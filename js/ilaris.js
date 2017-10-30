@@ -66,7 +66,7 @@ function initializeIlaris(callback, rebuild = false) {
     if (rebuild || localStorage.getItem("rules") === null) {
       $.ajax({
       					 type: "GET",
-      					 url: "http://raw.githubusercontent.com/Aeolitus/Sephrasto/master/datenbank.xml",
+      					 url: "https://raw.githubusercontent.com/Aeolitus/Sephrasto/master/datenbank.xml",
       					 cache: false,
       					 dataType: "xml",
       					 success: function(xml) {
@@ -77,7 +77,7 @@ function initializeIlaris(callback, rebuild = false) {
                     return callback();
       						}
       			 });
-      return;       
+      return;
     } else {
       Ilaris = getIlarisFromRulesXML();
       localStorage.setItem("Ilaris", JSON.stringify(Ilaris));
