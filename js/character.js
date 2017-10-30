@@ -109,7 +109,7 @@ function getCharacterFromXML(s) {
 
 
 function getStatusString(id) {
-
+//This method converts the Status ID to a readable string
   var statusArray = {};
   statusArray["4"] = "Abschaum";
   statusArray["3"] = "Unterschicht";
