@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='../js/download.js'></script>
+  <script src="../js/local.js"></script>
+  <script src="../js/ilaris.js"></script>
+  <script src="../js/character.js"></script>
+  <script src="../js/ui.js"></script>
+
+  <style>
+
+  body {
+    font-family: sans-serif;
+  }
+
+  .currentCharacterLabel {
+    font-weight: bold;
+  }
+  .selectedTalent {
+    background-color: #FF7;
+  }
+  .otherTalent {
+    color: #777;
+  }
+  .fertigkeit {
+    font-style:italic;
+  }
+  li {
+    padding: 2px;
+  }
+
+
+
+  </style>
+
+</head>
+<body>
+
+  <button type="button" id="rebuildButton">Rebuild Database</button>
+  <button type="button" id="deleteAllButton">Delete Characters</button>
+  <button type="button" id="downloadButton">Download local storage as JSON</button>
+  Restore local session from file:  <input type="file" id="fileInputLS">
+
+
+<hr>
+
+
+  Choose a file to add:  <input type="file" id="fileInput">
+  <hr>
+  <select id="characterList">
+
+  </select>
+  <button type="button" id="deleteCharacterButton">Entfernen</button>
+
+  <hr>
+  <div id="currentCharacter">
+    <div id="currentCharacterAllgemeineInfos">
+      <span class="currentCharacterLabel">Name</span><span id="currentCharacterName"></span>
+      <span class="currentCharacterLabel">Rasse</span><span id="currentCharacterRasse"></span>
+      <span class="currentCharacterLabel">Status</span><span id="currentCharacterStatus"></span>
+      <span class="currentCharacterLabel">Kurzbeschreibung</span><span id="currentCharacterKurzbeschreibung"></span>
+      <span class="currentCharacterLabel">Heimat</span><span id="currentCharacterHeimat"></span>
+      <span class="currentCharacterLabel">Finanzen</span><span id="currentCharacterFinanzen"></span>
+      <span class="currentCharacterLabel">Eigenheiten</span><ul id="currentCharacterEigenheiten"></ul>
+      <span class="currentCharacterLabel">EP</span><span id="currentCharacterEPspent"></span>/<span id="currentCharacterEPtotal"></span>
+    </div>
+    <div id="currentCharacterVorteile">
+      <span class="currentCharacterLabel">Vorteile</span><ul id="currentCharacterVorteileListe"></ul>
+    </div>
+    <div id="currentCharacterFertigkeiten">
+      <span class="currentCharacterLabel">Profane Fertigkeiten</span><ul id="currentCharacterPFertigkeiten"></ul>
+      <span class="currentCharacterLabel">Kampf-Fertigkeiten mit FW > 0</span><ul id="currentCharacterKFertigkeiten"></ul>
+      <span class="currentCharacterLabel">Übernatürliche Fertigkeiten mit FW > 0</span><ul id="currentCharacterUFertigkeiten"></ul>
+    </div>
+    <div id="currentCharacterTalente">
+      <span class="currentCharacterLabel">Übersicht profane Fertigkeiten und Talente</span><ul id="currentCharacterPTalente"></ul>
+    </div>
+
+  </div>
+
+
+
+  <script>
+
+
+
+  /* GET DATA FROM LOCAL STORAGE AND UPDATE UI */
+
+  initializeIlaris(UIinitialize);
+
+
+
+  </script>
+
+
+</body>
+</html>
