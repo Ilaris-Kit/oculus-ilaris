@@ -1,50 +1,108 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Fertigkeiten</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
   <script src='../js/download.js'></script>
   <script src="../js/local.js"></script>
   <script src="../js/ilaris.js"></script>
   <script src="../js/character.js"></script>
   <script src="../js/ui.js"></script>
 
+
   <style>
 
-  body {
-    font-family: sans-serif;
+  #FTABLE {
+    font-family: "Open Sans Condensed";
+    font-size: 140%;
   }
 
-  .currentCharacterLabel {
-    font-weight: bold;
-  }
-  .selectedTalent {
-    background-color: #FF7;
-  }
-  .otherTalent {
-    color: #777;
-  }
-  .fertigkeit {
-    font-style:italic;
-  }
-  li {
-    padding: 2px;
+  .probenwertWrapper {
+    display: table;
+    margin: auto;
+    position: relative;
+    text-align: center;
   }
 
+
+  .probenwert{
+    display: table-cell;
+    padding: .5rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bolder;
+  }
+
+  .isTalent:before {
+    content: "T";
+  }
+  .isFertigkeit:before {
+    content: "F";
+  }
+
+  .isSelected:before {
+    content: "✓";
+  }
+  .hasVorteil:before {
+    content: "V";
+  }
+  .hasEigenheit:before {
+    content: "E";
+  }
+
+
+  .table td, .table th {
+    vertical-align: middle;
+  }
+
+
+  .indicator:before {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    font-size: 60%;
+    font-weight: bolder;
+  }
+
+  .indicator-top:before {
+    top: 0px;
+  }
+  .indicator-right:before {
+    right: 3px;
+  }
+  .indicator-bottom:before {
+    bottom: 0px;
+  }
+  .indicator-left:before {
+    left: 3px;
+  }
 
 
   </style>
 
 </head>
 <body>
+  <form>
+  <button type="button" class="btn btn-sm btn-warning" id="rebuildButton">Rebuild Database</button>
+  <button type="button" class="btn btn-sm btn-danger" id="deleteAllButton">Delete Characters</button>
+  <button type="button" class="btn btn-sm btn-primary" id="downloadButton">Download local storage as JSON</button>
+  <div class="form-group btn btn-warning">
+    <label for="fileInputLS">Restore local session from JSON file</label> <input type="file" class="form-control-file" id="fileInputLS">
+</div>
+</form>
+  <hr>
 
-  <button type="button" id="rebuildButton">Rebuild Database</button>
-  <button type="button" id="deleteAllButton">Delete Characters</button>
-  <button type="button" id="downloadButton">Download local storage as JSON</button>
-  Restore local session from file:  <input type="file" id="fileInputLS">
-
-
-<hr>
 
 
   Choose a file to add:  <input type="file" id="fileInput">
@@ -52,7 +110,7 @@
   <select id="characterList">
 
   </select>
-  <button type="button" id="deleteCharacterButton">Entfernen</button>
+  <button type="button" class="btn btn-sm btn-danger" id="deleteCharacterButton">Entfernen</button>
 
   <hr>
   <div id="currentCharacter">
@@ -80,19 +138,34 @@
 
   </div>
 
+  <table class="table table-responsive-md table-hover table-striped" id="FTABLE">
+    <thead class="thead-dark">
+    </thead>
+    <tbody>
+
+  </tbody>
+  </table>
 
 
-  <script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script>
+
+initializeIlaris(function() {
+  UIinitialize();
+  console.log("Ilaris initialized");
+  $( "#characterList" ).change( function( event ) {
+    UIcreateFertigkeitenTable($("#characterList").val());
+  } );
+
+});
 
 
-
-  /* GET DATA FROM LOCAL STORAGE AND UPDATE UI */
-
-  initializeIlaris(UIinitialize);
-
-
-
-  </script>
+</script>
 
 
 </body>

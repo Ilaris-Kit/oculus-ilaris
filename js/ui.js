@@ -64,6 +64,10 @@ function UIinitialize() {
 
   });
 
+  console.log("UI Loaded.");
+  console.log("Ilaris object:");
+  console.log(Ilaris);
+
 }
 
 
@@ -193,6 +197,12 @@ function UIupdateCharacterSheet(currentlySelected) {
   $.each(lists, function( i, item ) {
     UIsortList("#currentCharacter" + item);
   });
+  $("#FTABLE > thead").append($("<th scope=\"col\">Kat</th><th scope=\"col\">Fertigkeit bzw. Talent</th>"));
+  $("#FTABLE > thead").append($("<th scope=\"col\">" + currentCharacter["Name"] + "s PW/PW(T)</th>"));
+
+  UIcreateFertigkeitenTable(currentCharacter,"P");
+  UIcreateFertigkeitenTable(currentCharacter,"K", true, true);
+  UIcreateFertigkeitenTable(currentCharacter,"U", true, true);
 
 
 
@@ -220,6 +230,57 @@ function UIsortList(listname) {
 
 }
 
+function UIsortTableByRowHeader(tablename) {
+  var items = $(tablename + ' > tbody > tr').get();
+  console.log(items);
+  items.sort(function(a,b){
+    var keyA = $($(a).children("th")[0]).text().split(": ")[0];
+    var keyB = $($(b).children("th")[0]).text().split(": ")[0];
+
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+
+    if ($(a).html() < $(b).html().split(": ")[0]) return -1;
+    if ($(a).html() > $(b).html().split(": ")[0]) return 1;
+    return 0;
+  });
+  $.each(items, function(i, li){
+    $(tablename + " > tbody").append(li);
+  });
+
+}
+
+function UIsortTable(tablename) {
+  var items = $(tablename + ' > tbody > tr').get();
+  console.log(items);
+  items.sort(function(a,b){
+    var keyA = $($(a).children("th")[0]).text().split(": ")[0];
+    var keyB = $($(b).children("th")[0]).text().split(": ")[0];
+
+
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+
+    var tdcounter = 0;
+    while (tdcounter < $(a).children("td").length) {
+      keyA = $($(a).children("td")[tdcounter]).text().split(": ")[0];
+      keyB = $($(b).children("td")[tdcounter]).text().split(": ")[0];
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      if ($(a).html() < $(b).html().split(": ")[0]) return -1;
+      if ($(a).html() > $(b).html().split(": ")[0]) return 1;
+    }
+
+
+    return 0;
+  });
+  $.each(items, function(i, li){
+    $(tablename + " > tbody").append(li);
+  });
+
+}
+
+
 function UIclearFields() {
   var textfields = ["Name", "Rasse", "Status", "Kurzbeschreibung", "Finanzen", "Heimat", "EPtotal", "EPspent"];
   $.each(textfields, function( i, item ) {
@@ -229,4 +290,67 @@ function UIclearFields() {
   $.each(lists, function( i, item ) {
     $("#currentCharacter" + item).empty();
   });
+  $("#FTABLE > tbody, #FTABLE > thead").empty();
+
+}
+
+
+function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = false, selectedFertigkeitenOnly = false) {
+
+
+
+  $.each(Ilaris[kategorie + "Fertigkeiten"], function( i, item ) {
+    if (selectedFertigkeitenOnly && character[kategorie + "Fertigkeiten"][i]["fw"] == 0) return;
+    var tlist = item["talente"];
+    $.each(tlist, function( ti, titem ) {
+      var pwt = -1;
+      if (character[kategorie + "Talente"][titem]["selected"]) {
+        pwt = getProbenWertT(character,i)
+      } else {
+        pwt = getProbenWert(character,i);
+      }
+      if (character[kategorie + "Talente"][titem]["selected"] || (!(new RegExp(".*\\(.*").test(titem)) && !selectedTalentsOnly)) {
+
+        $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, titem).append(UIcreateFertigkeitenCell(pwt,false,false,true,character[kategorie + "Talente"][titem]["selected"])));
+      }
+    });
+    $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, i).append(UIcreateFertigkeitenCell(getProbenWert(character,i),false,false)));
+  });
+
+//  UIsortTableByRowHeader("#FTABLE");
+  UIsortTable("#FTABLE");
+//  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Wahrnehmung").append(UIcreateFertigkeitenCell(17,false,true)));
+//  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Betören").append(UIcreateFertigkeitenCell(4,false,true,true)));
+//  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Rhetorik").append(UIcreateFertigkeitenCell(9,true,false,true,true)));
+}
+function UIcreateFertigkeitenRow(kategorie, fname) {
+  return $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"><th scope=\"row\">" + kategorie + "</th><td>" + fname + "</td></tr>");
+}
+
+function UIcreateFertigkeitenCell(pw,vorteil,eigenheit,talent=false,selected=false) {
+  var newWrapper = $("<div class=\"probenwertWrapper\"></div>");
+  var newProbenwert = $("<div class=\"probenwert\">" + pw + "</div>");
+  newWrapper.append(newProbenwert);
+  if (talent) {
+    newWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-left\"></span>"));
+    if (selected) {
+      newWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+    }
+
+  } else {
+    newWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-left\"></span>"));
+  }
+  if (vorteil) {
+    newWrapper.append($("<span class=\"hasVorteil indicator indicator-top indicator-right\"></span>"));
+  }
+  if (eigenheit) {
+    newWrapper.append($("<span class=\"hasEigenheit indicator indicator-top indicator-left\"></span>"));
+  }
+  return $("<td></td>").append(newWrapper);
+}
+
+UIKategorieStil = {
+  P: "",
+  K: "",
+  U: ""
 }
