@@ -350,7 +350,7 @@ function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
   tr.append(th);
   tr.append(icon);
   var f = $("<td id=\"ftable-" + fname + "-name\"></td>");
-  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 1rem; display: block;\">" + fname + "</span>");
+  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 1rem; display: inline-block;\">" + fname + "</span>");
   if (talent) {
     if (selected) {
       fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
