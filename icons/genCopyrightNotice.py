@@ -5,14 +5,13 @@ even = True
 def splitOnTagclose(x):
     global even
     if not even:
-        even = True
         return x.split(">")[1]
     else:
         even = False
         return ""
 
 def splitOnEndTag(x):
-    return x.split("</text>")[0]
+    return x.split("</text")[0]
 
 print ("<table id=\"copyrightNoticeIcons\">")
 
