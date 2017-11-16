@@ -339,7 +339,7 @@ function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
 
   var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
   var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
-  var thWrapper = $("<span style=\"position: relative; padding: 0; padding-right: .7rem\">" + kategorie + "</span>");
+  var thWrapper = $("<div style=\"position: relative; padding: 0; text-align: center;\">" + kategorie + "</div>");
   if (talent) {
     thWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-right\"></span>"));
   } else {
@@ -350,7 +350,7 @@ function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
   tr.append(th);
   tr.append(icon);
   var f = $("<td id=\"ftable-" + fname + "-name\"></td>");
-  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 1rem\">" + fname + "</span>");
+  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 1rem; display: block;\">" + fname + "</span>");
   if (talent) {
     if (selected) {
       fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
