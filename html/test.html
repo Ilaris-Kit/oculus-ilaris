@@ -11,13 +11,13 @@
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700">
   <script src='../js/download.js'></script>
   <script src="../js/local.js"></script>
   <script src="../js/ilaris.js"></script>
   <script src="../js/character.js"></script>
   <script src="../js/ui.js"></script>
-
+  <script src="https://use.fontawesome.com/f2c0b5f811.js"></script>
 
   <style>
 
@@ -88,6 +88,81 @@
     left: 3px;
   }
 
+  th.cat-p:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .iconWrapper {
+    display: table;
+    margin: auto;
+    position: relative;
+    text-align: center;
+  }
+
+  .icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: table-cell;
+    vertical-align: middle;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+  }
+
+  .icon-K {
+    background-image: url("../icons/sword.svg");
+  }
+  .icon-U {
+    background-image: url("../icons/wand.svg");
+  }
+  .icon-Athletik {
+    background-image: url("../icons/runner.svg");
+  }
+  .icon-Wahrnehmung {
+    background-image: url("../icons/eye.svg");
+  }
+  .icon-Beeinflussung {
+    background-image: url("../icons/puppeteer.svg");
+  }
+  .icon-Derekunde {
+    background-image: url("../icons/world.svg");
+  }
+  .icon-Autorität {
+    background-image: url("../icons/fist.svg");
+  }
+  .icon-Alchemie {
+    background-image: url("../icons/cauldron.svg");
+  }
+  .icon-Magiekunde {
+    background-image: url("../icons/magic-book.svg");
+  }
+  .icon-Überleben {
+    background-image: url("../icons/bonfire.svg");
+  }
+  .icon-Selbstbeherrschung {
+    background-image: url("../icons/meditation.svg");
+  }
+  .icon-Heilkunde {
+    background-image: url("../icons/hospital.svg");
+  }
+  .icon-Gebräuche {
+    background-image: url("../icons/cutlery.svg");
+  }
+  .icon-Handwerk {
+    background-image: url("../icons/hammer.svg");
+  }
+  .icon-Mythenkunde {
+    background-image: url("../icons/myth-book.svg");
+  }
+  .icon-Heimlichkeit {
+    background-image: url("../icons/agent.svg");
+  }
+  .icon-Verschlagenheit {
+    background-image: url("../icons/criminal.svg");
+  }
+
 
   </style>
 
@@ -138,7 +213,7 @@
 
   </div>
 
-  <table class="table table-responsive-md table-hover table-striped" id="FTABLE">
+  <table class="table table-responsive table-sm table-hover table-striped" id="FTABLE">
     <thead class="thead-dark">
     </thead>
     <tbody>

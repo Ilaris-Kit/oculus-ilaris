@@ -21,6 +21,9 @@ function UIinitialize() {
     UIupdateCharacterSheet($("#characterList").val());
   } );
 
+
+  UIinitializeIcons();
+
   var currentlySelected = UIupdateCharacterList();
   UIupdateCharacterSheet(currentlySelected);
 
@@ -197,7 +200,7 @@ function UIupdateCharacterSheet(currentlySelected) {
   $.each(lists, function( i, item ) {
     UIsortList("#currentCharacter" + item);
   });
-  $("#FTABLE > thead").append($("<th scope=\"col\">Kat</th><th scope=\"col\">Fertigkeit bzw. Talent</th>"));
+  $("#FTABLE > thead").append($("<th scope=\"col\">Kat</th><th scope=\"col\">Grp</th><th scope=\"col\">Fertigkeit bzw. Talent</th>"));
   $("#FTABLE > thead").append($("<th scope=\"col\">" + currentCharacter["Name"] + "s PW/PW(T)</th>"));
 
   UIcreateFertigkeitenTable(currentCharacter,"P");
@@ -326,7 +329,7 @@ function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = f
 //  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Rhetorik").append(UIcreateFertigkeitenCell(9,true,false,true,true)));
 }
 function UIcreateFertigkeitenRow(kategorie, fname) {
-  return $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"><th scope=\"row\">" + kategorie + "</th><td>" + fname + "</td></tr>");
+  return $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"><th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\">" + kategorie + "</th><td id=\"ftable-" + fname + "-icon\">" + UIgetIcon(fname) + "</td><td id=\"ftable-" + fname + "-name\">" + fname + "</td></tr>");
 }
 
 function UIcreateFertigkeitenCell(pw,vorteil,eigenheit,talent=false,selected=false) {
@@ -352,7 +355,48 @@ function UIcreateFertigkeitenCell(pw,vorteil,eigenheit,talent=false,selected=fal
 }
 
 UIKategorieStil = {
-  P: "",
-  K: "",
-  U: ""
+  P: "cat-p",
+  K: "cat-k",
+  U: "cat-u"
+}
+
+UIicons = {
+
+}
+
+function UIgetIcon(x) {
+  if (x in UIicons) {
+    return "<div class=\"iconWrapper\"><span class=\"icon icon-" + UIicons[x] + "\"></span></div>";
+  }
+  return "";
+}
+
+function UIinitializeIcons() {
+  $.each(["K","P","U"], function( k, kategorie ) {
+
+    var icon = "";
+    if (kategorie == "K") {
+      icon = icon + "K";
+    }
+    if (kategorie == "U") {
+      icon = icon + "U";
+    }
+
+    $.each(Ilaris[kategorie + "Fertigkeiten"], function( i, item ) {
+      var tlist = item["talente"];
+      $.each(tlist, function( ti, titem ) {
+        UIicons[titem] = icon;
+        if (kategorie == "P") {
+          UIicons[titem] = icon + i;
+        }
+      });
+        UIicons[i] = icon;
+        if (kategorie == "P") {
+          UIicons[i] = icon + i;
+        }
+    });
+  });
+
+
+
 }
