@@ -51,7 +51,12 @@
   }
 
   .isSelected:before {
-    content: "✓";
+    content: "T✓";
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+  .notSelected:before {
+    content: "T";
   }
   .hasVorteil:before {
     content: "V";
@@ -72,6 +77,9 @@
     position: absolute;
     font-size: 60%;
     font-weight: bolder;
+
+    width: 1rem;
+    height: 1rem;
   }
 
   .indicator-top:before {
@@ -79,12 +87,14 @@
   }
   .indicator-right:before {
     right: 3px;
+    text-align: left;
   }
   .indicator-bottom:before {
     bottom: 0px;
   }
   .indicator-left:before {
     left: 3px;
+    text-align: right;
   }
 
   th.cat-p:before {

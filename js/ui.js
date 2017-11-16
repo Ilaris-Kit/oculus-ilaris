@@ -200,7 +200,7 @@ function UIupdateCharacterSheet(currentlySelected) {
   $.each(lists, function( i, item ) {
     UIsortList("#currentCharacter" + item);
   });
-  $("#FTABLE > thead").append($("<th scope=\"col\">Kat</th><th scope=\"col\">Grp</th><th scope=\"col\">Fertigkeit bzw. Talent</th>"));
+  $("#FTABLE > thead").append($("<th scope=\"col\"></th><th scope=\"col\">Grp</th><th scope=\"col\">Fertigkeit bzw. Talent</th>"));
   $("#FTABLE > thead").append($("<th scope=\"col\">" + currentCharacter["Name"] + "s PW/PW(T)</th>"));
 
   UIcreateFertigkeitenTable(currentCharacter,"P");
@@ -235,7 +235,6 @@ function UIsortList(listname) {
 
 function UIsortTableByRowHeader(tablename) {
   var items = $(tablename + ' > tbody > tr').get();
-  console.log(items);
   items.sort(function(a,b){
     var keyA = $($(a).children("th")[0]).text().split(": ")[0];
     var keyB = $($(b).children("th")[0]).text().split(": ")[0];
@@ -255,7 +254,6 @@ function UIsortTableByRowHeader(tablename) {
 
 function UIsortTable(tablename, offset=0) {
   var items = $(tablename + ' > tbody > tr').get();
-  console.log(items);
   items.sort(function(a,b){
     var tdcounter = offset;
     while (tdcounter < $(a).children("th, td").length) {
@@ -339,23 +337,27 @@ function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
 
   var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
   var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
-  var thWrapper = $("<div style=\"position: relative; padding: 0; text-align: center;\">" + kategorie + "</div>");
+  var thWrapper = $("<div style=\"position: relative; padding: 0; padding-right: 1.2rem;text-align: left; display: inline-block;\">" + kategorie + "</div>");
   if (talent) {
-    thWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-right\"></span>"));
+    if (selected) {
+      thWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+    } else {
+      thWrapper.append($("<span class=\"notSelected indicator indicator-bottom indicator-right\"></span>"));
+    }
   } else {
-    thWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-right\"></span>"));
+   thWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-right\"></span>"));
   }
 
   th.append(thWrapper);
   tr.append(th);
   tr.append(icon);
   var f = $("<td id=\"ftable-" + fname + "-name\"></td>");
-  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 1rem; display: inline-block;\">" + fname + "</span>");
-  if (talent) {
+  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 0rem; display: inline-block;\">" + fname + "</span>");
+  /*if (talent) {
     if (selected) {
       fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
     }
-}
+}*/
   f.append(fWrapper);
   tr.append(f);
 
