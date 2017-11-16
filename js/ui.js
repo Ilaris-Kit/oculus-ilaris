@@ -306,7 +306,7 @@ function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = f
       }
       if (character[kategorie + "Talente"][titem]["selected"] || (!(new RegExp(".*\\(.*").test(titem)) && !selectedTalentsOnly)) {
 
-        $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, titem).append(UIcreateFertigkeitenCell(pwt,false,false,true,character[kategorie + "Talente"][titem]["selected"])));
+        $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, titem, true,character[kategorie + "Talente"][titem]["selected"]).append(UIcreateFertigkeitenCell(pwt,false,false,true,character[kategorie + "Talente"][titem]["selected"])));
       }
     });
     if (!talentsOnly) {
@@ -320,23 +320,52 @@ function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = f
 //  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Betören").append(UIcreateFertigkeitenCell(4,false,true,true)));
 //  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Rhetorik").append(UIcreateFertigkeitenCell(9,true,false,true,true)));
 }
-function UIcreateFertigkeitenRow(kategorie, fname) {
-  return $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"><th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\">" + kategorie + "</th><td id=\"ftable-" + fname + "-icon\">" + UIgetIcon(fname) + "</td><td id=\"ftable-" + fname + "-name\">" + fname + "</td></tr>");
+function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
+
+  var icon = $("<td id=\"ftable-" + fname + "-icon\"></td>");
+  var iconWrapper = $(UIgetIcon(fname));
+/*
+  if (talent) {
+    iconWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-left\"></span>"));
+    if (selected) {
+      iconWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+    }
+
+  } else {
+    iconWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-left\"></span>"));
+  }*/
+
+  icon.append(iconWrapper);
+
+  var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
+  var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
+  var thWrapper = $("<span style=\"position: relative; padding: 0; padding-right: .7rem\">" + kategorie + "</span>");
+  if (talent) {
+    thWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-right\"></span>"));
+  } else {
+    thWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-right\"></span>"));
+  }
+
+  th.append(thWrapper);
+  tr.append(th);
+  tr.append(icon);
+  var f = $("<td id=\"ftable-" + fname + "-name\"></td>");
+  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 1rem\">" + fname + "</span>");
+  if (talent) {
+    if (selected) {
+      fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+    }
+}
+  f.append(fWrapper);
+  tr.append(f);
+
+  return tr;
 }
 
 function UIcreateFertigkeitenCell(pw,vorteil,eigenheit,talent=false,selected=false) {
   var newWrapper = $("<div class=\"probenwertWrapper\"></div>");
   var newProbenwert = $("<div class=\"probenwert\">" + pw + "</div>");
   newWrapper.append(newProbenwert);
-  if (talent) {
-    newWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-left\"></span>"));
-    if (selected) {
-      newWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
-    }
-
-  } else {
-    newWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-left\"></span>"));
-  }
   if (vorteil) {
     newWrapper.append($("<span class=\"hasVorteil indicator indicator-top indicator-right\"></span>"));
   }
