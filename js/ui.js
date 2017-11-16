@@ -253,25 +253,17 @@ function UIsortTableByRowHeader(tablename) {
 
 }
 
-function UIsortTable(tablename) {
+function UIsortTable(tablename, offset=0) {
   var items = $(tablename + ' > tbody > tr').get();
   console.log(items);
   items.sort(function(a,b){
-    var keyA = $($(a).children("th")[0]).text().split(": ")[0];
-    var keyB = $($(b).children("th")[0]).text().split(": ")[0];
-
-
-    if (keyA < keyB) return -1;
-    if (keyA > keyB) return 1;
-
-    var tdcounter = 0;
-    while (tdcounter < $(a).children("td").length) {
-      keyA = $($(a).children("td")[tdcounter]).text().split(": ")[0];
-      keyB = $($(b).children("td")[tdcounter]).text().split(": ")[0];
+    var tdcounter = offset;
+    while (tdcounter < $(a).children("th, td").length) {
+      keyA = $($(a).children("th, td")[tdcounter]).text();
+      keyB = $($(b).children("th, td")[tdcounter]).text();
       if (keyA < keyB) return -1;
       if (keyA > keyB) return 1;
-      if ($(a).html() < $(b).html().split(": ")[0]) return -1;
-      if ($(a).html() > $(b).html().split(": ")[0]) return 1;
+      tdcounter = tdcounter+1;
     }
 
 
