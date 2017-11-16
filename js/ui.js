@@ -202,7 +202,7 @@ function UIupdateCharacterSheet(currentlySelected) {
 
   UIcreateFertigkeitenTable(currentCharacter,"P");
   UIcreateFertigkeitenTable(currentCharacter,"K", true, true);
-  UIcreateFertigkeitenTable(currentCharacter,"U", true, true);
+  UIcreateFertigkeitenTable(currentCharacter,"U", true, true, true);
 
 
 
@@ -295,7 +295,7 @@ function UIclearFields() {
 }
 
 
-function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = false, selectedFertigkeitenOnly = false) {
+function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = false, selectedFertigkeitenOnly = false, talentsOnly = false) {
 
 
 
@@ -314,7 +314,9 @@ function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = f
         $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, titem).append(UIcreateFertigkeitenCell(pwt,false,false,true,character[kategorie + "Talente"][titem]["selected"])));
       }
     });
+    if (!talentsOnly) {
     $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, i).append(UIcreateFertigkeitenCell(getProbenWert(character,i),false,false)));
+    }
   });
 
 //  UIsortTableByRowHeader("#FTABLE");
