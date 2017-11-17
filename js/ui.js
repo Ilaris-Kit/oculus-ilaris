@@ -276,8 +276,10 @@ function UIupdateCharacterSheet(currentlySelected) {
   $.each(lists, function( i, item ) {
     UIsortList("#currentCharacter" + item);
   });
-  $("#FTABLE > thead").append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
-  $("#FTABLE > thead").append($("<th scope=\"col\" style=\"text-align: right;\">PW/PW(T)</th>"));
+  var tr = $("<tr id=\"FTABLE-HEAD\"></tr>");
+  tr.append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
+  tr.append($("<th scope=\"col\" style=\"text-align: right;\">PW/PW(T)</th>"));
+  $("#FTABLE > thead").append(tr);
 
   UIcreateFertigkeitenTable(currentCharacter,"P");
   UIcreateFertigkeitenTable(currentCharacter,"K", true, true);
@@ -434,6 +436,10 @@ fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator
 }*/
 f.append(fWrapper);
 tr.append(f);
+tr.dblclick(function(e) {
+    e.preventDefault();
+    UIMVrollTheDice($("#MULTIVIEW-PFTABLE"), $(this), true);
+});
 
 return tr;
 }
@@ -528,6 +534,12 @@ function UIMVcreatePFertigkeitenRow(fname,talent=false) {
   f.append(fWrapper);
   tr.append(f);
 
+  tr.dblclick(function(e) {
+      e.preventDefault();
+      UIMVrollTheDice($("#MULTIVIEW-PFTABLE"), $(this));
+  });
+
+
   return tr;
 }
 
@@ -551,15 +563,17 @@ function UIMVcreatePFertigkeitenCell(fname,cname, pw,vorteil,eigenheit,talent=fa
 
 function UIMVcreatePFertigkeitenTable(characters) {
   $("#MULTIVIEW-PFTABLE > tbody, #MULTIVIEW-PFTABLE > thead").empty();
-  $("#MULTIVIEW-PFTABLE > thead").append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
+  var tr = $("<tr id=\"MULTIVIEW-FTABLE-HEAD\"></tr>");
+  tr.append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
   $.each(characters, function( currentlySelected, currentlySelectedChar ) {
     // console.log("I found a character: ");
     //console.log(currentlySelected);
     if (!UICharacters.hasOwnProperty(currentlySelected) || UICharacters[currentlySelected] === null) {
       UICharacters[currentlySelected] = getCharacterFromLocalStorage(currentlySelected);
     }
-    $("#MULTIVIEW-PFTABLE > thead").append($("<th scope=\"col\" style=\"text-align: right; padding-right: 1.5rem;\">" + UICharacters[currentlySelected]["Name"] + "</th>"));
+    tr.append($("<th scope=\"col\" style=\"text-align: right; padding-right: 1.5rem;\">" + UICharacters[currentlySelected]["Name"] + "</th>"));
   });
+  $("#MULTIVIEW-PFTABLE > thead").append(tr);
 
   var kategorie = "P";
   $.each(Ilaris[kategorie + "Fertigkeiten"], function( i, item ) {
@@ -583,6 +597,8 @@ function UIMVcreatePFertigkeitenTable(characters) {
         tr.append(UIMVcreatePFertigkeitenCell(titem,ci,pwt,false,false,true,sel));
       });
       $("#MULTIVIEW-PFTABLE > tbody").append(tr);
+
+
     });
     var tr = UIMVcreatePFertigkeitenRow(i, false);
     $.each(characters, function( ci, citem ) {
@@ -593,7 +609,10 @@ function UIMVcreatePFertigkeitenTable(characters) {
   });
 
   UIsortTable("#MULTIVIEW-PFTABLE");
+
 }
+
+
 
 function updateDeleteButton() {
   if ($("#characterList").val() === null) {
@@ -607,4 +626,45 @@ function updateDeleteButton() {
     $("#helpText").addClass("d-none");
   }
 
+}
+
+function UIMVrollTheDice(table,tr,current = false) {
+  var chars = $("#currentCharacterName");
+  var firstchar = 2;
+  if (!current) {
+     chars = table.children("thead").children("tr").children("th").get();
+     firstchar = 1;
+  }
+  var tds = tr.children("td").get();
+  var results = {};
+  var ul = $("<ul></ul>");
+  for (i = 2; i < tds.length; ++i) {
+    var td = $(tds[i]);
+    var pw = parseInt(td.text());
+    var rolls = [getRandomInt(1,20), getRandomInt(1,20), getRandomInt(1,20)];
+    var val = (rolls.sort( function(a,b) {return a - b;} ))[1];
+    results[$(chars[i-firstchar]).text()] = {
+      gewürfelt: rolls,
+      gewertet: val,
+      probenwert: pw,
+      resultat: pw + val
+    };
+    ul.append($("<li><strong>" + $(chars[i-firstchar]).text() + ": " + (val+pw) + "</strong>, gewertet: " + val +  ". <br><small>PW/PW(T) = " + pw + ", Würfel = (" + rolls.join(",")  + ")</small></li>"));
+  }
+  $("#rollTheDiceModalHeaderH").text("Würfle auf " + $(tds[1]).text());
+  $("#rollTheDiceModalBody").empty();
+  $("#rollTheDiceModalBody").append(ul);
+  $("#rollTheDiceModal").modal();
+
+
+
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
+ */
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
