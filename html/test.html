@@ -6,12 +6,13 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Fertigkeiten</title>
+  <title>Oculus Ilaris</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" crossorigin="anonymous">
   <script src='../js/download.js'></script>
   <script src="../js/local.js"></script>
   <script src="../js/ilaris.js"></script>
@@ -20,14 +21,24 @@
 
   <style>
 
-  #FTABLE {
+  h1 {
+    font-family: "Open Sans Condensed";
+    font-weight: bolder;
+  }
+
+  #FTABLE,  #MULTIVIEW-PFTABLE,  #currentCharacter, li.nav-item {
     font-family: "Open Sans Condensed";
     font-size: 140%;
   }
 
+  li.nav-item {
+    font-weight: bolder;
+  }
+
+
+
   .probenwertWrapper {
-    display: table;
-    margin: auto;
+    display: inline-block;
     position: relative;
     text-align: center;
   }
@@ -35,9 +46,10 @@
 
   .probenwert{
     display: table-cell;
-    padding: .5rem;
-    height: 2.5rem;
-    width: 2.5rem;
+    padding: 0rem;
+    padding-right: 1.3rem;
+    padding-left: 1.3rem;
+    height: 2rem;
     text-align: center;
     vertical-align: middle;
     font-weight: bolder;
@@ -77,7 +89,6 @@
     position: absolute;
     font-size: 60%;
     font-weight: bolder;
-
     width: 1rem;
     height: 1rem;
   }
@@ -96,6 +107,7 @@
     left: 3px;
     text-align: right;
   }
+
 
   th.cat-p:before {
     content: "";
@@ -172,112 +184,217 @@
     background-image: url("../icons/criminal.svg");
   }
 
-  #copyrightNoticeIcons  img {
+  #tsa-table-copyrightNoticeIcons  img {
     height: 1rem;
   }
+  #tsa-table-copyrightNoticeIcons  {
+    display:none;
+  }
+  .table {
+   margin: auto !important;
+}
+
+  .currentCharacterLabel {
+    font-weight: bolder;
+    font-family: "Open Sans Condensed";
+  }
+  body {
+    font-family: "Open Sans";
+  }
+
+  .tab-pane {
+    padding-top: 1rem;
+  }
+
 
 
   </style>
 
 </head>
 <body>
-  <form>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <p>
+        <h1>Oculus Ilaris</h1>
+              </p>
+      <form>
+        <div class="form-group">
+          <span class="text-muted" id="helpText">Add your character to get started. If you do not have one, create one with the <a target="_blank" href="https://github.com/Aeolitus/Sephrasto">Sephrasto-Tool</a>.</span>
+          <select id="characterList" class="custom-select form-control"></select>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Add new character
+          </button>
+            <button type="button" class="btn btn-danger" id="deleteCharacterButton">Delete</button>
+          </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addFileModal">Add a character</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <label class="custom-file" id="fileInputWrapper">
+                    <form>
+                  <input type="file" id="fileInput" class="custom-file-input">
+                  <span class="custom-file-control"></span><br>
+                  </label>
+                  <span id="fileInputLabel" style="display: none;"></span>
+                </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelUploadCharacter">Cancel</button>
+                  <button type="button" class="btn btn-primary" id="uploadCharacter" data-dismiss="modal" disabled>Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </form>
+  </div>
+    <div class="col-12">
+
+        <ul class="nav nav-tabs navbar-right justify-content-end" id="tsa-tablist" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="tsa-tab-single-sheet" data-toggle="tab" href="#tsa-single-sheet" role="tab" aria-controls="Charakter Sheet" aria-selected="true">Character Sheet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tsa-tab-single-fertigkeiten" data-toggle="tab" href="#tsa-single-fertigkeiten" role="tab" aria-controls="Fertigkeiten Übersicht" aria-selected="false">Fertigkeiten-Übersicht</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tsa-tab-multi-pfertigkeiten" data-toggle="tab" href="#tsa-multi-pfertigkeiten" role="tab" aria-controls="Multiview Fertigkeiten Übersicht" aria-selected="false">Multiview: Profane Fertigkeiten</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+
+        <div class="tab-content" id="tsa-tabcontent">
+
+          <div class="tab-pane fade show active" id="tsa-single-sheet" role="tabpanel" aria-labelledby="tsa-tab-single-sheet">
+            <div class=container>
+              <div id="currentCharacter">
+                <div id="currentCharacterAllgemeineInfos">
+                  <span class="currentCharacterLabel">Name</span><span id="currentCharacterName"></span>
+                  <span class="currentCharacterLabel">Rasse</span><span id="currentCharacterRasse"></span>
+                  <span class="currentCharacterLabel">Status</span><span id="currentCharacterStatus"></span>
+                  <span class="currentCharacterLabel">Kurzbeschreibung</span><span id="currentCharacterKurzbeschreibung"></span>
+                  <span class="currentCharacterLabel">Heimat</span><span id="currentCharacterHeimat"></span>
+                  <span class="currentCharacterLabel">Finanzen</span><span id="currentCharacterFinanzen"></span>
+                  <span class="currentCharacterLabel">Eigenheiten</span><ul id="currentCharacterEigenheiten"></ul>
+                  <span class="currentCharacterLabel">EP</span><span id="currentCharacterEPspent"></span>/<span id="currentCharacterEPtotal"></span>
+                </div>
+                <div id="currentCharacterVorteile">
+                  <span class="currentCharacterLabel">Vorteile</span><ul id="currentCharacterVorteileListe"></ul>
+                </div>
+                <div id="currentCharacterFertigkeiten">
+                  <span class="currentCharacterLabel">Profane Fertigkeiten</span><ul id="currentCharacterPFertigkeiten"></ul>
+                  <span class="currentCharacterLabel">Kampf-Fertigkeiten mit FW > 0</span><ul id="currentCharacterKFertigkeiten"></ul>
+                  <span class="currentCharacterLabel">Übernatürliche Fertigkeiten mit FW > 0</span><ul id="currentCharacterUFertigkeiten"></ul>
+                </div>
+                <div id="currentCharacterTalente">
+                  <span class="currentCharacterLabel">Übersicht profane Fertigkeiten und Talente</span><ul id="currentCharacterPTalente"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tsa-single-fertigkeiten" role="tabpanel" aria-labelledby="tsa-tab-single-fertigkeiten">
+
+            <table class="table table-sm table-hover table-striped table-responsive-sm" id="FTABLE">
+              <thead class="thead-dark">
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tab-pane fade" id="tsa-multi-pfertigkeiten" role="tabpanel" aria-labelledby="tsa-tab-multi-pfertigkeiten">
+            <table class="table table-sm table-hover table-striped table-responsive-sm" id="MULTIVIEW-PFTABLE">
+              <thead class="thead-dark">
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+<div class="container">
   <button type="button" class="btn btn-sm btn-warning" id="rebuildButton">Rebuild Database</button>
   <button type="button" class="btn btn-sm btn-danger" id="deleteAllButton">Delete Characters</button>
   <button type="button" class="btn btn-sm btn-primary" id="downloadButton">Download local storage as JSON</button>
-  <div class="form-group btn btn-warning">
     <label for="fileInputLS">Restore local session from JSON file</label> <input type="file" class="form-control-file" id="fileInputLS">
+
 </div>
-</form>
-  <hr>
+
+
+      <footer class="footer container" id="tsa-icon-copyrights" >
+        <strong><a href="#tsa-table-copyrightNoticeIcons">All icons used under Creative Commons. Click to toggle attributions.</a></strong>
+        <table class="table table-sm" id="tsa-table-copyrightNoticeIcons">
+          <tr><td><img src="../icons/cutlery.svg"></td><td>Created by Hopkins from the Noun Project</td></tr>
+          <tr><td><img src="../icons/meditation.svg"></td><td>Created by yasminvisible from the Noun Project</td></tr>
+          <tr><td><img src="../icons/fist.svg"></td><td>Created by Isabel Foo from the Noun Project</td></tr>
+          <tr><td><img src="../icons/agent.svg"></td><td>Created by Setyo Ari Wibowo from the Noun Project</td></tr>
+          <tr><td><img src="../icons/bonfire.svg"></td><td>Created by Setyo Ari Wibowo from the Noun Project</td></tr>
+          <tr><td><img src="../icons/cauldron.svg"></td><td>Created by Vectors Market from the Noun Project</td></tr>
+          <tr><td><img src="../icons/hospital.svg"></td><td>Created by UNiCORN from the Noun Project</td></tr>
+          <tr><td><img src="../icons/world.svg"></td><td>Created by Aleksandr Vector from the Noun Project</td></tr>
+          <tr><td><img src="../icons/puppeteer.svg"></td><td>Created by Luis Prado from the Noun Project</td></tr>
+          <tr><td><img src="../icons/runner.svg"></td><td>Created by Gregor Cresnar from the Noun Project</td></tr>
+          <tr><td><img src="../icons/myth-book.svg"></td><td>Created by IconfactoryTeam from the Noun Project</td></tr>
+          <tr><td><img src="../icons/hammer.svg"></td><td>Created by Thomas' designs from the Noun Project</td></tr>
+          <tr><td><img src="../icons/eye.svg"></td><td>Created by Edward Boatman from the Noun Project</td></tr>
+          <tr><td><img src="../icons/wand.svg"></td><td>Created by Matthew R. Miller from the Noun Project</td></tr>
+          <tr><td><img src="../icons/criminal.svg"></td><td>Created by Gregor Cresnar from the Noun Project</td></tr>
+          <tr><td><img src="../icons/sword.svg"></td><td>Created by Postcat from the Noun Project</td></tr>
+          <tr><td><img src="../icons/magic-book.svg"></td><td>Created by mbok sumirna from the Noun Project</td></tr>
+        </table>
+      </footer>
+
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+      <script>
+
+      initializeIlaris(function() {
+        UIinitialize();
+        console.log("Ilaris initialized");
+        $( "#characterList" ).change( function( event ) {
+          UIcreateFertigkeitenTable($("#characterList").val());
+        } );
+
+      });
+
+      $(document).on('click', 'a[href^="#tsa-table-copyrightNoticeIcons"]', function (event) {
+        if ($("#tsa-table-copyrightNoticeIcons").css("display") === "none") {
+          $("#tsa-table-copyrightNoticeIcons").css("display","block");
+        } else {
+          $("#tsa-table-copyrightNoticeIcons").css("display","none");
+          event.preventDefault();
+        }
+      });
 
 
 
-  Choose a file to add:  <input type="file" id="fileInput">
-  <hr>
-  <select id="characterList">
-
-  </select>
-  <button type="button" class="btn btn-sm btn-danger" id="deleteCharacterButton">Entfernen</button>
-
-  <hr>
-  <div id="currentCharacter">
-    <div id="currentCharacterAllgemeineInfos">
-      <span class="currentCharacterLabel">Name</span><span id="currentCharacterName"></span>
-      <span class="currentCharacterLabel">Rasse</span><span id="currentCharacterRasse"></span>
-      <span class="currentCharacterLabel">Status</span><span id="currentCharacterStatus"></span>
-      <span class="currentCharacterLabel">Kurzbeschreibung</span><span id="currentCharacterKurzbeschreibung"></span>
-      <span class="currentCharacterLabel">Heimat</span><span id="currentCharacterHeimat"></span>
-      <span class="currentCharacterLabel">Finanzen</span><span id="currentCharacterFinanzen"></span>
-      <span class="currentCharacterLabel">Eigenheiten</span><ul id="currentCharacterEigenheiten"></ul>
-      <span class="currentCharacterLabel">EP</span><span id="currentCharacterEPspent"></span>/<span id="currentCharacterEPtotal"></span>
-    </div>
-    <div id="currentCharacterVorteile">
-      <span class="currentCharacterLabel">Vorteile</span><ul id="currentCharacterVorteileListe"></ul>
-    </div>
-    <div id="currentCharacterFertigkeiten">
-      <span class="currentCharacterLabel">Profane Fertigkeiten</span><ul id="currentCharacterPFertigkeiten"></ul>
-      <span class="currentCharacterLabel">Kampf-Fertigkeiten mit FW > 0</span><ul id="currentCharacterKFertigkeiten"></ul>
-      <span class="currentCharacterLabel">Übernatürliche Fertigkeiten mit FW > 0</span><ul id="currentCharacterUFertigkeiten"></ul>
-    </div>
-    <div id="currentCharacterTalente">
-      <span class="currentCharacterLabel">Übersicht profane Fertigkeiten und Talente</span><ul id="currentCharacterPTalente"></ul>
-    </div>
-
-  </div>
-
-  <table class="table table-responsive table-sm table-hover table-striped" id="FTABLE">
-    <thead class="thead-dark">
-    </thead>
-    <tbody>
-
-  </tbody>
-  </table>
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
-<script>
-
-initializeIlaris(function() {
-  UIinitialize();
-  console.log("Ilaris initialized");
-  $( "#characterList" ).change( function( event ) {
-    UIcreateFertigkeitenTable($("#characterList").val());
-  } );
-
-});
-
-
-</script>
-
-<hr>
-
-<strong>All icons used under Creative Commons with the following attribution:</strong>
-
-<table id="copyrightNoticeIcons">
-<tr><td><img src="../icons/cutlery.svg"></td><td>Created by Hopkins from the Noun Project</td></tr>
-<tr><td><img src="../icons/meditation.svg"></td><td>Created by yasminvisible from the Noun Project</td></tr>
-<tr><td><img src="../icons/fist.svg"></td><td>Created by Isabel Foo from the Noun Project</td></tr>
-<tr><td><img src="../icons/agent.svg"></td><td>Created by Setyo Ari Wibowo from the Noun Project</td></tr>
-<tr><td><img src="../icons/bonfire.svg"></td><td>Created by Setyo Ari Wibowo from the Noun Project</td></tr>
-<tr><td><img src="../icons/cauldron.svg"></td><td>Created by Vectors Market from the Noun Project</td></tr>
-<tr><td><img src="../icons/hospital.svg"></td><td>Created by UNiCORN from the Noun Project</td></tr>
-<tr><td><img src="../icons/world.svg"></td><td>Created by Aleksandr Vector from the Noun Project</td></tr>
-<tr><td><img src="../icons/puppeteer.svg"></td><td>Created by Luis Prado from the Noun Project</td></tr>
-<tr><td><img src="../icons/runner.svg"></td><td>Created by Gregor Cresnar from the Noun Project</td></tr>
-<tr><td><img src="../icons/myth-book.svg"></td><td>Created by IconfactoryTeam from the Noun Project</td></tr>
-<tr><td><img src="../icons/hammer.svg"></td><td>Created by Thomas' designs from the Noun Project</td></tr>
-<tr><td><img src="../icons/eye.svg"></td><td>Created by Edward Boatman from the Noun Project</td></tr>
-<tr><td><img src="../icons/wand.svg"></td><td>Created by Matthew R. Miller from the Noun Project</td></tr>
-<tr><td><img src="../icons/criminal.svg"></td><td>Created by Gregor Cresnar from the Noun Project</td></tr>
-<tr><td><img src="../icons/sword.svg"></td><td>Created by Postcat from the Noun Project</td></tr>
-<tr><td><img src="../icons/magic-book.svg"></td><td>Created by mbok sumirna from the Noun Project</td></tr>
-</table>
-
-</body>
-</html>
+      </script>
+    </body>
+    </html>

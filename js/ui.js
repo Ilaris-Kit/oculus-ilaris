@@ -19,6 +19,7 @@ function UIinitialize() {
 
   $( "#characterList" ).change( function( event ) {
     UIupdateCharacterSheet($("#characterList").val());
+    updateDeleteButton();
   } );
 
 
@@ -31,10 +32,35 @@ function UIinitialize() {
     $(this).html("<br>" + $(this).text() + ":&nbsp;");
   });
 
+  var fileInputButton = document.getElementById('uploadCharacter');
+  var fileInputCancelButton = document.getElementById('cancelUploadCharacter');
   var fileInput = document.getElementById('fileInput');
-
-
   fileInput.addEventListener('change', function(e) {
+    fileInputButton.disabled = (fileInput.files.length == 0);
+    $("#fileInputLabel").text("");
+    $("#fileInputLabel").css("display", "none");
+    $("#fileInputWrapper").css("display", "block");
+
+    if (fileInput.files.length > 0) {
+      $("#fileInputLabel").text(fileInput.value.split('\\').pop());
+      $("#fileInputLabel").css("display","block");
+      $("#fileInputWrapper").css("display", "none");
+    }
+
+  });
+  fileInputCancelButton.addEventListener('click', function(e) {
+    fileInputButton.disabled = true;
+    fileInput.files = null;
+    $("#fileInputLabel").text("");
+    $("#fileInputLabel").css("display", "none");
+    $("#fileInputWrapper").css("display", "block");
+  });
+
+
+  fileInputButton.addEventListener('click', function(e) {
+
+    if (fileInput.files.length == 0) return;
+
     var file = fileInput.files[0];
     var textType = /text.*/;
 
@@ -44,6 +70,10 @@ function UIinitialize() {
       reader.onload = function(e) {
         text = reader.result;
         UIupdateCharacterSheet(UIupdateCharacterList(addCharacterToLocalStorage(text)));
+        fileInput.files = null;
+        $("#fileInputLabel").text("");
+        $("#fileInputLabel").css("display", "none");
+        $("#fileInputWrapper").css("display", "block");
       }
 
       reader.readAsText(file);
@@ -55,15 +85,15 @@ function UIinitialize() {
 
   fileInputLS.addEventListener('change', function(e) {
     var file = fileInputLS.files[0];
-      var reader = new FileReader();
+    var reader = new FileReader();
 
-      reader.onload = function(e) {
-        text = reader.result;
-        JSONtoLocalStorage(text);
-        UIupdateCharacterSheet(UIupdateCharacterList(null));
-      }
+    reader.onload = function(e) {
+      text = reader.result;
+      JSONtoLocalStorage(text);
+      UIupdateCharacterSheet(UIupdateCharacterList(null));
+    }
 
-      reader.readAsText(file);
+    reader.readAsText(file);
 
   });
 
@@ -78,10 +108,6 @@ function UIupdateCharacterList(newlyselected = null) {
   var currentlySelected = $("#characterList").val();
   $("#characterList").empty();
   var clist = getCharacterListFromLocalStorage();
-  if (clist.length == 0) return null;
-  if (!(newlyselected === null)) {
-    currentlySelected = newlyselected;
-  }
   var first = false;
   if (currentlySelected === null) {
     first = true;
@@ -89,12 +115,33 @@ function UIupdateCharacterList(newlyselected = null) {
 
   $.each(clist, function( i, item ) {
     $("#characterList").append("<option>" + item + "</option>");
+    if (UICharacters[item] === undefined) {
+      UICharacters[item] = null;
+    }
     if (first) {
       currentlySelected = item;
       first = false;
     }
   });
+
+  for (var c in UICharacters) {
+    if (UICharacters.hasOwnProperty(c) && !(clist.includes(c))) {
+      delete UICharacters[c];
+    }
+  }
+  UIMVcreatePFertigkeitenTable(UICharacters);
+  updateDeleteButton();
+
+
+  if (clist.length == 0) return null;
+
+  if (!(newlyselected === null)) {
+    currentlySelected = newlyselected;
+  }
+
   $("#characterList").val(currentlySelected);
+
+
   return currentlySelected;
 }
 
@@ -105,7 +152,7 @@ function UIupdateTextField(id,currentlySelected) {
 function UIupdateCharacterSheet(currentlySelected) {
   UIclearFields();
   if (currentlySelected === null) return;
-  if (!UICharacters.hasOwnProperty(currentlySelected)) {
+  if (!UICharacters.hasOwnProperty(currentlySelected) || UICharacters[currentlySelected] === null) {
     UICharacters[currentlySelected] = getCharacterFromLocalStorage($("#characterList").val());
   }
   var currentCharacter = UICharacters[currentlySelected];
@@ -200,12 +247,13 @@ function UIupdateCharacterSheet(currentlySelected) {
   $.each(lists, function( i, item ) {
     UIsortList("#currentCharacter" + item);
   });
-  $("#FTABLE > thead").append($("<th scope=\"col\"></th><th scope=\"col\">Grp</th><th scope=\"col\">Fertigkeit bzw. Talent</th>"));
-  $("#FTABLE > thead").append($("<th scope=\"col\">" + currentCharacter["Name"] + "s PW/PW(T)</th>"));
+  $("#FTABLE > thead").append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
+  $("#FTABLE > thead").append($("<th scope=\"col\" style=\"text-align: right;\">PW/PW(T)</th>"));
 
   UIcreateFertigkeitenTable(currentCharacter,"P");
   UIcreateFertigkeitenTable(currentCharacter,"K", true, true);
   UIcreateFertigkeitenTable(currentCharacter,"U", true, true, true);
+
 
 
 
@@ -308,60 +356,56 @@ function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = f
       }
     });
     if (!talentsOnly) {
-    $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, i).append(UIcreateFertigkeitenCell(getProbenWert(character,i),false,false)));
+      $("#FTABLE > tbody").append(UIcreateFertigkeitenRow(kategorie, i).append(UIcreateFertigkeitenCell(getProbenWert(character,i),false,false)));
     }
   });
 
-//  UIsortTableByRowHeader("#FTABLE");
   UIsortTable("#FTABLE");
-//  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Wahrnehmung").append(UIcreateFertigkeitenCell(17,false,true)));
-//  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Betören").append(UIcreateFertigkeitenCell(4,false,true,true)));
-//  $("#FTABLE > tbody").append(UIcreateFertigkeitenRow("Rhetorik").append(UIcreateFertigkeitenCell(9,true,false,true,true)));
 }
 function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
 
   var icon = $("<td id=\"ftable-" + fname + "-icon\"></td>");
   var iconWrapper = $(UIgetIcon(fname));
-/*
+  /*
   if (talent) {
-    iconWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-left\"></span>"));
-    if (selected) {
-      iconWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
-    }
+  iconWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-left\"></span>"));
+  if (selected) {
+  iconWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+}
 
-  } else {
-    iconWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-left\"></span>"));
-  }*/
-
-  icon.append(iconWrapper);
-
-  var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
-  var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
-  var thWrapper = $("<div style=\"position: relative; padding: 0; padding-right: 1.2rem;text-align: left; display: inline-block;\">" + kategorie + "</div>");
-  if (talent) {
-    if (selected) {
-      thWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
-    } else {
-      thWrapper.append($("<span class=\"notSelected indicator indicator-bottom indicator-right\"></span>"));
-    }
-  } else {
-   thWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-right\"></span>"));
-  }
-
-  th.append(thWrapper);
-  tr.append(th);
-  tr.append(icon);
-  var f = $("<td id=\"ftable-" + fname + "-name\"></td>");
-  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 0rem; display: inline-block;\">" + fname + "</span>");
-  /*if (talent) {
-    if (selected) {
-      fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
-    }
+} else {
+iconWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-left\"></span>"));
 }*/
-  f.append(fWrapper);
-  tr.append(f);
 
-  return tr;
+icon.append(iconWrapper);
+
+var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
+var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
+var thWrapper = $("<div style=\"position: relative; padding: 0; padding-right: 1.2rem;text-align: left; display: inline-block;\">" + kategorie + "</div>");
+if (talent) {
+  if (selected) {
+    thWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+  } else {
+    thWrapper.append($("<span class=\"notSelected indicator indicator-bottom indicator-right\"></span>"));
+  }
+} else {
+  thWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-right\"></span>"));
+}
+
+th.append(thWrapper);
+tr.append(th);
+tr.append(icon);
+var f = $("<td id=\"ftable-" + fname + "-name\"></td>");
+var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 0rem; display: inline-block;\">" + fname + "</span>");
+/*if (talent) {
+if (selected) {
+fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+}
+}*/
+f.append(fWrapper);
+tr.append(f);
+
+return tr;
 }
 
 function UIcreateFertigkeitenCell(pw,vorteil,eigenheit,talent=false,selected=false) {
@@ -374,7 +418,7 @@ function UIcreateFertigkeitenCell(pw,vorteil,eigenheit,talent=false,selected=fal
   if (eigenheit) {
     newWrapper.append($("<span class=\"hasEigenheit indicator indicator-top indicator-left\"></span>"));
   }
-  return $("<td></td>").append(newWrapper);
+  return $("<td style=\"text-align: right;\"></td>").append(newWrapper);
 }
 
 UIKategorieStil = {
@@ -413,13 +457,128 @@ function UIinitializeIcons() {
           UIicons[titem] = icon + i;
         }
       });
-        UIicons[i] = icon;
-        if (kategorie == "P") {
-          UIicons[i] = icon + i;
-        }
+      UIicons[i] = icon;
+      if (kategorie == "P") {
+        UIicons[i] = icon + i;
+      }
     });
   });
 
 
+
+}
+
+
+
+
+
+
+function UIMVcreatePFertigkeitenRow(fname,talent=false) {
+
+  var kategorie = "P";
+  var icon = $("<td id=\"MULTIVIEW-ftable-" + fname + "-icon\"></td>");
+  var iconWrapper = $(UIgetIcon(fname));
+
+  icon.append(iconWrapper);
+
+  var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
+  var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
+  var thWrapper = $("<div style=\"position: relative; padding: 0; padding-right: 1.2rem;text-align: left; display: inline-block;\">" + kategorie + "</div>");
+  if (talent) {
+    thWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-right\"></span>"));
+  } else {
+    thWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indicator-right\"></span>"));
+  }
+
+  th.append(thWrapper);
+  tr.append(th);
+  tr.append(icon);
+  var f = $("<td id=\"MULTIVIEW-ftable-" + fname + "-name\"></td>");
+  var fWrapper = $("<span style=\"position: relative; padding: 0; padding-right: 0rem; display: inline-block;\">" + fname + "</span>");
+  f.append(fWrapper);
+  tr.append(f);
+
+  return tr;
+}
+
+
+function UIMVcreatePFertigkeitenCell(fname,cname, pw,vorteil,eigenheit,talent=false,selected=false) {
+  var newWrapper = $("<div class=\"probenwertWrapper\"></div>");
+  var newProbenwert = $("<div class=\"probenwert\">" + pw + "</div>");
+  newWrapper.append(newProbenwert);
+  if (vorteil) {
+    newWrapper.append($("<span class=\"hasVorteil indicator indicator-top indicator-right\"></span>"));
+  }
+  if (eigenheit) {
+    newWrapper.append($("<span class=\"hasEigenheit indicator indicator-top indicator-left\"></span>"));
+  }
+  if (talent && selected) {
+    newWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator-right\"></span>"));
+  }
+  return $("<td style=\"text-align: right;\" id=\"MULTIVIEW-ftable-" + fname + "-" + cname + " \"></td>").append(newWrapper);
+}
+
+
+function UIMVcreatePFertigkeitenTable(characters) {
+  console.log("Initializing MULTIVIEW with " + Object.keys(characters).length + " characters:");
+  console.log(Object.keys(characters));
+  $("#MULTIVIEW-PFTABLE > tbody, #MULTIVIEW-PFTABLE > thead").empty();
+  $("#MULTIVIEW-PFTABLE > thead").append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
+  $.each(characters, function( currentlySelected, currentlySelectedChar ) {
+    // console.log("I found a character: ");
+    //console.log(currentlySelected);
+    if (!UICharacters.hasOwnProperty(currentlySelected) || UICharacters[currentlySelected] === null) {
+      UICharacters[currentlySelected] = getCharacterFromLocalStorage(currentlySelected);
+    }
+    $("#MULTIVIEW-PFTABLE > thead").append($("<th scope=\"col\" style=\"text-align: right; padding-right: 1.5rem;\">" + UICharacters[currentlySelected]["Name"] + "</th>"));
+  });
+
+  var kategorie = "P";
+  $.each(Ilaris[kategorie + "Fertigkeiten"], function( i, item ) {
+    var tlist = item["talente"];
+    $.each(tlist, function( ti, titem ) {
+      var pwt = -1;
+      var sel = null;
+      var tr = UIMVcreatePFertigkeitenRow(titem, true);
+      $.each(characters, function( ci, citem ) {
+        //console.log("Lookup for character: " + ci);
+        //console.log(citem);
+        pwt = -1;
+        sel = null;
+        if (citem[kategorie + "Talente"][titem]["selected"]) {
+          pwt = getProbenWertT(citem,i);
+          sel = true;
+        } else {
+          pwt = getProbenWert(citem,i);
+          sel = false;
+        }
+        tr.append(UIMVcreatePFertigkeitenCell(titem,ci,pwt,false,false,true,sel));
+      });
+      $("#MULTIVIEW-PFTABLE > tbody").append(tr);
+    });
+    var tr = UIMVcreatePFertigkeitenRow(i, false);
+    $.each(characters, function( ci, citem ) {
+      pwt = getProbenWert(citem,i);
+      tr.append(UIMVcreatePFertigkeitenCell(i,ci,pwt,false,false,false));
+    });
+    $("#MULTIVIEW-PFTABLE > tbody").append(tr);
+  });
+
+  //UIsortTable("#MULTIVIEW-PFTABLE");
+}
+
+function updateDeleteButton() {
+  console.log("Charlist:");
+  console.log($("#characterList").val());
+  if ($("#characterList").val() === null) {
+    $("#deleteCharacterButton").addClass("d-none");
+    $("#characterList").addClass("d-none");
+    $("#helpText").removeClass("d-none");
+  } else {
+    $("#deleteCharacterButton").html("Delete " + $("#characterList").val());
+    $("#characterList").removeClass("d-none");
+    $("#deleteCharacterButton").removeClass("d-none");
+    $("#helpText").addClass("d-none");
+  }
 
 }
