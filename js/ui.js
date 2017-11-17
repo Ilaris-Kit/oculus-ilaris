@@ -336,6 +336,7 @@ function UIsortTable(tablename, offset=0) {
     while (tdcounter < $(a).children("th, td").length) {
       keyA = $($(a).children("th, td")[tdcounter]).text();
       keyB = $($(b).children("th, td")[tdcounter]).text();
+      //console.log(keyA + " vs " + keyB);
       if (keyA < keyB) return -1;
       if (keyA > keyB) return 1;
       tdcounter = tdcounter+1;
@@ -591,7 +592,7 @@ function UIMVcreatePFertigkeitenTable(characters) {
     $("#MULTIVIEW-PFTABLE > tbody").append(tr);
   });
 
-  //UIsortTable("#MULTIVIEW-PFTABLE");
+  UIsortTable("#MULTIVIEW-PFTABLE");
 }
 
 function updateDeleteButton() {
