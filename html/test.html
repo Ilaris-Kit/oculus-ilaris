@@ -27,9 +27,12 @@
   }
 
   #FTABLE,  #MULTIVIEW-PFTABLE,  #currentCharacter, li.nav-item {
+
     font-family: "Open Sans Condensed";
     font-size: 140%;
   }
+
+
 
   li.nav-item {
     font-weight: bolder;
@@ -191,8 +194,10 @@
     display:none;
   }
   .table {
-   margin: auto !important;
+   margin-left: auto !important;
+   margin-right: auto !important;
 }
+
 
   .currentCharacterLabel {
     font-weight: bolder;
@@ -202,8 +207,9 @@
     font-family: "Open Sans";
   }
 
-  .tab-pane {
-    padding-top: 1rem;
+
+  .currentCharacterLabel.ul {
+    background: red;
   }
 
 
@@ -260,17 +266,36 @@
   </div>
     <div class="col-12">
 
-        <ul class="nav nav-tabs navbar-right justify-content-end" id="tsa-tablist" role="tablist">
+        <ul class="nav nav-tabs d-none d-lg-flex" id="tsa-tablist" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" id="tsa-tab-single-sheet" data-toggle="tab" href="#tsa-single-sheet" role="tab" aria-controls="Charakter Sheet" aria-selected="true">Character Sheet</a>
+            <a class="nav-link active" id="tsa-tab-single-sheet" data-toggle="tab" href="#tsa-single-sheet" role="tab" aria-controls="Charakter Sheet" aria-selected="true">Charakterbogen</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="tsa-tab-single-fertigkeiten" data-toggle="tab" href="#tsa-single-fertigkeiten" role="tab" aria-controls="Fertigkeiten Übersicht" aria-selected="false">Fertigkeiten-Übersicht</a>
+            <a class="nav-link" id="tsa-tab-single-fertigkeiten" data-toggle="tab" href="#tsa-single-fertigkeiten" role="tab" aria-controls="Fertigkeiten Übersicht" aria-selected="false">Profane Fertigkeiten</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" id="tsa-tab-multi-pfertigkeiten" data-toggle="tab" href="#tsa-multi-pfertigkeiten" role="tab" aria-controls="Multiview Fertigkeiten Übersicht" aria-selected="false">Multiview: Profane Fertigkeiten</a>
           </li>
         </ul>
+        <form class="d-block d-lg-none">
+        <div class="form-group">
+          <select id="dropDownMenu" class="custom-select form-control">
+
+          </select>
+        </div>
+      </form>
+<!--      <ul class="nav nav-pills d-none d-sm-flex d-lg-none" id="tsa-tablist-md" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="tsa-tab-single-sheet-md" data-toggle="tab" href="#tsa-single-sheet" role="tab" aria-controls="Charakter Sheet" aria-selected="true">Charakterbogen</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="tsa-tab-single-fertigkeiten-md" data-toggle="tab" href="#tsa-single-fertigkeiten" role="tab" aria-controls="Fertigkeiten Übersicht" aria-selected="false">Profane Fertigkeiten</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="tsa-tab-multi-pfertigkeiten-md" data-toggle="tab" href="#tsa-multi-pfertigkeiten" role="tab" aria-controls="Multiview Fertigkeiten Übersicht" aria-selected="false">Multiview: Profane Fertigkeiten</a>
+        </li>
+      </ul>-->
+
       </div>
 
     </div>
@@ -281,7 +306,6 @@
         <div class="tab-content" id="tsa-tabcontent">
 
           <div class="tab-pane fade show active" id="tsa-single-sheet" role="tabpanel" aria-labelledby="tsa-tab-single-sheet">
-            <div class=container>
               <div id="currentCharacter">
                 <div id="currentCharacterAllgemeineInfos">
                   <span class="currentCharacterLabel">Name</span><span id="currentCharacterName"></span>
@@ -303,10 +327,9 @@
                 </div>
                 <div id="currentCharacterTalente">
                   <span class="currentCharacterLabel">Übersicht profane Fertigkeiten und Talente</span><ul id="currentCharacterPTalente"></ul>
-                </div>
-              </div>
             </div>
           </div>
+        </div>
           <div class="tab-pane fade" id="tsa-single-fertigkeiten" role="tabpanel" aria-labelledby="tsa-tab-single-fertigkeiten">
 
             <table class="table table-sm table-hover table-striped table-responsive-sm" id="FTABLE">

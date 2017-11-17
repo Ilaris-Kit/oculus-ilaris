@@ -2,6 +2,35 @@ UICharacters = {};
 
 function UIinitialize() {
   console.log("Initializing UI...");
+
+  var first = true;
+  $.each($("#tsa-tablist > li > a"), function(x,xitem) {
+    var text = $(xitem).text().trim();
+    $("#dropDownMenu").append("<option value=\"#" + $(xitem).attr("id") + "\">" + text + "</option>");
+  });
+
+$("#dropDownMenu").change( function (event) {
+    $($("#dropDownMenu").val()).tab("show");
+  });
+
+/*  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    var old = null;
+    var n = null;
+    if ($(e.target).attr("id").endsWith("md")) {
+        n = $("#" + $(e.target).attr("id").split("-md")[0]);
+        old = $("#" + $(e.relatedTarget).attr("id").split("-md")[0]);
+    } else {
+      n = $("#" + $(e.target).attr("id") + "-md");
+      old = $("#" + $(e.relatedTarget).attr("id") + "-md");
+    }
+    console.log(old.hasClass("active"));
+    console.log(n.hasClass("active"));
+
+    old.removeClass("active");
+    n.addClass("active");
+
+  });*/
+
   $( "#rebuildButton" ).click( function( event ) {
     initializeIlaris(function() {alert("Rebuilt");}, true);
   } );
@@ -27,9 +56,10 @@ function UIinitialize() {
 
   var currentlySelected = UIupdateCharacterList();
   UIupdateCharacterSheet(currentlySelected);
-
+  var br = "";
   $( ".currentCharacterLabel" ).each(function( index ) {
-    $(this).html("<br>" + $(this).text() + ":&nbsp;");
+    $(this).html(br+ $(this).text() + ":&nbsp;");
+    br = "<br>";
   });
 
   var fileInputButton = document.getElementById('uploadCharacter');
@@ -98,8 +128,6 @@ function UIinitialize() {
   });
 
   console.log("UI Loaded.");
-  console.log("Ilaris object:");
-  console.log(Ilaris);
 
 }
 
@@ -521,8 +549,6 @@ function UIMVcreatePFertigkeitenCell(fname,cname, pw,vorteil,eigenheit,talent=fa
 
 
 function UIMVcreatePFertigkeitenTable(characters) {
-  console.log("Initializing MULTIVIEW with " + Object.keys(characters).length + " characters:");
-  console.log(Object.keys(characters));
   $("#MULTIVIEW-PFTABLE > tbody, #MULTIVIEW-PFTABLE > thead").empty();
   $("#MULTIVIEW-PFTABLE > thead").append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
   $.each(characters, function( currentlySelected, currentlySelectedChar ) {
@@ -569,8 +595,6 @@ function UIMVcreatePFertigkeitenTable(characters) {
 }
 
 function updateDeleteButton() {
-  console.log("Charlist:");
-  console.log($("#characterList").val());
   if ($("#characterList").val() === null) {
     $("#deleteCharacterButton").addClass("d-none");
     $("#characterList").addClass("d-none");
