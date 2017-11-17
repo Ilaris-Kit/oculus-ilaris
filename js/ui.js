@@ -140,6 +140,7 @@ function UIupdateCharacterList(newlyselected = null) {
   }
 
   $("#characterList").val(currentlySelected);
+  updateDeleteButton();
 
 
   return currentlySelected;
@@ -364,7 +365,7 @@ function UIcreateFertigkeitenTable(character, kategorie, selectedTalentsOnly = f
 }
 function UIcreateFertigkeitenRow(kategorie, fname,talent=false,selected=false) {
 
-  var icon = $("<td id=\"ftable-" + fname + "-icon\"></td>");
+  var icon = $("<td id=\"ftable-" + fname + "-icon\" style=\"min-width: 2.5rem; width: 2.5rem; max-width: 2.5rem;\"></td>");
   var iconWrapper = $(UIgetIcon(fname));
   /*
   if (talent) {
@@ -380,7 +381,7 @@ iconWrapper.append($("<span class=\"isFertigkeit indicator indicator-bottom indi
 icon.append(iconWrapper);
 
 var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
-var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
+var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\" style=\"min-width: 2rem; width: 2rem; max-width: 2rem;\"></th>");
 var thWrapper = $("<div style=\"position: relative; padding: 0; padding-right: 1.2rem;text-align: left; display: inline-block;\">" + kategorie + "</div>");
 if (talent) {
   if (selected) {
@@ -476,13 +477,13 @@ function UIinitializeIcons() {
 function UIMVcreatePFertigkeitenRow(fname,talent=false) {
 
   var kategorie = "P";
-  var icon = $("<td id=\"MULTIVIEW-ftable-" + fname + "-icon\"></td>");
+  var icon = $("<td id=\"MULTIVIEW-ftable-" + fname + "-icon\" style=\"min-width: 2.5rem; width: 2.5rem; max-width: 2.5rem;\"></td>");
   var iconWrapper = $(UIgetIcon(fname));
 
   icon.append(iconWrapper);
 
   var tr = $("<tr class=\"" + UIKategorieStil[kategorie] +  "\"></tr>");
-  var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"></th>");
+  var th = $("<th class=\"" + UIKategorieStil[kategorie] + "\" scope=\"row\"  style=\"min-width: 2rem; width: 2rem; max-width: 2rem;\"></th>");
   var thWrapper = $("<div style=\"position: relative; padding: 0; padding-right: 1.2rem;text-align: left; display: inline-block;\">" + kategorie + "</div>");
   if (talent) {
     thWrapper.append($("<span class=\"isTalent indicator indicator-bottom indicator-right\"></span>"));
