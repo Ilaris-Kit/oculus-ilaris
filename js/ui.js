@@ -3,48 +3,24 @@ UICharacters = {};
 function UIinitialize() {
   console.log("Initializing UI...");
 
-  var first = true;
-  $.each($("#tsa-tablist > li > a"), function(x,xitem) {
-    var text = $(xitem).text().trim();
-    $("#dropDownMenu").append("<option value=\"#" + $(xitem).attr("id") + "\">" + text + "</option>");
-  });
-
-$("#dropDownMenu").change( function (event) {
+  $("#dropDownMenu").change( function (event) {
     $($("#dropDownMenu").val()).tab("show");
   });
 
-/*  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    var old = null;
-    var n = null;
-    if ($(e.target).attr("id").endsWith("md")) {
-        n = $("#" + $(e.target).attr("id").split("-md")[0]);
-        old = $("#" + $(e.relatedTarget).attr("id").split("-md")[0]);
-    } else {
-      n = $("#" + $(e.target).attr("id") + "-md");
-      old = $("#" + $(e.relatedTarget).attr("id") + "-md");
-    }
-    console.log(old.hasClass("active"));
-    console.log(n.hasClass("active"));
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    $("#dropDownMenu").val("#" + $(e.target).attr("id"));
+  });
 
-    old.removeClass("active");
-    n.addClass("active");
-
-  });*/
-
-  $( "#rebuildButton" ).click( function( event ) {
-    initializeIlaris(function() {alert("Rebuilt");}, true);
-  } );
-  $( "#deleteAllButton" ).click( function( event ) {
-    UIupdateCharacterSheet(UIupdateCharacterList(deleteAllCharactersFromLocalStorage()));
-
-  } );
   $( "#deleteCharacterButton" ).click( function( event ) {
-    UIupdateCharacterSheet(UIupdateCharacterList(deleteCharacterFromLocalStorage($("#characterList").val())));
+    UIdeletionModal($("#characterList").val(), function () {
+      UIupdateCharacterSheet(UIupdateCharacterList(deleteCharacterFromLocalStorage($("#characterList").val())));
+    })
+  } );
 
-  } );
-  $( "#downloadButton" ).click( function( event ) {
-    download(localStorageToJSON(), "ilarisLocalStorage.json","text/plain");
-  } );
+  $("#confirmDeletionButton" ).click( function( event ) {
+    UIdeletionModalCallback();
+    UIdeletionModalCallback = null;
+  });
 
   $( "#characterList" ).change( function( event ) {
     UIupdateCharacterSheet($("#characterList").val());
@@ -65,19 +41,35 @@ $("#dropDownMenu").change( function (event) {
   var fileInputButton = document.getElementById('uploadCharacter');
   var fileInputCancelButton = document.getElementById('cancelUploadCharacter');
   var fileInput = document.getElementById('fileInput');
+  UIcharacterUploadCache = null;
+
   fileInput.addEventListener('change', function(e) {
     fileInputButton.disabled = (fileInput.files.length == 0);
     $("#fileInputLabel").text("");
     $("#fileInputLabel").css("display", "none");
     $("#fileInputWrapper").css("display", "block");
+    UIcharacterUploadCache = null;
 
     if (fileInput.files.length > 0) {
       $("#fileInputLabel").text(fileInput.value.split('\\').pop());
       $("#fileInputLabel").css("display","block");
       $("#fileInputWrapper").css("display", "none");
+      var file = fileInput.files[0];
+      var textType = /text.*/;
+
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          UIcharacterUploadCache = getCharacterFromXML(reader.result);
+          $("#fileInputLabel").text("\"" + UIcharacterUploadCache["Name"] + "\" aus \"" + UIcharacterUploadCache["Heimat"] + "\"");
+        }
+
+        reader.readAsText(file);
+
     }
 
   });
+
   fileInputCancelButton.addEventListener('click', function(e) {
     fileInputButton.disabled = true;
     fileInput.files = null;
@@ -90,27 +82,27 @@ $("#dropDownMenu").change( function (event) {
   fileInputButton.addEventListener('click', function(e) {
 
     if (fileInput.files.length == 0) return;
+    fileInput.files = null;
+    $("#fileInputLabel").text("");
+    $("#fileInputLabel").css("display", "none");
+    $("#fileInputWrapper").css("display", "block");
 
-    var file = fileInput.files[0];
-    var textType = /text.*/;
+    UIupdateCharacterSheet(UIupdateCharacterList(addCharacterToLocalStorage(UIcharacterUploadCache)));
 
-    if (file.type.match(textType)) {
-      var reader = new FileReader();
-
-      reader.onload = function(e) {
-        text = reader.result;
-        UIupdateCharacterSheet(UIupdateCharacterList(addCharacterToLocalStorage(text)));
-        fileInput.files = null;
-        $("#fileInputLabel").text("");
-        $("#fileInputLabel").css("display", "none");
-        $("#fileInputWrapper").css("display", "block");
-      }
-
-      reader.readAsText(file);
-    }
 
   });
 
+  $( "#rebuildButton" ).click( function( event ) {
+    initializeIlaris(function() {alert("Rebuilt");}, true);
+  } );
+  $( "#deleteAllButton" ).click( function( event ) {
+    UIupdateCharacterSheet(UIupdateCharacterList(deleteAllCharactersFromLocalStorage()));
+
+  } );
+
+  $( "#downloadButton" ).click( function( event ) {
+    download(localStorageToJSON(), "ilarisLocalStorage.json","text/plain");
+  } );
   var fileInputLS = document.getElementById('fileInputLS');
 
   fileInputLS.addEventListener('change', function(e) {
@@ -125,6 +117,17 @@ $("#dropDownMenu").change( function (event) {
 
     reader.readAsText(file);
 
+  });
+
+  $("#maintenance").removeClass("d-none");
+
+  $(document).on('click', 'a[href^="#tsa-table-copyrightNoticeIcons"]', function (event) {
+    if ($("#tsa-table-copyrightNoticeIcons").css("display") === "none") {
+      $("#tsa-table-copyrightNoticeIcons").css("display","block");
+    } else {
+      $("#tsa-table-copyrightNoticeIcons").css("display","none");
+      event.preventDefault();
+    }
   });
 
   console.log("UI Loaded.");
@@ -160,7 +163,6 @@ function UIupdateCharacterList(newlyselected = null) {
   UIMVcreatePFertigkeitenTable(UICharacters);
   updateDeleteButton();
 
-
   if (clist.length == 0) return null;
 
   if (!(newlyselected === null)) {
@@ -168,7 +170,6 @@ function UIupdateCharacterList(newlyselected = null) {
   }
 
   $("#characterList").val(currentlySelected);
-  updateDeleteButton();
 
 
   return currentlySelected;
@@ -437,8 +438,8 @@ fWrapper.append($("<span class=\"isSelected indicator indicator-bottom indicator
 f.append(fWrapper);
 tr.append(f);
 tr.dblclick(function(e) {
-    e.preventDefault();
-    UIMVrollTheDice($("#MULTIVIEW-PFTABLE"), $(this), true);
+  e.preventDefault();
+  UIMVrollTheDice($("#MULTIVIEW-PFTABLE"), $(this), true);
 });
 
 return tr;
@@ -535,8 +536,8 @@ function UIMVcreatePFertigkeitenRow(fname,talent=false) {
   tr.append(f);
 
   tr.dblclick(function(e) {
-      e.preventDefault();
-      UIMVrollTheDice($("#MULTIVIEW-PFTABLE"), $(this));
+    e.preventDefault();
+    UIMVrollTheDice($("#MULTIVIEW-PFTABLE"), $(this));
   });
 
 
@@ -613,18 +614,24 @@ function UIMVcreatePFertigkeitenTable(characters) {
 }
 
 
-
 function updateDeleteButton() {
   if ($("#characterList").val() === null) {
-    $("#deleteCharacterButton").addClass("d-none");
-    $("#characterList").addClass("d-none");
+    $("#addCharacterButtonLong").removeClass("d-none");
+    $("#characterManager").addClass("d-none");
     $("#helpText").removeClass("d-none");
+    $("#navigation").addClass("d-none");
+    $("#tsa-tabcontent").addClass("importantHide");
+    $("#dropDownMenu").val("#tsa-tab-single-sheet");
+    $("#dropDownMenu").trigger("change");
   } else {
-    $("#deleteCharacterButton").html("Delete " + $("#characterList").val());
-    $("#characterList").removeClass("d-none");
-    $("#deleteCharacterButton").removeClass("d-none");
+    $("#addCharacterButtonLong").addClass("d-none");
+    $("#characterManager").removeClass("d-none");
     $("#helpText").addClass("d-none");
+    $("#navigation").removeClass("d-none");
+    $("#tsa-tabcontent").removeClass("importantHide");
   }
+
+  $("#menu").removeClass("d-none");
 
 }
 
@@ -632,8 +639,8 @@ function UIMVrollTheDice(table,tr,current = false) {
   var chars = $("#currentCharacterName");
   var firstchar = 2;
   if (!current) {
-     chars = table.children("thead").children("tr").children("th").get();
-     firstchar = 1;
+    chars = table.children("thead").children("tr").children("th").get();
+    firstchar = 1;
   }
   var tds = tr.children("td").get();
   var results = {};
@@ -661,10 +668,19 @@ function UIMVrollTheDice(table,tr,current = false) {
 }
 
 /**
- * Returns a random integer between min (inclusive) and max (inclusive)
- * Using Math.round() will give you a non-uniform distribution!
- https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
- */
+* Returns a random integer between min (inclusive) and max (inclusive)
+* Using Math.round() will give you a non-uniform distribution!
+https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
+*/
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+UIdeletionModalCallback = null;
+
+function UIdeletionModal(character, callback) {
+  UIdeletionModalCallback = callback;
+  $("#deletionModalHeaderH").text(character + " wirklich entfernen?")
+  $("#deletionModalBody").html("Soll der folgende Charakter tatsächlich entfernt werden? <br><strong>" + character + "</strong>");
+  $("#deletionModal").modal();
 }

@@ -2,13 +2,12 @@ function getCharacterFromLocalStorage(character) {
   return JSON.parse(localStorage.getItem("characters"))[character];
 }
 
-function addCharacterToLocalStorage(s) {
+function addCharacterToLocalStorage(newCharacter) {
   if (localStorage.getItem("characters") === null) {
     localStorage.setItem("characters", JSON.stringify({}));
   }
   c = JSON.parse(localStorage.getItem("characters"));
 
-  newCharacter = getCharacterFromXML(s);
   c[newCharacter["Name"]] = newCharacter;
   localStorage.setItem("characters",JSON.stringify(c));
 
