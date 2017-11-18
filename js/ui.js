@@ -1,96 +1,93 @@
 UICharacters = {};
+UIisInitialized = {}
 
 function UIinitialize() {
   console.log("Initializing UI...");
 
-  $("#dropDownMenu").change( function (event) {
-    $($("#dropDownMenu").val()).tab("show");
-  });
 
-  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    $("#dropDownMenu").val("#" + $(e.target).attr("id"));
-  });
-
-  $( "#deleteCharacterButton" ).click( function( event ) {
-    UIdeletionModal($("#characterList").val(), function () {
-      UIupdateCharacterSheet(UIupdateCharacterList(deleteCharacterFromLocalStorage($("#characterList").val())));
-    })
-  } );
-
-  $("#confirmDeletionButton" ).click( function( event ) {
-    UIdeletionModalCallback();
-    UIdeletionModalCallback = null;
-  });
-
-  $( "#characterList" ).change( function( event ) {
-    UIupdateCharacterSheet($("#characterList").val());
-    updateDeleteButton();
-  } );
-
-
-  UIinitializeIcons();
+  UIisInitialized["characterList"] = false;
+  UIisInitialized["dropDownMenu"] = false;
+  UIisInitialized["deleteCharacterButton"] = false;
+  UIisInitialized["deletionModal"] = false;
+  UIisInitialized["icons"] = false;
 
   var currentlySelected = UIupdateCharacterList();
+  console.log("List done");
   UIupdateCharacterSheet(currentlySelected);
+
   var br = "";
   $( ".currentCharacterLabel" ).each(function( index ) {
     $(this).html(br+ $(this).text() + ":&nbsp;");
     br = "<br>";
   });
 
-  var fileInputButton = document.getElementById('uploadCharacter');
-  var fileInputCancelButton = document.getElementById('cancelUploadCharacter');
-  var fileInput = document.getElementById('fileInput');
-  UIcharacterUploadCache = null;
+  UIisInitialized["fileUploader"] = false;
 
-  fileInput.addEventListener('change', function(e) {
-    fileInputButton.disabled = (fileInput.files.length == 0);
-    $("#fileInputLabel").text("");
-    $("#fileInputLabel").css("display", "none");
-    $("#fileInputWrapper").css("display", "block");
-    UIcharacterUploadCache = null;
+  $("#addCharacterButtonLong, #addCharacterButton").click(function (e) {
 
-    if (fileInput.files.length > 0) {
-      $("#fileInputLabel").text(fileInput.value.split('\\').pop());
-      $("#fileInputLabel").css("display","block");
-      $("#fileInputWrapper").css("display", "none");
-      var file = fileInput.files[0];
-      var textType = /text.*/;
 
-        var reader = new FileReader();
+      if (!UIisInitialized["fileUploader"]) {
+      var fileInputButton = document.getElementById('uploadCharacter');
+      var fileInputCancelButton = document.getElementById('cancelUploadCharacter');
+      var fileInput = document.getElementById('fileInput');
+      UIcharacterUploadCache = null;
 
-        reader.onload = function(e) {
-          UIcharacterUploadCache = getCharacterFromXML(reader.result);
-          $("#fileInputLabel").text("\"" + UIcharacterUploadCache["Name"] + "\" aus \"" + UIcharacterUploadCache["Heimat"] + "\"");
+      fileInput.addEventListener('change', function(e) {
+        fileInputButton.disabled = (fileInput.files.length == 0);
+        $("#fileInputLabel").text("");
+        $("#fileInputLabel").css("display", "none");
+        $("#fileInputWrapper").css("display", "block");
+        UIcharacterUploadCache = null;
+
+        if (fileInput.files.length > 0) {
+          $("#fileInputLabel").text(fileInput.value.split('\\').pop());
+          $("#fileInputLabel").css("display","block");
+          $("#fileInputWrapper").css("display", "none");
+          var file = fileInput.files[0];
+          var textType = /text.*/;
+
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+              UIcharacterUploadCache = getCharacterFromXML(reader.result);
+              $("#fileInputLabel").text("\"" + UIcharacterUploadCache["Name"] + "\" aus \"" + UIcharacterUploadCache["Heimat"] + "\"");
+            }
+
+            reader.readAsText(file);
+
         }
 
-        reader.readAsText(file);
+      });
 
+      fileInputCancelButton.addEventListener('click', function(e) {
+        fileInputButton.disabled = true;
+        fileInput.files = null;
+        $("#fileInputLabel").text("");
+        $("#fileInputLabel").css("display", "none");
+        $("#fileInputWrapper").css("display", "block");
+      });
+
+
+      fileInputButton.addEventListener('click', function(e) {
+
+        if (fileInput.files.length == 0) return;
+        fileInput.files = null;
+        $("#fileInputLabel").text("");
+        $("#fileInputLabel").css("display", "none");
+        $("#fileInputWrapper").css("display", "block");
+
+        UIupdateCharacterSheet(UIupdateCharacterList(addCharacterToLocalStorage(UIcharacterUploadCache)));
+
+
+      });
+      UIisInitialized["fileUploader"] = true;
     }
 
-  });
-
-  fileInputCancelButton.addEventListener('click', function(e) {
-    fileInputButton.disabled = true;
-    fileInput.files = null;
-    $("#fileInputLabel").text("");
-    $("#fileInputLabel").css("display", "none");
-    $("#fileInputWrapper").css("display", "block");
-  });
-
-
-  fileInputButton.addEventListener('click', function(e) {
-
-    if (fileInput.files.length == 0) return;
-    fileInput.files = null;
-    $("#fileInputLabel").text("");
-    $("#fileInputLabel").css("display", "none");
-    $("#fileInputWrapper").css("display", "block");
-
-    UIupdateCharacterSheet(UIupdateCharacterList(addCharacterToLocalStorage(UIcharacterUploadCache)));
-
+    $("#fileUploadModal").modal("show");
 
   });
+
+
 
   $( "#rebuildButton" ).click( function( event ) {
     initializeIlaris(function() {alert("Rebuilt");}, true);
@@ -119,7 +116,6 @@ function UIinitialize() {
 
   });
 
-  $("#maintenance").removeClass("d-none");
 
   $(document).on('click', 'a[href^="#tsa-table-copyrightNoticeIcons"]', function (event) {
     if ($("#tsa-table-copyrightNoticeIcons").css("display") === "none") {
@@ -130,20 +126,28 @@ function UIinitialize() {
     }
   });
 
+  $("#maintenance").removeClass("d-none");
+  $("#tsa-icon-copyrights").removeClass("d-none");
+
   console.log("UI Loaded.");
 
 }
 
 
 function UIupdateCharacterList(newlyselected = null) {
+
   var currentlySelected = $("#characterList").val();
-  $("#characterList").empty();
   var clist = getCharacterListFromLocalStorage();
+
+  UIhasCharacters = (clist.length > 0);
+  updateDeleteButton();
+
   var first = false;
   if (currentlySelected === null) {
     first = true;
   }
 
+  $("#characterList").empty();
   $.each(clist, function( i, item ) {
     $("#characterList").append("<option>" + item + "</option>");
     if (UICharacters[item] === undefined) {
@@ -155,13 +159,15 @@ function UIupdateCharacterList(newlyselected = null) {
     }
   });
 
-  for (var c in UICharacters) {
-    if (UICharacters.hasOwnProperty(c) && !(clist.includes(c))) {
-      delete UICharacters[c];
-    }
+  if (!(UIisInitialized["characterList"])) {
+    $( "#characterList" ).change( function( event ) {
+      UIupdateCharacterSheet($("#characterList").val());
+    } );
+    UIisInitialized["characterList"] = true;
   }
-  UIMVcreatePFertigkeitenTable(UICharacters);
-  updateDeleteButton();
+
+
+  UIMVcreatePFertigkeitenTable(UICharacters, clist);
 
   if (clist.length == 0) return null;
 
@@ -469,6 +475,11 @@ UIicons = {
 }
 
 function UIgetIcon(x) {
+  if (!(UIisInitialized["icons"])) {
+    UIinitializeIcons();
+    UIisInitialized["icons"] = true;
+  }
+
   if (x in UIicons) {
     return "<div class=\"iconWrapper\"><span class=\"icon icon-" + UIicons[x] + "\"></span></div>";
   }
@@ -562,17 +573,17 @@ function UIMVcreatePFertigkeitenCell(fname,cname, pw,vorteil,eigenheit,talent=fa
 }
 
 
-function UIMVcreatePFertigkeitenTable(characters) {
+function UIMVcreatePFertigkeitenTable(characters, clist) {
   $("#MULTIVIEW-PFTABLE > tbody, #MULTIVIEW-PFTABLE > thead").empty();
   var tr = $("<tr id=\"MULTIVIEW-FTABLE-HEAD\"></tr>");
   tr.append($("<th scope=\"col\" colspan=3>Fertigkeit/Talent</th>"));
-  $.each(characters, function( currentlySelected, currentlySelectedChar ) {
-    // console.log("I found a character: ");
-    //console.log(currentlySelected);
-    if (!UICharacters.hasOwnProperty(currentlySelected) || UICharacters[currentlySelected] === null) {
-      UICharacters[currentlySelected] = getCharacterFromLocalStorage(currentlySelected);
+  $.each(clist, function( currentlySelected, currentlySelectedChar ) {
+    var theChar = UICharacters[currentlySelectedChar];
+    if (!UICharacters.hasOwnProperty(currentlySelectedChar) || UICharacters[currentlySelectedChar] === null) {
+      theChar = getCharacterFromLocalStorage(currentlySelectedChar);
+      UICharacters[currentlySelectedChar] = theChar;
     }
-    tr.append($("<th scope=\"col\" style=\"text-align: right; padding-right: 1.5rem;\">" + UICharacters[currentlySelected]["Name"] + "</th>"));
+    tr.append($("<th scope=\"col\" style=\"text-align: right; padding-right: 1.5rem;\">" + theChar["Name"] + "</th>"));
   });
   $("#MULTIVIEW-PFTABLE > thead").append(tr);
 
@@ -583,28 +594,28 @@ function UIMVcreatePFertigkeitenTable(characters) {
       var pwt = -1;
       var sel = null;
       var tr = UIMVcreatePFertigkeitenRow(titem, true);
-      $.each(characters, function( ci, citem ) {
+      $.each(clist, function( ci, citem ) {
         //console.log("Lookup for character: " + ci);
         //console.log(citem);
         pwt = -1;
-        sel = null;
-        if (citem[kategorie + "Talente"][titem]["selected"]) {
-          pwt = getProbenWertT(citem,i);
-          sel = true;
+        var theChar = UICharacters[citem];
+        var sel = theChar[kategorie + "Talente"][titem]["selected"];
+        if (sel) {
+          pwt = getProbenWertT(theChar,i);
         } else {
-          pwt = getProbenWert(citem,i);
-          sel = false;
+          pwt = getProbenWert(theChar,i);
         }
-        tr.append(UIMVcreatePFertigkeitenCell(titem,ci,pwt,false,false,true,sel));
+        tr.append(UIMVcreatePFertigkeitenCell(titem,citem,pwt,false,false,true,sel));
       });
       $("#MULTIVIEW-PFTABLE > tbody").append(tr);
 
 
     });
     var tr = UIMVcreatePFertigkeitenRow(i, false);
-    $.each(characters, function( ci, citem ) {
-      pwt = getProbenWert(citem,i);
-      tr.append(UIMVcreatePFertigkeitenCell(i,ci,pwt,false,false,false));
+    $.each(clist, function( ci, citem ) {
+      var theChar = UICharacters[citem];
+      pwt = getProbenWert(theChar,i);
+      tr.append(UIMVcreatePFertigkeitenCell(i,citem,pwt,false,false,false));
     });
     $("#MULTIVIEW-PFTABLE > tbody").append(tr);
   });
@@ -613,9 +624,11 @@ function UIMVcreatePFertigkeitenTable(characters) {
 
 }
 
+UIhasCharacters = false;
 
 function updateDeleteButton() {
-  if ($("#characterList").val() === null) {
+
+  if (!UIhasCharacters) {
     $("#addCharacterButtonLong").removeClass("d-none");
     $("#characterManager").addClass("d-none");
     $("#helpText").removeClass("d-none");
@@ -624,6 +637,26 @@ function updateDeleteButton() {
     $("#dropDownMenu").val("#tsa-tab-single-sheet");
     $("#dropDownMenu").trigger("change");
   } else {
+    if (!(UIisInitialized["deleteCharacterButton"])) {
+      $( "#deleteCharacterButton" ).click( function( event ) {
+        UIdeletionModal($("#characterList").val(), function () {
+          UIupdateCharacterSheet(UIupdateCharacterList(deleteCharacterFromLocalStorage($("#characterList").val())));
+        })
+      } );
+      UIisInitialized["deleteCharacterButton"] = true;
+    }
+    if (!(UIisInitialized["dropDownMenu"])) {
+      $("#dropDownMenu").change( function (event) {
+        $($("#dropDownMenu").val()).tab("show");
+      });
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $("#dropDownMenu").val("#" + $(e.target).attr("id"));
+      });
+
+      UIisInitialized["dropDownMenu"] = true;
+    }
+
+
     $("#addCharacterButtonLong").addClass("d-none");
     $("#characterManager").removeClass("d-none");
     $("#helpText").addClass("d-none");
@@ -632,6 +665,7 @@ function updateDeleteButton() {
   }
 
   $("#menu").removeClass("d-none");
+
 
 }
 
@@ -679,6 +713,14 @@ function getRandomInt(min, max) {
 UIdeletionModalCallback = null;
 
 function UIdeletionModal(character, callback) {
+  if (!(UIisInitialized["deletionModal"])) {
+    $("#confirmDeletionButton" ).click( function( event ) {
+      UIdeletionModalCallback();
+      UIdeletionModalCallback = null;
+    });
+    UIisInitialized["deletionModal"] = true;
+
+  }
   UIdeletionModalCallback = callback;
   $("#deletionModalHeaderH").text(character + " wirklich entfernen?")
   $("#deletionModalBody").html("Soll der folgende Charakter tatsächlich entfernt werden? <br><strong>" + character + "</strong>");
