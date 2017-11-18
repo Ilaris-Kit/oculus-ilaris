@@ -723,6 +723,6 @@ function UIdeletionModal(character, callback) {
   }
   UIdeletionModalCallback = callback;
   $("#deletionModalHeaderH").text(character + " wirklich entfernen?")
-  $("#deletionModalBody").html("Soll der folgende Charakter tatsächlich entfernt werden? <br><strong>" + character + "</strong>");
+  $("#deletionModalBody").html("Soll der folgende Charakter tatsächlich entfernt werden? <br>\"" + UICharacters[character]["Name"] + "\" aus \"" + UICharacters[character]["Heimat"] + "\"");
   $("#deletionModal").modal();
 }

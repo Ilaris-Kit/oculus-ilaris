@@ -299,7 +299,7 @@
                 <a class="nav-link active" id="tsa-tab-single-sheet" data-toggle="tab" href="#tsa-single-sheet" role="tab" aria-controls="Charakter Sheet" aria-selected="true">Charakterbogen</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="tsa-tab-single-fertigkeiten" data-toggle="tab" href="#tsa-single-fertigkeiten" role="tab" aria-controls="Fertigkeiten Übersicht" aria-selected="false">Profane Fertigkeiten</a>
+                <a class="nav-link" id="tsa-tab-single-fertigkeiten" data-toggle="tab" href="#tsa-single-fertigkeiten" role="tab" aria-controls="Fertigkeiten Übersicht" aria-selected="false">Fertigkeiten</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" id="tsa-tab-multi-pfertigkeiten" data-toggle="tab" href="#tsa-multi-pfertigkeiten" role="tab" aria-controls="Multiview Fertigkeiten Übersicht" aria-selected="false">Multiview: Profane Fertigkeiten</a>
@@ -309,7 +309,7 @@
               <div class="form-group">
                 <select id="dropDownMenu" class="custom-select form-control">
                   <option value="#tsa-tab-single-sheet" selected>Charakterbogen</a>
-                    <option value="#tsa-tab-single-fertigkeiten">Profane Fertigkeiten</a>
+                    <option value="#tsa-tab-single-fertigkeiten">Fertigkeiten</a>
                       <option value="#tsa-tab-multi-pfertigkeiten">Multiview: Profane Fertigkeiten</a>
                       </select>
                     </div>
@@ -463,9 +463,7 @@
             $(document).ready(function () {
             initializeIlaris(function() {
               UIinitialize();
-              $( "#characterList" ).change( function( event ) {
-                UIcreateFertigkeitenTable($("#characterList").val());
-              } );
+
 
             });
           });
