@@ -605,7 +605,21 @@ function UIMVcreatePFertigkeitenTable(characters, clist) {
         } else {
           pwt = getProbenWert(theChar,i);
         }
-        tr.append(UIMVcreatePFertigkeitenCell(titem,citem,pwt,false,false,true,sel));
+        console.log("Checking: " + titem);
+        var vorteileFertigkeit = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Fertigkeiten"][i]["vorteile"]);
+        var vorteilFertigkeit = vorteileFertigkeit.length > 0;
+        var vorteileTalent = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Talente"][titem]["vorteile"]);
+        var vorteilTalent = vorteileTalent.length > 0;
+        var newTD = UIMVcreatePFertigkeitenCell(titem,citem,pwt,vorteilFertigkeit || vorteilTalent,false,true,sel);
+        var newSpan = $("<span class=\"d-none vorteile\"></span>");
+        $.each(vorteileFertigkeit, function(v, vv) {
+          newSpan.append("<li>" + vv + "</li>");
+        });
+        $.each(vorteileTalent, function(v, vv) {
+          newSpan.append("<li>" + vv + "</li>");
+        });
+        newTD.append(newSpan);
+        tr.append(newTD);
       });
       $("#MULTIVIEW-PFTABLE > tbody").append(tr);
 
@@ -615,7 +629,15 @@ function UIMVcreatePFertigkeitenTable(characters, clist) {
     $.each(clist, function( ci, citem ) {
       var theChar = UICharacters[citem];
       pwt = getProbenWert(theChar,i);
-      tr.append(UIMVcreatePFertigkeitenCell(i,citem,pwt,false,false,false));
+      var vorteileFertigkeit = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Fertigkeiten"][i]["vorteile"]);
+      var vorteilFertigkeit = vorteileFertigkeit.length > 0;
+      var newSpan = $("<span class=\"d-none vorteile\"></span>");
+      $.each(vorteileFertigkeit, function(v, vv) {
+        newSpan.append("<li>" + vv + "</li>");
+      });
+      var newTD = UIMVcreatePFertigkeitenCell(i,citem,pwt,vorteilFertigkeit,false,false);
+
+    tr.append(newTD);
     });
     $("#MULTIVIEW-PFTABLE > tbody").append(tr);
   });
@@ -679,6 +701,7 @@ function UIMVrollTheDice(table,tr,current = false) {
   var tds = tr.children("td").get();
   var results = {};
   var ul = $("<ul></ul>");
+
   for (i = 2; i < tds.length; ++i) {
     var td = $(tds[i]);
     var pw = parseInt(td.text());
@@ -690,7 +713,12 @@ function UIMVrollTheDice(table,tr,current = false) {
       probenwert: pw,
       resultat: pw + val
     };
-    ul.append($("<li><strong>" + $(chars[i-firstchar]).text() + ": " + (val+pw) + "</strong>, gewertet: " + val +  ". <br><small>PW/PW(T) = " + pw + ", Würfel = (" + rolls.join(",")  + ")</small></li>"));
+
+
+    var vlist = $("<ul></ul>");
+    vlist.html(td.children("span.vorteile").html());
+    var entry = $("<li><strong>" + $(chars[i-firstchar]).text() + ": " + (val+pw) + "</strong>, gewertet: " + val +  ". <br><small>PW/PW(T) = " + pw + ", Würfel = (" + rolls.join(",")  + ")</small><ul>" + vlist.html() + "</ul></li>");
+    ul.append(entry);
   }
   $("#rollTheDiceModalHeaderH").text("Würfle auf " + $(tds[1]).text());
   $("#rollTheDiceModalBody").empty();
@@ -725,4 +753,25 @@ function UIdeletionModal(character, callback) {
   $("#deletionModalHeaderH").text(character + " wirklich entfernen?")
   $("#deletionModalBody").html("Soll der folgende Charakter tatsächlich entfernt werden? <br>\"" + UICharacters[character]["Name"] + "\" aus \"" + UICharacters[character]["Heimat"] + "\"");
   $("#deletionModal").modal();
+}
+
+
+function UIintersection(a, b) {
+
+  console.log("Comparing:" );
+  console.log(a);
+  console.log(b);
+    if (a === undefined) return [];
+    if (b === undefined) return [];
+
+    var t;
+    if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+    return a.filter(function (e) {
+        return b.indexOf(e) > -1;
+    });
+}
+
+
+function UIintersectionNonEmpty(a,b) {
+  return (UIintersectArrays(a,b).length > 0);
 }

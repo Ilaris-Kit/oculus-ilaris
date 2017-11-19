@@ -61,6 +61,7 @@ function getIlarisFromRulesXML() {
 Ilaris = {};
 
 function initializeIlaris(callback, rebuild = false) {
+
   IlarisLocal = localStorage.getItem("Ilaris");
   if (rebuild || IlarisLocal === null) {
     if (rebuild || localStorage.getItem("rules") === null) {
@@ -74,18 +75,18 @@ function initializeIlaris(callback, rebuild = false) {
                     console.log("Pulled from github");
                     Ilaris = getIlarisFromRulesXML();
                     localStorage.setItem("Ilaris", JSON.stringify(Ilaris));
-                    return callback();
+                    return finalizeCallback(callback);
       						}
       			 });
       return;
     } else {
       Ilaris = getIlarisFromRulesXML();
       localStorage.setItem("Ilaris", JSON.stringify(Ilaris));
-      return callback();
+      return finalizeCallback(callback);
     }
   }
   Ilaris = JSON.parse(IlarisLocal);
-  return callback();
+  return finalizeCallback(callback);
 }
 
 function IlarisCleanupTalent(talent) {
@@ -93,4 +94,35 @@ function IlarisCleanupTalent(talent) {
     return talent.split(": ").join(" (") + ")";
   }
   return talent;
+}
+
+function finalizeCallback(callback) {
+
+  $.each(IlarisVorteile, function(i,item) {
+    $.each(item, function(j,jitem) {
+      $.each(jitem["for"], function(f, fertigkeit) {
+        $.each(["P", "U", "K"], function (k, kategorie) {
+          if (fertigkeit in Ilaris[kategorie + "Fertigkeiten"]) {
+            if (!("vorteile" in Ilaris[kategorie + "Fertigkeiten"][fertigkeit])) {
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile"] = [];
+            }
+            Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile"].push(i);
+          }
+        });
+        $.each(["P", "U", "K"], function (k, kategorie) {
+          if (fertigkeit in Ilaris[kategorie + "Talente"]) {
+            if (!("vorteile" in Ilaris[kategorie + "Talente"][fertigkeit])) {
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile"] = [];
+            }
+            Ilaris[kategorie + "Talente"][fertigkeit]["vorteile"].push(i);
+          }
+        });
+
+      })
+    })
+  });
+
+  console.log(Ilaris);
+
+  return callback();
 }
