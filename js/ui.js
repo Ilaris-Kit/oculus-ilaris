@@ -605,7 +605,6 @@ function UIMVcreatePFertigkeitenTable(characters, clist) {
         } else {
           pwt = getProbenWert(theChar,i);
         }
-        console.log("Checking: " + titem);
         var vorteileFertigkeit = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Fertigkeiten"][i]["vorteile"]);
         var vorteilFertigkeit = vorteileFertigkeit.length > 0;
         var vorteileTalent = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Talente"][titem]["vorteile"]);
@@ -631,11 +630,16 @@ function UIMVcreatePFertigkeitenTable(characters, clist) {
       pwt = getProbenWert(theChar,i);
       var vorteileFertigkeit = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Fertigkeiten"][i]["vorteile"]);
       var vorteilFertigkeit = vorteileFertigkeit.length > 0;
+      if (vorteilFertigkeit) {
+        console.log(i);
+        console.log(vorteileFertigkeit);
+      }
       var newSpan = $("<span class=\"d-none vorteile\"></span>");
       $.each(vorteileFertigkeit, function(v, vv) {
         newSpan.append("<li>" + vv + "</li>");
       });
       var newTD = UIMVcreatePFertigkeitenCell(i,citem,pwt,vorteilFertigkeit,false,false);
+      newTD.append(newSpan);
 
     tr.append(newTD);
     });
@@ -758,9 +762,6 @@ function UIdeletionModal(character, callback) {
 
 function UIintersection(a, b) {
 
-  console.log("Comparing:" );
-  console.log(a);
-  console.log(b);
     if (a === undefined) return [];
     if (b === undefined) return [];
 
