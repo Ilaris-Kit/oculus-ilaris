@@ -8,6 +8,7 @@ function UIinitialize() {
   UIisInitialized["characterList"] = false;
   UIisInitialized["dropDownMenu"] = false;
   UIisInitialized["deleteCharacterButton"] = false;
+  UIisInitialized["renamingCharacterButton"] = false;
   UIisInitialized["deletionModal"] = false;
   UIisInitialized["icons"] = false;
 
@@ -319,8 +320,8 @@ function UIsortList(listname) {
 
 }
 
-function UIsortTableByRowHeader(tablename) {
-  var items = $(tablename + ' > tbody > tr').get();
+function UIsortTableByRowHeader(tablenaming) {
+  var items = $(tablenaming + ' > tbody > tr').get();
   items.sort(function(a,b){
     var keyA = $($(a).children("th")[0]).text().split(": ")[0];
     var keyB = $($(b).children("th")[0]).text().split(": ")[0];
@@ -333,13 +334,13 @@ function UIsortTableByRowHeader(tablename) {
     return 0;
   });
   $.each(items, function(i, li){
-    $(tablename + " > tbody").append(li);
+    $(tablenaming + " > tbody").append(li);
   });
 
 }
 
-function UIsortTable(tablename, offset=0) {
-  var items = $(tablename + ' > tbody > tr').get();
+function UIsortTable(tablenaming, offset=0) {
+  var items = $(tablenaming + ' > tbody > tr').get();
   items.sort(function(a,b){
     var tdcounter = offset;
     while (tdcounter < $(a).children("th, td").length) {
@@ -355,7 +356,7 @@ function UIsortTable(tablename, offset=0) {
     return 0;
   });
   $.each(items, function(i, li){
-    $(tablename + " > tbody").append(li);
+    $(tablenaming + " > tbody").append(li);
   });
 
 }
@@ -630,10 +631,6 @@ function UIMVcreatePFertigkeitenTable(characters, clist) {
       pwt = getProbenWert(theChar,i);
       var vorteileFertigkeit = UIintersection(theChar["Vorteile"], Ilaris[kategorie+ "Fertigkeiten"][i]["vorteile"]);
       var vorteilFertigkeit = vorteileFertigkeit.length > 0;
-      if (vorteilFertigkeit) {
-        console.log(i);
-        console.log(vorteileFertigkeit);
-      }
       var newSpan = $("<span class=\"d-none vorteile\"></span>");
       $.each(vorteileFertigkeit, function(v, vv) {
         newSpan.append("<li>" + vv + "</li>");
@@ -670,6 +667,14 @@ function updateDeleteButton() {
         })
       } );
       UIisInitialized["deleteCharacterButton"] = true;
+    }
+    if (!(UIisInitialized["renamingCharacterButton"])) {
+      $( "#renamingCharacterButton" ).click( function( event ) {
+        UIrenamingModal($("#characterList").val(), function (newname) {
+          UIupdateCharacterSheet(UIupdateCharacterList(renameCharacterFromLocalStorage(UICharacters[$("#characterList").val()], newname)));
+        })
+      } );
+      UIisInitialized["renamingCharacterButton"] = true;
     }
     if (!(UIisInitialized["dropDownMenu"])) {
       $("#dropDownMenu").change( function (event) {
@@ -743,6 +748,7 @@ function getRandomInt(min, max) {
 }
 
 UIdeletionModalCallback = null;
+UIrenamingModalCallback = null;
 
 function UIdeletionModal(character, callback) {
   if (!(UIisInitialized["deletionModal"])) {
@@ -757,6 +763,21 @@ function UIdeletionModal(character, callback) {
   $("#deletionModalHeaderH").text(character + " wirklich entfernen?")
   $("#deletionModalBody").html("Soll der folgende Charakter tatsächlich entfernt werden? <br>\"" + UICharacters[character]["Name"] + "\" aus \"" + UICharacters[character]["Heimat"] + "\"");
   $("#deletionModal").modal();
+}
+
+function UIrenamingModal(character, callback) {
+  if (!(UIisInitialized["renamingModal"])) {
+    $("#confirmRenamingButton" ).click( function( event ) {
+      UIrenamingModalCallback($("#newName").val());
+      UIrenamingModalCallback = null;
+    });
+    UIisInitialized["renamingModal"] = true;
+  }
+  UIrenamingModalCallback = callback;
+  $("#renamingModalHeaderH").text(character + " umbenennen?");
+  var renamingField = "<input id=\"newName\" type=\"text\" value=\"" + UICharacters[character]["Name"]  + "\">";
+  $("#renamingModalBody").html("Soll der folgende Charakter tatsächlich umbenannt werden? <br>\"" + UICharacters[character]["Name"] + "\" aus \"" + UICharacters[character]["Heimat"] + "\"<br>" + renamingField);
+  $("#renamingModal").modal();
 }
 
 

@@ -2,6 +2,12 @@ function getCharacterFromLocalStorage(character) {
   return JSON.parse(localStorage.getItem("characters"))[character];
 }
 
+function renameCharacterFromLocalStorage(character, newname) {
+  deleteCharacterFromLocalStorage(character["Name"]);
+  character["Name"] = newname;
+  return addCharacterToLocalStorage(character);
+}
+
 function addCharacterToLocalStorage(newCharacter) {
   if (localStorage.getItem("characters") === null) {
     localStorage.setItem("characters", JSON.stringify({}));
@@ -48,7 +54,6 @@ function localStorageToJSON() {
 
 function JSONtoLocalStorage(json) {
   var ls = JSON.parse(json);
-  console.log(ls);
   localStorage.setItem("rules",JSON.stringify(ls["rules"]));
   localStorage.setItem("Ilaris",JSON.stringify(ls["Ilaris"]));
   localStorage.setItem("characters", JSON.stringify(ls["characters"]));
