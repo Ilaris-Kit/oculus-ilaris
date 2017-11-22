@@ -1,0 +1,70 @@
+
+
+{
+
+  "pw": {
+    "arity": 1,
+    "calc": {
+      "op": "add",
+      "args": [
+        {
+          "op": "get",
+          "args": ["fw", "$1"]
+
+        },
+        {
+          "op": "divide",
+          "args": [
+            {
+              "op": "get",
+              "args" : ["bw", "$1"]
+            },
+            2
+          ]
+        }
+      ]
+    }
+  },
+  "fw" : {
+    "arity": 1,
+    "calc": {
+      "op" : "load",
+      "args": ["$0.fw"]
+    }
+  },
+  "bw" : {
+    "arity": 3,
+    "calc": {
+      "op" : "divide",
+      "args" : [
+        {
+          "op": "sum",
+          "args" : [
+            {
+              "op" : "get",
+              "args": ["Attribut","$0"]
+            },
+            {
+              "op" : "get",
+              "args": ["Attribut","$1"]
+            },
+            {
+              "op" : "get",
+              "args": ["Attribut","$2"]
+            }
+            ]
+        }
+        ,
+        3
+      ]
+    }
+  },
+  "Attribut" : {
+    "arity": "1",
+    "calc" : {
+      "op" : "load",
+      "args" : ["Attribut.$0"]
+    }
+  }
+
+}
