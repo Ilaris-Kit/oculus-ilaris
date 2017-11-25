@@ -1,0 +1,18 @@
+h1, h5 {
+  font-family: "Open Sans Condensed";
+  font-weight: bolder;
+}
+
+li.nav-item {
+  font-weight: bolder;
+}
+
+.table {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+body {
+  font-family: "Open Sans";
+}
