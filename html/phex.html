@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Oculus Ilaris</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" crossorigin="anonymous">
+  <script src='../js/download.js' defer="defer"></script>
+  <script src="../js/local.js" defer="defer"></script>
+  <script src="../js/ilaris.js" defer="defer"></script>
+  <script src="../js/character.js" defer="defer"></script>
+  <script src="../js/ui.js" defer="defer"></script>
+  <script src="../js/vorteile.js" defer="defer"></script>
+
+  <link rel="stylesheet" href="../css/common.css">
+
+  <style>
+  #fertigkeitSelectorCol {
+
+  }
+
+  #fertigkeitSelectorForm > div.form-group {
+    width: 100%;
+  }
+  #fertigkeitSelectorForm > div.form-group > select {
+    resize:vertical;
+  }
+
+  #fertigkeitSelectorForm > div.form-group > select > option {
+    font-family: "Open Sans Condensed";
+    font-size: 140%;
+  }
+
+  #fertigkeitSelectorFertigkeitenDiv, #fertigkeitSelectorTalenteDiv {
+    min-width: 30%;
+  }
+
+  #fertigkeitSelectorFertigkeiten > option::first-letter {
+    color: lightgray;
+  }
+
+
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <p>
+          <h1>Oculus Ilaris</h1>
+        </p>
+
+      </div>
+    </div>
+    <div class="col-12" id="fertigkeitSelectorCol">
+      <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: flex-start; flex-wrap: wrap;">
+        <div class="form-group" id="fertigkeitSelectorKategorienDiv">
+          <label for="fertigkeitSelectorKategorienLabel"><a id="fertigkeitSelectorKategorienAll" href="#fertigkeitSelectorKategorienAll">A</a>/<a id="fertigkeitSelectorKategorienNone" href="#fertigkeitSelectorKategorienNone">K</a></label>
+          <select multiple class="form-control" id="fertigkeitSelectorKategorien">
+            <option id="fertigkeitSelectorKategorienOptionK">K</option>
+            <option id="fertigkeitSelectorKategorienOptionP">P</option>
+            <option id="fertigkeitSelectorKategorienOptionU">U</option>
+          </select>
+        </div>
+        <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
+          <label for="fertigkeitSelectorFertigkeitenDiv"><a id="fertigkeitSelectorFertigkeitenAll" href="#fertigkeitSelectorFertigkeitenAll">A</a>/<a id="fertigkeitSelectorFertigkeitenNone" href="#fertigkeitSelectorFertigkeitenNone">K</a></label>
+          <select multiple class="form-control" id="fertigkeitSelectorFertigkeiten">
+          </select>
+        </div>
+        <div class="form-group" id="fertigkeitSelectorTalenteDiv">
+          <label for="fertigkeitSelectorTalenteDiv"><a id="fertigkeitSelectorTalenteAll" href="#fertigkeitSelectorTalenteAll">A</a>/<a id="fertigkeitSelectorTalenteNone" href="#fertigkeitSelectorTalenteNone">K</a></label>
+          <select multiple class="form-control" id="fertigkeitSelectorTalente">
+          </select>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script>
+  $(document).ready(function () {
+    initializeIlaris(function() {
+
+      var kategorien = $("#fertigkeitSelectorKategorien");
+      var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+      var talente = $("#fertigkeitSelectorTalente");
+
+      kategorien.on("change", updateFertigkeitSelector);
+      fertigkeiten.on("change", updateFertigkeitSelector);
+      talente.on("change", updateFertigkeitSelector);
+
+      updateFertigkeitSelector();
+      $(document).on('click', 'a[href^="#fertigkeitSelector"]', function (event) {
+        var href = $(this).attr('href');
+
+        if (href.startsWith("#fertigkeitSelector")) {
+          if (href.endsWith("All")) {
+            selectAll($(href.split("All")[0]));
+            event.preventDefault();
+            updateFertigkeitSelector();
+            return;
+          }
+          if (href.endsWith("None")) {
+            selectNone($(href.split("None")[0]));
+            event.preventDefault();
+            updateFertigkeitSelector();
+            return;
+          }
+        }
+
+      });
+/*
+      var pickedUp = false;
+      var pageY = 0;
+      $("#fertigkeitSelectorCol").mousedown(function(e) {
+          pickedUp = true;
+          pageY = e.pageY;
+
+      }).mousemove(function(e) {
+          if (pickedUp) {
+            var h = $(this).height();
+            $(this).height(h + (e.pageY - pageY));
+            pageY = e.pageY;
+
+          }
+       }).mouseup(function() {
+          pickedUp = false;
+      });
+      */
+
+    });
+  });
+
+  fertigkeitSelectorState = {
+    kategorien: new Set(),
+    fertigkeiten: new Set(),
+    talente: new Set()
+  }
+
+  function updateFertigkeitSelectorState() {
+    var kategorien = $("#fertigkeitSelectorKategorien");
+    var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+    var talente = $("#fertigkeitSelectorTalente");
+
+    var diff = {
+      added: {
+        kategorien: new Set(),
+        fertigkeiten: new Set(),
+        talente: new Set()
+      },
+      removed: {
+        kategorien: new Set(),
+        fertigkeiten: new Set(),
+        talente: new Set()
+      }
+    };
+
+
+    $.each(
+      ["K", "P", "U"],
+      function(k, kategorie) {
+        var kategorieSelected = $("#fertigkeitSelectorKategorienOption" + kategorie).prop("selected");
+
+        if (fertigkeitSelectorState.kategorien.has(kategorie)) {
+          if (kategorieSelected) {
+            $.each(
+              Ilaris[kategorie + "Fertigkeiten"],
+              function(f, ff) {
+                var fertigkeitSelected = $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
+                if (fertigkeitSelectorState.fertigkeiten.has(f)) {
+                  if (fertigkeitSelected) {
+
+                  } else {
+                    diff.removed.fertigkeiten.add(f);
+                    fertigkeitSelectorState.fertigkeiten.delete(f);
+                  }
+                } else {
+                  if (fertigkeitSelected) {
+                    diff.added.fertigkeiten.add(f);
+                    fertigkeitSelectorState.fertigkeiten.add(f);
+                  } else {
+
+                  }
+                }
+              }
+            );
+          } else {
+            diff.removed.kategorien.add(kategorie);
+            fertigkeitSelectorState.kategorien.delete(kategorie);
+            $.each(
+              Ilaris[kategorie + "Fertigkeiten"],
+              function(f, ff) {
+                diff.removed.fertigkeiten.add(f);
+                fertigkeitSelectorState.fertigkeiten.delete(f);
+              }
+            );
+          }
+        } else {
+          if (kategorieSelected) {
+            diff.added.kategorien.add(kategorie);
+            fertigkeitSelectorState.kategorien.add(kategorie);
+            $.each(
+              Ilaris[kategorie + "Fertigkeiten"],
+              function(f, ff) {
+                var fertigkeitSelected = $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
+                  if (fertigkeitSelected) {
+                    diff.added.fertigkeiten.add(f);
+                    fertigkeitSelectorState.fertigkeiten.add(f);
+                  }
+              }
+            );
+
+          } else {
+          }
+
+        }
+
+      });
+
+
+
+
+      return diff;
+
+
+
+    }
+
+    function updateFertigkeitSelector() {
+
+      var diff = updateFertigkeitSelectorState();
+
+      var kategorien = $("#fertigkeitSelectorKategorien");
+      var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+      var talente = $("#fertigkeitSelectorTalente");
+
+      $.each(["K", "P", "U"],
+      function(k, kategorie) {
+
+        if (diff.added.kategorien.has(kategorie)) {
+          $.each(
+            Ilaris[kategorie + "Fertigkeiten"],
+            function(f, ff) {
+              fertigkeiten.append($("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode() + "\">" + kategorie + " " +  f +"</option>"));
+            }
+          );
+        }
+
+        if (diff.removed.kategorien.has(kategorie)) {
+          $.each(
+            Ilaris[kategorie + "Fertigkeiten"],
+            function(f, ff) {
+              $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).remove();
+            }
+          );
+        }
+
+
+      $.each(Ilaris[kategorie + "Fertigkeiten"],
+      function(f, ff) {
+        if (diff.added.fertigkeiten.has(f)) {
+          $.each(
+            ff["talente"],
+            function(t, tt) {
+              talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + kategorie + "-"  + f.hashCode() + "-"+ tt.hashCode() + "\">" + tt +"</option>"));
+            }
+          );
+        }
+
+        if (diff.removed.fertigkeiten.has(f)) {
+          $.each(
+            ff["talente"],
+            function(t, tt) {
+              $("#fertigkeitSelectorTalenteOption-" + kategorie + "-" + f.hashCode() + "-" + tt.hashCode()).remove();
+            }
+          );
+        }
+      }
+      );
+    }
+    );
+
+
+
+
+    sortSelect(fertigkeiten);
+    sortSelect(talente);
+
+  }
+
+  function selectAll(select) {
+    select.children("option").prop("selected", true);
+  }
+  function selectNone(select) {
+    select.children("option").prop("selected", false);
+  }
+
+  function sortSelect(select) {
+    var items = select.children("option").get();
+    items.sort(function(a,b){
+      var keyA = $(a).text();
+      var keyB = $(b).text();
+
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+
+      return 0;
+    });
+    $.each(items, function(i, li){
+      select.append(li);
+    });
+  }
+
+
+  String.prototype.hashCode = function() {
+    var hash = 0, i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+      chr   = this.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  };
+  </script>
+
+
+</body>
+</html>
