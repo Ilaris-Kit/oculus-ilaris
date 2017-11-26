@@ -67,146 +67,156 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: space-between; flex-wrap: wrap; align-items: stretch;">
+        <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: space-between; flex-wrap: wrap; align-items: stretch;">
 
 
-            <div class="form-group" id="fertigkeitSelectorKategorienDiv">
+          <div class="form-group" id="fertigkeitSelectorKategorienDiv">
 
-              <div class="input-group">
-                <span class="input-group-addon clickable" style="flex-grow: 1; justify-content: center;"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
-                <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
-                <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
-                <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; justify-content: center;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
+            <div class="input-group">
+              <span class="input-group-addon clickable" style="flex-grow: 1; justify-content: center;"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
+              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
+              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
+              <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; justify-content: center;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
 
-              </div>
-            </div>
-            <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
-              <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten" style="flex-grow: 100;">
-              </select>
-            </div>
-
-        <div class="form-group" id="fertigkeitSelectorTalenteDiv">
-          <div class="input-group">
-            <span class="input-group-addon clickable" style="justify-content: center;"><input id="fertigkeitSelectorTalenteJa" type="checkbox" checked><span id="fertigkeitSelectorTalenteJaSpan" style="margin-left: .5rem;" >Talent auswählen</span></span>
-            <select class="form-control custom-select" id="fertigkeitSelectorTalente">
-            </select>
             </div>
           </div>
-        <div class="form-group" id="fertigkeitSelectorModusDiv">
-          <div class="input-group">
-            <span class="input-group-addon clickable" style="justify-content: center;">
-              <input id="fertigkeitSelectorModusSG" type="radio" name="fertigkeitSelectorModus" checked>
-              <span id="fertigkeitSelectorModusSGSpan" style="margin-left: .5rem;" >SG</span>
-            </span>
-            <span class="input-group-addon clickable" style="justify-content: center;">
-              <input id="fertigkeitSelectorModusVP" type="radio" name="fertigkeitSelectorModus">
-              <span id="fertigkeitSelectorModusVPSpan" style="margin-left: .5rem;" >NSC</span>
-            </span>
-            <input class="form-control usethis" id="fertigkeitSelectorModusText" value="12">
+          <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
+            <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten" style="flex-grow: 100;">
+            </select>
+          </div>
+
+          <div class="form-group" id="fertigkeitSelectorTalenteDiv">
+            <div class="input-group">
+              <span class="input-group-addon clickable" style="justify-content: center;"><input id="fertigkeitSelectorTalenteJa" type="checkbox" checked><span id="fertigkeitSelectorTalenteJaSpan" style="margin-left: .5rem;" >Talent auswählen</span></span>
+              <select class="form-control custom-select" id="fertigkeitSelectorTalente">
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="fertigkeitSelectorModusDiv">
+            <div class="input-group">
+              <span class="input-group-addon clickable" style="justify-content: center;">
+                <input id="fertigkeitSelectorModusSG" type="radio" name="fertigkeitSelectorModus" checked>
+                <span id="fertigkeitSelectorModusSGSpan" style="margin-left: .5rem;" >SG</span>
+              </span>
+              <span class="input-group-addon clickable" style="justify-content: center;">
+                <input id="fertigkeitSelectorModusVP" type="radio" name="fertigkeitSelectorModus">
+                <span id="fertigkeitSelectorModusVPSpan" style="margin-left: .5rem;" >NSC</span>
+              </span>
+              <input class="form-control usethis" id="fertigkeitSelectorModusText" value="12">
             </div>
           </div>
         </form>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <ul class="list-group" id="probenListe">
+        </ul>
+      </div>
+
+    </div>
+
   </div>
-</div>
 
 
 
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
-<script>
-$("#navWrapper").load("nav.html", function() {$("#phexLink").addClass("active"); $(".navbar-brand").text("Phex");});
-$(document).ready(function () {
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script>
+  $("#navWrapper").load("nav.html", function() {$("#phexLink").addClass("active"); $("_navbar-brand").text("Phex");});
+  $(document).ready(function () {
 
 
-  initializeIlaris(function() {
-    var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
-    var talente = $("#fertigkeitSelectorTalente");
-  $("#fertigkeitSelectorTalenteJa").on("change", function(e) {
-      var state = $("#fertigkeitSelectorTalenteJa").prop("checked");
-      talente.prop("disabled", !state);
-      if (state) {
-        talente.addClass("usethis");
-        fertigkeiten.removeClass("usethis");
-      } else {
-        talente.removeClass("usethis");
-        fertigkeiten.addClass("usethis");
+    initializeIlaris(function() {
+      var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+      var talente = $("#fertigkeitSelectorTalente");
+      $("#fertigkeitSelectorTalenteJa").on("change", function(e) {
+        var state = $("#fertigkeitSelectorTalenteJa").prop("checked");
+        talente.prop("disabled", !state);
+        if (state) {
+          talente.addClass("usethis");
+          fertigkeiten.removeClass("usethis");
+        } else {
+          talente.removeClass("usethis");
+          fertigkeiten.addClass("usethis");
+        }
+        updateProbenListe();
+      });
+
+      PhexCharacters = getCharacterListFromLocalStorage();
+
+      updateFertigkeitSelector();
+      updateProbenListe();
+
+      var fertigkeitenWrapper = $("#fertigkeitSelectorFertigkeitenDiv");
+
+
+      fertigkeiten.on("change", updateFertigkeitSelector);
+      talente.on("change", updateFertigkeitSelector);
+      $("#fertigkeitSelectorKategorienOptionK, #fertigkeitSelectorKategorienOptionP, #fertigkeitSelectorKategorienOptionU").on("change", updateFertigkeitSelector);
+      $("#fertigkeitSelectorDisplayFertigkeitenGrouped").on("change", rewriteEntries);
+
+
+
+      $("_clickable").on("click", function(e) {
+        if ($(e.target).is("input[type='checkbox']") || $(e.target).is("input[type='radio']")) return;
+        $.each($(this).children("input[type='checkbox'], input[type='radio']"), function(i, cb) {
+          if ($(cb).prop("disabled")) return;
+          $(cb).prop("checked", !$(cb).prop("checked") || $(cb).is("input[type='radio']"));
+          $(cb).change();
+        });
+        e.preventDefault();
+
       }
+    );
+
+    var wide = !($(window).width() >= 500);
+
+    $(window).resize(function(e) {
+
+      if ($(window).width() >= 500 && wide == false) {
+        wide = true;
+        var grp = $("#fertigkeitSelectorDisplayFertigkeitenGroupedSpan");
+        fertigkeiten.insertBefore(grp);
+        fertigkeitenWrapper.addClass("d-none");
+        $("#fertigkeitSelectorTalenteJaSpan").removeClass("d-none");
+        return;
+      }
+      if ($(window).width() < 500 && wide == true) {
+        wide = false;
+        fertigkeitenWrapper.removeClass("d-none");
+        fertigkeitenWrapper.append(fertigkeiten);
+        $("#fertigkeitSelectorTalenteJaSpan").addClass("d-none");
+      }
+
     });
 
-    PhexCharacters = getCharacterListFromLocalStorage();
+    $(window).trigger("resize");
 
+
+
+    /*  $(document).on('click', 'a[href^="#fertigkeitSelector"]', function (event) {
+    var href = $(this).attr('href');
+
+    if (href.startsWith("#fertigkeitSelector")) {
+    if (href.endsWith("All")) {
+    selectAll($(href.split("All")[0]));
+    event.preventDefault();
     updateFertigkeitSelector();
-
-    var fertigkeitenWrapper = $("#fertigkeitSelectorFertigkeitenDiv");
-
-
-    fertigkeiten.on("change", updateFertigkeitSelector);
-    talente.on("change", updateFertigkeitSelector);
-    $("#fertigkeitSelectorKategorienOptionK, #fertigkeitSelectorKategorienOptionP, #fertigkeitSelectorKategorienOptionU").on("change", updateFertigkeitSelector);
-    $("#fertigkeitSelectorDisplayFertigkeitenGrouped").on("change", rewriteEntries);
-
-
-
-    $(".clickable").on("click", function(e) {
-      if ($(e.target).is("input[type='checkbox']") || $(e.target).is("input[type='radio']")) return;
-      $.each($(this).children("input[type='checkbox'], input[type='radio']"), function(i, cb) {
-        if ($(cb).prop("disabled")) return;
-        $(cb).prop("checked", !$(cb).prop("checked") || $(cb).is("input[type='radio']"));
-        $(cb).change();
-      });
-      e.preventDefault();
-
-    }
-  );
-
-  var wide = !($(window).width() >= 500);
-
-  $(window).resize(function(e) {
-
-    if ($(window).width() >= 500 && wide == false) {
-      wide = true;
-      var grp = $("#fertigkeitSelectorDisplayFertigkeitenGroupedSpan");
-      fertigkeiten.insertBefore(grp);
-      fertigkeitenWrapper.addClass("d-none");
-      $("#fertigkeitSelectorTalenteJaSpan").removeClass("d-none");
-      return;
-    }
-    if ($(window).width() < 500 && wide == true) {
-      wide = false;
-      fertigkeitenWrapper.removeClass("d-none");
-      fertigkeitenWrapper.append(fertigkeiten);
-      $("#fertigkeitSelectorTalenteJaSpan").addClass("d-none");
-    }
-
-  });
-
-  $(window).trigger("resize");
-
-
-
-  /*  $(document).on('click', 'a[href^="#fertigkeitSelector"]', function (event) {
-  var href = $(this).attr('href');
-
-  if (href.startsWith("#fertigkeitSelector")) {
-  if (href.endsWith("All")) {
-  selectAll($(href.split("All")[0]));
+    return;
+  }
+  if (href.endsWith("None")) {
+  selectNone($(href.split("None")[0]));
   event.preventDefault();
   updateFertigkeitSelector();
   return;
-}
-if (href.endsWith("None")) {
-selectNone($(href.split("None")[0]));
-event.preventDefault();
-updateFertigkeitSelector();
-return;
 }
 }
 
@@ -247,7 +257,7 @@ function rewriteEntries() {
     fertigkeiten.children("option"),
     function (o, option) {
       var text = $(option).text();
-      var kategorie = $(option).attr("id").split("-")[1];
+      var kategorie = $(option).attr("id").split("_")[1];
 
       var splitted = text.split(kategorie + " ");
 
@@ -308,55 +318,74 @@ function updateFertigkeitSelectorState() {
           $.each(
             Ilaris[kategorie + "Fertigkeiten"],
             function(f, ff) {
-              var fertigkeitSelected = (selectedForChar && selectedForCharKategorie === kategorie) || selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
+              var fertigkeitSelected = (selectedForChar && selectedForCharKategorie === kategorie) || selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode()).prop("selected");
               if (fertigkeitSelectorState.fertigkeiten.has(f)) {
                 if (fertigkeitSelected) {
-/*                  $.each(
-                    ff["talente"],
-                    function(t, tt) {
-                      if (selectedForChar && !getCharacterFromLocalStorage(selectedChar)[kategorie + "Talente"][tt].selected) return;
-                      if (fertigkeitSelectorState.talente.has(f + "-" + tt)) return;
-                      diff.added.talente.add(f + "-" + tt);
-                      fertigkeitSelectorState.talente.add(f + "-" + tt);
-                    }
-                  );*/
-                } else {
-                  diff.removed.fertigkeiten.add(f);
-                  fertigkeitSelectorState.fertigkeiten.delete(f);
-                  /*
-                  $.each(
-                    ff["talente"],
-                    function(t, tt) {
-                      if (!fertigkeitSelectorState.talente.has(f + "-" + tt)) return;
-                      diff.removed.talente.add(f + "-" + tt);
-                      fertigkeitSelectorState.talente.delete(f + "-" + tt);
-                    }
-                  );
-                  */
+                  /*                  $.each(
+                  ff["talente"],
+                  function(t, tt) {
+                  if (selectedForChar && !getCharacterFromLocalStorage(selectedChar)[kategorie + "Talente"][tt].selected) return;
+                  if (fertigkeitSelectorState.talente.has(f + "_" + tt)) return;
+                  diff.added.talente.add(f + "_" + tt);
+                  fertigkeitSelectorState.talente.add(f + "_" + tt);
                 }
-              } else {
-                if (fertigkeitSelected) {
-                  diff.added.fertigkeiten.add(f);
-                  fertigkeitSelectorState.fertigkeiten.add(f);
-/*                  $.each(
-                    ff["talente"],
-                    function(t, tt) {
-                      if (selectedForChar && !getCharacterFromLocalStorage(selectedChar)[kategorie + "Talente"][tt].selected) return;
-                      if (fertigkeitSelectorState.talente.has(f + "-" + tt)) return;
-                      diff.added.talente.add(f + "-" + tt);
-                      fertigkeitSelectorState.talente.add(f + "-" + tt);
-                    }
-                  );
-*/
-                } else {
-
-                }
-              }
+              );*/
+            } else {
+              diff.removed.fertigkeiten.add(f);
+              fertigkeitSelectorState.fertigkeiten.delete(f);
+              /*
+              $.each(
+              ff["talente"],
+              function(t, tt) {
+              if (!fertigkeitSelectorState.talente.has(f + "_" + tt)) return;
+              diff.removed.talente.add(f + "_" + tt);
+              fertigkeitSelectorState.talente.delete(f + "_" + tt);
             }
           );
-        } else {
-          diff.removed.kategorien.add(kategorie);
-          fertigkeitSelectorState.kategorien.delete(kategorie);
+          */
+        }
+      } else {
+        if (fertigkeitSelected) {
+          diff.added.fertigkeiten.add(f);
+          fertigkeitSelectorState.fertigkeiten.add(f);
+          /*                  $.each(
+          ff["talente"],
+          function(t, tt) {
+          if (selectedForChar && !getCharacterFromLocalStorage(selectedChar)[kategorie + "Talente"][tt].selected) return;
+          if (fertigkeitSelectorState.talente.has(f + "_" + tt)) return;
+          diff.added.talente.add(f + "_" + tt);
+          fertigkeitSelectorState.talente.add(f + "_" + tt);
+        }
+      );
+      */
+    } else {
+
+    }
+  }
+}
+);
+} else {
+  diff.removed.kategorien.add(kategorie);
+  fertigkeitSelectorState.kategorien.delete(kategorie);
+  $.each(
+    Ilaris[kategorie + "Fertigkeiten"],
+    function(f, ff) {
+      diff.removed.fertigkeiten.add(f);
+      fertigkeitSelectorState.fertigkeiten.delete(f);
+    }
+  );
+}
+} else {
+  if (kategorieSelected) {
+    diff.added.kategorien.add(kategorie);
+    fertigkeitSelectorState.kategorien.add(kategorie);
+    $.each(
+      Ilaris[kategorie + "Fertigkeiten"],
+      function(f, ff) {
+        var fertigkeitSelected = (selectedForChar && selectedForCharKategorie === kategorie) || selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode()).prop("selected");
+        if (fertigkeitSelected) {
+          diff.added.fertigkeiten.add(f);
+          fertigkeitSelectorState.fertigkeiten.add(f);
           $.each(
             Ilaris[kategorie + "Fertigkeiten"],
             function(f, ff) {
@@ -364,199 +393,250 @@ function updateFertigkeitSelectorState() {
               fertigkeitSelectorState.fertigkeiten.delete(f);
             }
           );
-        }
-      } else {
-        if (kategorieSelected) {
-          diff.added.kategorien.add(kategorie);
-          fertigkeitSelectorState.kategorien.add(kategorie);
-          $.each(
-            Ilaris[kategorie + "Fertigkeiten"],
-            function(f, ff) {
-              var fertigkeitSelected = (selectedForChar && selectedForCharKategorie === kategorie) || selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
-              if (fertigkeitSelected) {
-                diff.added.fertigkeiten.add(f);
-                fertigkeitSelectorState.fertigkeiten.add(f);
-                $.each(
-                  Ilaris[kategorie + "Fertigkeiten"],
-                  function(f, ff) {
-                    diff.removed.fertigkeiten.add(f);
-                    fertigkeitSelectorState.fertigkeiten.delete(f);
-                  }
-                );
 
-              }
-            }
-          );
-
-        } else {
-        }
-
-      }
-
-    });
-
-    for (var t of fertigkeitSelectorState.talente.keys()) {
-      diff.removed.talente.add(t);
-    }
-
-    fertigkeitSelectorState.talente.clear();
-
-    for (var f of fertigkeitSelectorState.fertigkeiten.keys()) {
-
-      var obj = Ilaris;
-      if (selectedForChar) {
-        obj = getCharacterFromLocalStorage(selectedChar);
-      }
-
-      var kategorie = null;
-      $.each(["K", "P", "U"], function(k, kat) {
-        if (Ilaris[kat + "Fertigkeiten"].hasOwnProperty(f)) kategorie = kat;
-      });
-
-      $.each(Ilaris[kategorie + "Fertigkeiten"][f]["talente"], function(t, tt) {
-        if (!selectedForChar || obj[kategorie + "Talente"][tt].selected) {
-          fertigkeitSelectorState.talente.add(f + "-" + tt);
-          if (diff.removed.talente.has(f + "-" + tt)) {
-            diff.removed.talente.delete(f + "-" + tt);
-          } else {
-            diff.added.talente.add(f + "-" + tt);
-          }
-        }
-      });
-    }
-
-
-
-    return diff;
-
-
-
-  }
-
-  function selectedPseudoForKategorie(kategorie) {
-    var finder = getPseudoForKategorie(kategorie);
-    if (finder.length == 0) return false;
-    return finder.prop("selected");
-  }
-  function selectedPseudoForKategorieAndCharacter(kategorie, character) {
-    var finder = getPseudoForKategorieAndCharacter(kategorie, character);
-    if (finder.length == 0) return false;
-    return finder.prop("selected");
-  }
-
-  function createPseudoForKategorie(kategorie) {
-    var text = "(Alle) " + kategorie + "-Talente";
-    return $("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle\">" + text + "</option>");
-  }
-
-  function createPseudoForKategorieAndCharacter(kategorie, character) {
-    var text = "(Alle) " + kategorie + "-Talente von " + character;
-    return $("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle-" + character + "\">" + text + "</option>");
-  }
-
-
-  function getPseudoForKategorie(kategorie) {
-    return $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle");
-  }
-
-  function getPseudoForKategorieAndCharacter(kategorie, character) {
-    return $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle-" + character);
-  }
-
-  function getAllPseudoForKategorieAndCharacter(kategorie) {
-    return $("option[id^='fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle-']");
-  }
-
-
-  function updateFertigkeitSelector() {
-
-    var diff = updateFertigkeitSelectorState();
-
-    var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
-    var talente = $("#fertigkeitSelectorTalente");
-
-    var talentMustBeSelected = false;
-
-    $.each(["K", "P", "U"],
-    function(k, kategorie) {
-
-//      talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorie(kategorie);
-
-      if (diff.added.kategorien.has(kategorie)) {
-        var prefix = "";
-        if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
-          prefix = kategorie + " ";
-        }
-
-        fertigkeiten.append(createPseudoForKategorie(kategorie));
-        $.each(
-          PhexCharacters, function(c, cc) {
-            fertigkeiten.append(createPseudoForKategorieAndCharacter(kategorie, cc));
-          }
-        );
-
-        $.each(
-          Ilaris[kategorie + "Fertigkeiten"],
-          function(f, ff) {
-            fertigkeiten.append($("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode() + "\">" + prefix + f +"</option>"));
-          }
-        );
-      }
-
-      if (diff.removed.kategorien.has(kategorie)) {
-        getPseudoForKategorie(kategorie).remove();
-        getAllPseudoForKategorieAndCharacter(kategorie).remove();
-        $.each(
-          Ilaris[kategorie + "Fertigkeiten"],
-          function(f, ff) {
-            $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).remove();
-          }
-        );
-      }
-
-
-
-/*
-      $.each(Ilaris[kategorie + "Fertigkeiten"],
-      function(f, ff) {
-        if (diff.added.fertigkeiten.has(f)) {
-          $.each(
-            ff["talente"],
-            function(t, tt) {
-              talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + f.hashCode() + "-" + tt.hashCode() + "\">" + tt + "</option>"));
-            }
-          );
-        }
-
-        if (diff.removed.fertigkeiten.has(f)) {
-          $.each(
-            ff["talente"],
-            function(t, tt) {
-              $("#fertigkeitSelectorTalenteOption-" + f.hashCode() + "-" + tt.hashCode()).remove();
-            }
-          );
         }
       }
     );
+
+  } else {
+  }
+
+}
+
+});
+
+for (var t of fertigkeitSelectorState.talente.keys()) {
+  diff.removed.talente.add(t);
+}
+
+fertigkeitSelectorState.talente.clear();
+
+for (var f of fertigkeitSelectorState.fertigkeiten.keys()) {
+
+  var obj = Ilaris;
+  if (selectedForChar) {
+    obj = PhexCharacterObjects(selectedChar);
+  }
+
+  var kategorie = null;
+  $.each(["K", "P", "U"], function(k, kat) {
+    if (Ilaris[kat + "Fertigkeiten"].hasOwnProperty(f)) kategorie = kat;
+  });
+
+  $.each(Ilaris[kategorie + "Fertigkeiten"][f]["talente"], function(t, tt) {
+    if (!selectedForChar || obj[kategorie + "Talente"][tt].selected) {
+      fertigkeitSelectorState.talente.add(kategorie + "_" + f + "_" + tt);
+      if (diff.removed.talente.has(kategorie + "_" + f + "_" + tt)) {
+        diff.removed.talente.delete(kategorie + "_" + f + "_" + tt);
+      } else {
+        diff.added.talente.add(kategorie + "_" + f + "_" + tt);
+      }
+    }
+  });
+}
+
+
+
+return diff;
+
+
+
+}
+
+var PhexCharactersMap = new Map();
+
+function PhexCharacterObjects(char) {
+  if (!PhexCharactersMap.has(char)) {
+    PhexCharactersMap.set(char, getCharacterFromLocalStorage(char));
+  }
+
+  return PhexCharactersMap.get(char);
+}
+
+var probenListeInitialized = false;
+var probenListeEntries = new Map();
+
+var probabilities = [0.73, 2.08, 3.28, 4.32, 5.22, 5.97, 6.58, 7.03, 7.32, 7.47, 7.47, 7.32, 7.03, 6.58, 5.97, 5.22, 4.32, 3.28, 2.08, 0.73];
+
+function updateProbenListe() {
+  var pl = $("#probenListe");
+  if (!probenListeInitialized) {
+    $.each(PhexCharacters, function(c, char) {
+      var forC = $("<li class=\"list-group-item d-flex w-100 justify-content-between flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
+      var forCName = $("<h5>" + char + "</h5>");
+      var forCPW = $("<span id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
+      var forCReq = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
+      var forCProb = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
+      forC.append(forCName);
+      forC.append(forCPW);
+      forC.append(forCReq);
+      forC.append(forCProb);
+      probenListeEntries.set(char, forC);
+      pl.append(forC);
+    });
+    probenListeInitialized = true;
+  }
+
+  var toption = $("#fertigkeitSelectorTalente").children("option:selected");
+  var kategorie = toption.attr("data-kategorie");
+  var f = toption.attr("data-fertigkeit");
+  var t = toption.val();
+
+
+  var dc = parseInt($("#fertigkeitSelectorModusText").val());
+  if ($("#fertigkeitSelectorModusVP").prop("checked")) {
+    dc = dc + 10.5;
+  }
+
+  $.each(PhexCharacters, function(c, charname) {
+    var char = PhexCharacterObjects(charname);
+    var pw = getProbenWert(char, f);
+    var pwPref = "PW";
+    if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (char[kategorie+"Talente"][t].selected)) {
+      pw = getProbenWertT(char,f);
+      pwPref = "PW(T)"
+    }
+    var reqNr = Math.max(0, dc-pw);
+    var chance = 100;
+    for (var i = 0; i < reqNr; ++i) {
+      chance = chance - probabilities[i];
+    }
+    chance = chance.toFixed(2);
+    $("#probenListeLiPW_" + charname.hashCode()).text(pwPref + ": " + pw);
+    $("#probenListeLiReq_" + charname.hashCode()).text("Benötigt: " + reqNr);
+    $("#probenListeLiProb_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit: " + chance + "%");
+
+  });
+
+
+}
+
+
+
+function selectedPseudoForKategorie(kategorie) {
+  var finder = getPseudoForKategorie(kategorie);
+  if (finder.length == 0) return false;
+  return finder.prop("selected");
+}
+function selectedPseudoForKategorieAndCharacter(kategorie, character) {
+  var finder = getPseudoForKategorieAndCharacter(kategorie, character);
+  if (finder.length == 0) return false;
+  return finder.prop("selected");
+}
+
+function createPseudoForKategorie(kategorie) {
+  var text = "(Alle) " + kategorie + "Talente";
+  return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\">" + text + "</option>");
+}
+
+function createPseudoForKategorieAndCharacter(kategorie, character) {
+  var text = "(Alle) " + kategorie + "_Talente von " + character;
+  return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character + "\">" + text + "</option>");
+}
+
+
+function getPseudoForKategorie(kategorie) {
+  return $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle");
+}
+
+function getPseudoForKategorieAndCharacter(kategorie, character) {
+  return $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character);
+}
+
+function getAllPseudoForKategorieAndCharacter(kategorie) {
+  return $("option[id^='fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle.']");
+}
+
+
+function updateFertigkeitSelector() {
+
+  var diff = updateFertigkeitSelectorState();
+
+  var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+  var talente = $("#fertigkeitSelectorTalente");
+
+  var talentMustBeSelected = false;
+
+  $.each(["K", "P", "U"],
+  function(k, kategorie) {
+
+    //      talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorie(kategorie);
+
+    if (diff.added.kategorien.has(kategorie)) {
+      var prefix = "";
+      if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
+        prefix = kategorie + " ";
+      }
+
+      fertigkeiten.append(createPseudoForKategorie(kategorie));
+      $.each(
+        PhexCharacters, function(c, cc) {
+          fertigkeiten.append(createPseudoForKategorieAndCharacter(kategorie, cc));
+        }
+      );
+
+      $.each(
+        Ilaris[kategorie + "Fertigkeiten"],
+        function(f, ff) {
+          fertigkeiten.append($("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode() + "\">" + prefix + f +"</option>"));
+        }
+      );
+    }
+
+    if (diff.removed.kategorien.has(kategorie)) {
+      getPseudoForKategorie(kategorie).remove();
+      getAllPseudoForKategorieAndCharacter(kategorie).remove();
+      $.each(
+        Ilaris[kategorie + "Fertigkeiten"],
+        function(f, ff) {
+          $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode()).remove();
+        }
+      );
+    }
+
+
+
+    /*
+    $.each(Ilaris[kategorie + "Fertigkeiten"],
+    function(f, ff) {
+    if (diff.added.fertigkeiten.has(f)) {
+    $.each(
+    ff["talente"],
+    function(t, tt) {
+    talente.append($("<option id=\"fertigkeitSelectorTalenteOption_" + f.hashCode() + "_" + tt.hashCode() + "\">" + tt + "</option>"));
+  }
+);
+}
+
+if (diff.removed.fertigkeiten.has(f)) {
+$.each(
+ff["talente"],
+function(t, tt) {
+$("#fertigkeitSelectorTalenteOption_" + f.hashCode() + "_" + tt.hashCode()).remove();
+}
+);
+}
+}
+);
 */
 
-  }
+}
 
 
 );
 
 for (var tt of diff.removed.talente.keys()) {
-  var tts = tt.split("-");
-  $("#fertigkeitSelectorTalenteOption-" + tts[0].hashCode() + "-" + tts[1].hashCode()).remove();
+  var tts = tt.split("_");
+  $("#fertigkeitSelectorTalenteOption_" + tts[1].hashCode() + "_" + tts[2].hashCode()).remove();
 }
 
 for (var tt of diff.added.talente.keys()) {
-  var tts = tt.split("-");
+  var tts = tt.split("_");
   klammer = "";
   if (Ilaris["UTalente"].hasOwnProperty(tts[1])) {
-     klammer = " ["+ tts[0]+  "]";
+    klammer = " ["+ tts[0]+  "]";
   }
-  talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + tts[0].hashCode() + "-" + tts[1].hashCode() + "\">" + tts[1] + klammer + "</option>"));
+  talente.append($("<option id=\"fertigkeitSelectorTalenteOption_" + tts[1].hashCode() + "_" + tts[2].hashCode() + "\" data-kategorie=\"" + tts[0] + "\" data-fertigkeit=\"" + tts[1] + "\">" + tts[2] + klammer + "</option>"));
 }
 
 
@@ -572,9 +652,9 @@ if ((fertigkeitSelectorState.kategorien.size > 0) && (fertigkeitSelectorState.fe
 talentMustBeSelected = selectedPseudoForKategorie("K") || selectedPseudoForKategorie("P") || selectedPseudoForKategorie("U");
 $.each(["K", "P", "U"], function(k, kategorie) {
 
-$.each(PhexCharacters, function(c, cc) {
-  talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorieAndCharacter(kategorie, cc);
-});
+  $.each(PhexCharacters, function(c, cc) {
+    talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorieAndCharacter(kategorie, cc);
+  });
 
 });
 
