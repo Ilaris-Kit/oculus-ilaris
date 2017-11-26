@@ -64,16 +64,16 @@
     <div class="row">
       <div class="col-12">
         <div>
-          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: space-between; flex-wrap: wrap;">
+          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: space-between; flex-wrap: wrap; align-items: stretch;">
 
 
             <div class="form-group" id="fertigkeitSelectorKategorienDiv">
 
             <div class="input-group">
-              <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
-              <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
-              <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
-              <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; text-align: right;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
+              <span class="input-group-addon clickable" style="flex-grow: 1; justify-content: center;"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
+              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
+              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
+              <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; justify-content: center;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
 
             </div>
           </div>
@@ -144,14 +144,14 @@
     var wide = false;
 
     $(window).resize(function(e) {
-      if ($(window).width() >= 768 && wide == false) {
+      if ($(window).width() >= 500 && wide == false) {
         wide = true;
         var grp = $("#fertigkeitSelectorDisplayFertigkeitenGroupedSpan");
         fertigkeiten.insertBefore(grp);
         fertigkeitenWrapper.addClass("d-none");
         return;
       }
-      if ($(window).width() < 768 && wide == true) {
+      if ($(window).width() < 500 && wide == true) {
         wide = false;
         fertigkeitenWrapper.removeClass("d-none");
         fertigkeitenWrapper.append(fertigkeiten);
