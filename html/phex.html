@@ -171,9 +171,9 @@
 
 
 
-      $("_clickable").on("click", function(e) {
+      $(".clickable").on("click", function(e) {
         if ($(e.target).is("input[type='checkbox']") || $(e.target).is("input[type='radio']")) return;
-        $.each($(this).children("input[type='checkbox'], input[type='radio']"), function(i, cb) {
+        $.each($(this).children("input[type=checkbox], input[type='radio']"), function(i, cb) {
           if ($(cb).prop("disabled")) return;
           $(cb).prop("checked", !$(cb).prop("checked") || $(cb).is("input[type='radio']"));
           $(cb).change();
@@ -512,12 +512,12 @@ function updateProbenListe() {
     }
     var chance = 100;
     var chanceDyn = 100;
-    console.log("Statische Schwierigkeit: " + dc);
-    console.log("Probenwert: " + pw);
-    console.log("Benötige: " + reqNr);
+  //  console.log("Statische Schwierigkeit: " + dc);
+  //  console.log("Probenwert: " + pw);
+  //  console.log("Benötige: " + reqNr);
 
     for (var i = 0; i < reqNr-1; ++i) {
-      console.log("Habe gewürfelt: " + (i+1));
+//      console.log("Habe gewürfelt: " + (i+1));
       chance = chance - probabilities[i];
     }
     if (!sg) {
