@@ -506,10 +506,60 @@ function updateProbenListe() {
       var forCReq = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
       var forCProb = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
       var forCProbDyn = $("<span id=\"probenListeLiProbDyn_" + char.hashCode() + "\"></span>")
+
+      var formGrp = $("<form class=\"w-100\"><div class=\"form-group w-100\"></div></form>");
+      var inputGrp = $("<div class=\"input-group\"></div>");
+
+
+      var textAddon = $("<span class=\"input-group-addon\">Erschwernis</span>");
+      var inputField = $("<input class=\"form-control\" value=\"0\" type=\"number\">");
+      var updown = $("<span class=\"input-group-btn\"></span>");
+      var down = $("<button class=\"btn btn-secondary\" type=\"button\">▼</button>");
+      var up = $("<button class=\"btn btn-secondary\" type=\"button\">▲</button>");
+      updown.append(down);
+      updown.append(up);
+
+      inputField.attr("id", "probenListModifier_" + char.hashCode());
+
+      inputField.on("input", function() {
+        var fine = (inputField[0].checkValidity());
+        up.prop("disabled", !fine);
+        down.prop("disabled", !fine);
+        if (fine) inputField.removeClass("is-invalid");
+        else inputField.addClass("is-invalid");
+        if (fine) updateProbenListe();
+      });
+
+      inputField.change(function() {
+        inputField.trigger("input");
+      });
+
+
+
+      down.on("click", function() {
+        inputField.val(parseInt(inputField.val()) - 1);
+        inputField.change();
+      });
+
+      up.on("click", function() {
+        inputField.val(parseInt(inputField.val()) + 1);
+        inputField.change();
+      });
+
+      var button = $("<span class=\"input-group-btn\"><button class=\"btn btn-primary\">Würfeln</button></span>");
       forC.append(forCName);
+
+      inputGrp.append(textAddon);
+      inputGrp.append(inputField);
+      inputGrp.append(updown);
+      inputGrp.append(button);
+      formGrp.append(inputGrp);
+      forC.append(formGrp);
+
       forC.append(forCReq);
       forC.append(forCProb);
       forC.append(forCProbDyn);
+
       probenListeEntries.set(char, forC);
       pl.append(forC);
     });
@@ -524,12 +574,14 @@ function updateProbenListe() {
   var t = toption.val().split(" [")[0];
 
   var dc = parseInt($("#fertigkeitSelectorModusText").val());
+
   if (isNaN(dc)) {
     $("#fertigkeitSelectorModusText").addClass("is-invalid");
     return;
   } else {
     $("#fertigkeitSelectorModusText").removeClass("is-invalid");
   }
+
   var sg = true;
   if ($("#fertigkeitSelectorModusVP").prop("checked")) {
     dc = dc + 10;
@@ -540,6 +592,18 @@ function updateProbenListe() {
     var char = PhexCharacterObjects(charname);
     var pw = getProbenWert(char, f);
     var pwPref = "PW ";
+    var mod = parseInt($("#probenListModifier_" + charname.hashCode()).val());
+    if (isNaN(mod)) {
+      $("#probenListModifier_" + charname.hashCode()).addClass("is-invalid");
+      return;
+    } else {
+      $("#probenListModifier_" + charname.hashCode()).removeClass("is-invalid");
+    }
+
+    dc = dc + mod;
+
+
+
 //    var talentText = "";
     var talentClass = "badge-primary";
     if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (char[kategorie+"Talente"][t].selected)) {
