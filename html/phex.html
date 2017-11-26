@@ -498,8 +498,10 @@ function updateProbenListe() {
   if (!probenListeInitialized) {
     $.each(PhexCharacters, function(c, char) {
       var forC = $("<li class=\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
-      var forCName = $("<h4 class=\"w-100 d-flex justify-content-between align-items-center\">" + char + "</h4>");
+      var forCName = $("<h4 class=\"w-100 d-flex justify-content-end align-items-center\"><span style=\"flex-grow: 1;\">" + char + "</span></h4>");
+      var forCSelected = $("<span class=\"badge badge-pill\" id=\"probenListeLiSelected_" + char.hashCode() + "\"></span>")
       var forCPW = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
+      forCName.append(forCSelected);
       forCName.append(forCPW);
       var forCReq = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
       var forCProb = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
@@ -519,7 +521,7 @@ function updateProbenListe() {
   if (toption.length === 0) return;
   var kategorie = toption.attr("data-kategorie");
   var f = toption.attr("data-fertigkeit");
-  var t = toption.val();
+  var t = toption.val().split(" [")[0];
 
   var dc = parseInt($("#fertigkeitSelectorModusText").val());
   if (isNaN(dc)) {
@@ -537,11 +539,21 @@ function updateProbenListe() {
   $.each(PhexCharacters, function(c, charname) {
     var char = PhexCharacterObjects(charname);
     var pw = getProbenWert(char, f);
-    var pwPref = "PW";
+//    var pwPref = "PW";
+    var talentText = "";
+    var talentClass = "";
     if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (char[kategorie+"Talente"][t].selected)) {
       pw = getProbenWertT(char,f);
-      pwPref = "PW(T)"
+//      pwPref = "PW(T)"
+      talentText = "hat Talent";
+      talentClass = "badge-success";
     }
+    if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (!char[kategorie+"Talente"][t].selected)) {
+      talentText = "hat Talent nicht";
+      talentClass = "badge-danger";
+    }
+
+
     var reqNr = Math.max(0, Math.ceil(dc-pw));
     if (reqNr > 20) {
       reqNr = -1;
@@ -584,7 +596,13 @@ function updateProbenListe() {
     }
 
     chance = chance.toFixed(2);
-    $("#probenListeLiPW_" + charname.hashCode()).text(pwPref + ": " + pw);
+    $("#probenListeLiPW_" + charname.hashCode()).text(pw);
+    $("#probenListeLiSelected_" + charname.hashCode()).text(talentText);
+    $("#probenListeLiSelected_" + charname.hashCode()).removeClass("badge-danger");
+    $("#probenListeLiSelected_" + charname.hashCode()).removeClass("badge-success");
+    $("#probenListeLiSelected_" + charname.hashCode()).addClass(talentClass);
+
+
     if (reqNr >= 0) {
       $("#probenListeLiReq_" + charname.hashCode()).text("Benötigt (statisch): " + reqNr);
       $("#probenListeLiProb_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (statisch): " + chance + "%");
