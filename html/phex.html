@@ -741,8 +741,8 @@ for (var tt of diff.removed.talente.keys()) {
 for (var tt of diff.added.talente.keys()) {
   var tts = tt.split("_");
   klammer = "";
-  if (Ilaris["UTalente"].hasOwnProperty(tts[1])) {
-    klammer = " ["+ tts[0]+  "]";
+  if (tts[0] === "U") {
+    klammer = " ["+ tts[1]+  "]";
   }
   talente.append($("<option id=\"fertigkeitSelectorTalenteOption_" + tts[1].hashCode() + "_" + tts[2].hashCode() + "\" data-kategorie=\"" + tts[0] + "\" data-fertigkeit=\"" + tts[1] + "\">" + tts[2] + klammer + "</option>"));
 }
