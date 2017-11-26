@@ -599,10 +599,14 @@ function updateProbenListe() {
     sg = false;
   }
 
+  var keepdc = dc;
   $.each(PhexCharacters, function(c, charname) {
+    dc = keepdc;
+
     var char = PhexCharacterObjects(charname);
     var pw = getProbenWert(char, f);
     var pwPref = "PW ";
+
     var mod = parseInt($("#probenListModifier_" + charname.hashCode()).val());
     if (isNaN(mod)) {
       $("#probenListModifier_" + charname.hashCode()).addClass("is-invalid");
@@ -612,6 +616,8 @@ function updateProbenListe() {
     }
 
     dc = dc + mod;
+
+
 
 
 
