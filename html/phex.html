@@ -111,6 +111,10 @@
                 <span id="fertigkeitSelectorModusVPSpan" style="margin-left: .5rem;" >NSC</span>
               </span>
               <input class="form-control usethis" id="fertigkeitSelectorModusText" value="12" type="number">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">▼</button>
+                <button class="btn btn-secondary" type="button">▲</button>
+              </span>
             </div>
           </div>
         </form>
@@ -497,14 +501,16 @@ function updateProbenListe() {
   }
 
   var toption = $("#fertigkeitSelectorTalente").children("option:selected");
+
+  if (toption.length === 0) return;
   var kategorie = toption.attr("data-kategorie");
   var f = toption.attr("data-fertigkeit");
   var t = toption.val();
 
-
   var dc = parseInt($("#fertigkeitSelectorModusText").val());
   if (isNaN(dc)) {
     $("#fertigkeitSelectorModusText").addClass("is-invalid");
+    return;
   } else {
     $("#fertigkeitSelectorModusText").removeClass("is-invalid");
   }
@@ -624,7 +630,7 @@ function getPseudoForKategorieAndCharacter(kategorie, character) {
 }
 
 function getAllPseudoForKategorieAndCharacter(kategorie) {
-  return $("option[id^='fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle.']");
+  return $("option[id^='fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_']");
 }
 
 
@@ -725,7 +731,7 @@ sortSelect(fertigkeiten);
 sortSelect(talente);
 
 if ((fertigkeitSelectorState.kategorien.size > 0) && (fertigkeitSelectorState.fertigkeiten.size === 0) && !(fertigkeiten.val === "")) {
-  //console.log("Val ist: " + fertigkeiten.val());
+//  console.log("Val ist: " + fertigkeiten.val());
   updateFertigkeitSelector();
 }
 
