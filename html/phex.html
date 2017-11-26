@@ -36,6 +36,8 @@
 
   }
 
+
+
   #probenListe > li > span {
     /*padding-left: 1rem;*/
   }
@@ -47,6 +49,9 @@
     resize:vertical;
   }
 
+
+
+
   #fertigkeitSelectorForm > div.form-group > div.input-group > select,
   #fertigkeitSelectorForm > div.form-group > select,
   #fertigkeitSelectorForm > div.form-group > div.input-group >span.input-group-addon,
@@ -57,10 +62,6 @@
 
   }
 
-
-  #fertigkeitSelectorFertigkeiten > option::first-letter {
-    color: lightgray;
-  }
 
 
   </style>
@@ -82,9 +83,9 @@
 
             <div class="input-group">
               <span class="input-group-addon clickable" style="flex-grow: 1; justify-content: center;"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
-              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
-              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
-              <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; justify-content: center;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
+              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px" checked>P</span>
+              <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px" checked>U</span>
+              <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; justify-content: center;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px" checked>Gruppieren</span>
 
             </div>
           </div>
@@ -112,8 +113,8 @@
               </span>
               <input class="form-control usethis" id="fertigkeitSelectorModusText" value="12" type="number">
               <span class="input-group-btn">
-                <button class="btn btn-secondary" type="button">▼</button>
-                <button class="btn btn-secondary" type="button">▲</button>
+                <button class="btn btn-secondary" type="button" id="fertigkeitSelectorDec">▼</button>
+                <button class="btn btn-secondary" type="button" id="fertigkeitSelectorInc">▲</button>
               </span>
             </div>
           </div>
@@ -165,9 +166,14 @@
       $("#fertigkeitSelectorModusText").on("input", function(e) {
         if ($("#fertigkeitSelectorModusText")[0].checkValidity()) {
           $("#fertigkeitSelectorModusText").removeClass("is-invalid");
+          $("#fertigkeitSelectorInc").prop("disabled", false);
+          $("#fertigkeitSelectorDec").prop("disabled", false);
+
           updateProbenListe();
         } else {
           $("#fertigkeitSelectorModusText").addClass("is-invalid");
+          $("#fertigkeitSelectorInc").prop("disabled", true);
+          $("#fertigkeitSelectorDec").prop("disabled", true);
         }
       });
 
@@ -184,6 +190,14 @@
       $("#fertigkeitSelectorKategorienOptionK, #fertigkeitSelectorKategorienOptionP, #fertigkeitSelectorKategorienOptionU").on("change", updateFertigkeitSelector);
       $("#fertigkeitSelectorDisplayFertigkeitenGrouped").on("change", rewriteEntries);
 
+      $("#fertigkeitSelectorDec").on("click", function(e) {
+        $("#fertigkeitSelectorModusText").val(parseInt($("#fertigkeitSelectorModusText").val()) - 1);
+        $("#fertigkeitSelectorModusText").change();
+      });
+      $("#fertigkeitSelectorInc").on("click", function(e) {
+        $("#fertigkeitSelectorModusText").val(parseInt($("#fertigkeitSelectorModusText").val()) + 1);
+        $("#fertigkeitSelectorModusText").change();
+      });
 
 
       $(".clickable").on("click", function(e) {
@@ -611,12 +625,20 @@ function selectedPseudoForKategorieAndCharacter(kategorie, character) {
 }
 
 function createPseudoForKategorie(kategorie) {
-  var text = "(Alle) " + kategorie + "Talente";
+  var prefix = "";
+  if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
+    prefix = kategorie + " ";
+  }
+  var text = prefix + "(Alle) " + kategorie + "-Talente";
   return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\">" + text + "</option>");
 }
 
 function createPseudoForKategorieAndCharacter(kategorie, character) {
-  var text = "(Alle) " + kategorie + "_Talente von " + character;
+  var prefix = "";
+  if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
+    prefix = kategorie + " ";
+  }
+  var text = prefix + "(Alle) " + kategorie + "-Talente von " + character;
   return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character + "\">" + text + "</option>");
 }
 
