@@ -141,6 +141,8 @@ $(document).ready(function () {
       }
     });
 
+    PhexCharacters = getCharacterListFromLocalStorage();
+
     updateFertigkeitSelector();
 
     var fertigkeitenWrapper = $("#fertigkeitSelectorFertigkeitenDiv");
@@ -234,7 +236,8 @@ pickedUp = false;
 fertigkeitSelectorState = {
   kategorien: new Set(),
   fertigkeiten: new Set(),
-  talente: new Set()
+  talente: new Set(),
+  character: null
 }
 
 function rewriteEntries() {
@@ -282,29 +285,69 @@ function updateFertigkeitSelectorState() {
     }
   };
 
+  var selectedChar = null;
+  var selectedForChar = false;
+  var selectedForCharKategorie = null;
 
   $.each(
     ["K", "P", "U"],
     function(k, kategorie) {
       var kategorieSelected = $("#fertigkeitSelectorKategorienOption" + kategorie).prop("checked");
+      $.each(PhexCharacters, function(c, cc) {
+        if (selectedForChar) return;
+        var forThisChar = selectedPseudoForKategorieAndCharacter(kategorie, cc);
+        selectedForChar = forThisChar;
+        if (forThisChar) {
+          selectedChar = cc;
+          selectedForCharKategorie = kategorie;
+        }
+      });
 
       if (fertigkeitSelectorState.kategorien.has(kategorie)) {
         if (kategorieSelected) {
           $.each(
             Ilaris[kategorie + "Fertigkeiten"],
             function(f, ff) {
-              var fertigkeitSelected = selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
+              var fertigkeitSelected = (selectedForChar && selectedForCharKategorie === kategorie) || selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
               if (fertigkeitSelectorState.fertigkeiten.has(f)) {
                 if (fertigkeitSelected) {
-
+/*                  $.each(
+                    ff["talente"],
+                    function(t, tt) {
+                      if (selectedForChar && !getCharacterFromLocalStorage(selectedChar)[kategorie + "Talente"][tt].selected) return;
+                      if (fertigkeitSelectorState.talente.has(f + "-" + tt)) return;
+                      diff.added.talente.add(f + "-" + tt);
+                      fertigkeitSelectorState.talente.add(f + "-" + tt);
+                    }
+                  );*/
                 } else {
                   diff.removed.fertigkeiten.add(f);
                   fertigkeitSelectorState.fertigkeiten.delete(f);
+                  /*
+                  $.each(
+                    ff["talente"],
+                    function(t, tt) {
+                      if (!fertigkeitSelectorState.talente.has(f + "-" + tt)) return;
+                      diff.removed.talente.add(f + "-" + tt);
+                      fertigkeitSelectorState.talente.delete(f + "-" + tt);
+                    }
+                  );
+                  */
                 }
               } else {
                 if (fertigkeitSelected) {
                   diff.added.fertigkeiten.add(f);
                   fertigkeitSelectorState.fertigkeiten.add(f);
+/*                  $.each(
+                    ff["talente"],
+                    function(t, tt) {
+                      if (selectedForChar && !getCharacterFromLocalStorage(selectedChar)[kategorie + "Talente"][tt].selected) return;
+                      if (fertigkeitSelectorState.talente.has(f + "-" + tt)) return;
+                      diff.added.talente.add(f + "-" + tt);
+                      fertigkeitSelectorState.talente.add(f + "-" + tt);
+                    }
+                  );
+*/
                 } else {
 
                 }
@@ -329,10 +372,18 @@ function updateFertigkeitSelectorState() {
           $.each(
             Ilaris[kategorie + "Fertigkeiten"],
             function(f, ff) {
-              var fertigkeitSelected =selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
+              var fertigkeitSelected = (selectedForChar && selectedForCharKategorie === kategorie) || selectedPseudoForKategorie(kategorie) || $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode()).prop("selected");
               if (fertigkeitSelected) {
                 diff.added.fertigkeiten.add(f);
                 fertigkeitSelectorState.fertigkeiten.add(f);
+                $.each(
+                  Ilaris[kategorie + "Fertigkeiten"],
+                  function(f, ff) {
+                    diff.removed.fertigkeiten.add(f);
+                    fertigkeitSelectorState.fertigkeiten.delete(f);
+                  }
+                );
+
               }
             }
           );
@@ -344,6 +395,35 @@ function updateFertigkeitSelectorState() {
 
     });
 
+    for (var t of fertigkeitSelectorState.talente.keys()) {
+      diff.removed.talente.add(t);
+    }
+
+    fertigkeitSelectorState.talente.clear();
+
+    for (var f of fertigkeitSelectorState.fertigkeiten.keys()) {
+
+      var obj = Ilaris;
+      if (selectedForChar) {
+        obj = getCharacterFromLocalStorage(selectedChar);
+      }
+
+      var kategorie = null;
+      $.each(["K", "P", "U"], function(k, kat) {
+        if (Ilaris[kat + "Fertigkeiten"].hasOwnProperty(f)) kategorie = kat;
+      });
+
+      $.each(Ilaris[kategorie + "Fertigkeiten"][f]["talente"], function(t, tt) {
+        if (!selectedForChar || obj[kategorie + "Talente"][tt].selected) {
+          fertigkeitSelectorState.talente.add(f + "-" + tt);
+          if (diff.removed.talente.has(f + "-" + tt)) {
+            diff.removed.talente.delete(f + "-" + tt);
+          } else {
+            diff.added.talente.add(f + "-" + tt);
+          }
+        }
+      });
+    }
 
 
 
@@ -358,17 +438,34 @@ function updateFertigkeitSelectorState() {
     if (finder.length == 0) return false;
     return finder.prop("selected");
   }
+  function selectedPseudoForKategorieAndCharacter(kategorie, character) {
+    var finder = getPseudoForKategorieAndCharacter(kategorie, character);
+    if (finder.length == 0) return false;
+    return finder.prop("selected");
+  }
 
   function createPseudoForKategorie(kategorie) {
     var text = "(Alle) " + kategorie + "-Talente";
     return $("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle\">" + text + "</option>");
   }
 
+  function createPseudoForKategorieAndCharacter(kategorie, character) {
+    var text = "(Alle) " + kategorie + "-Talente von " + character;
+    return $("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle-" + character + "\">" + text + "</option>");
+  }
+
+
   function getPseudoForKategorie(kategorie) {
     return $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle");
   }
 
+  function getPseudoForKategorieAndCharacter(kategorie, character) {
+    return $("#fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle-" + character);
+  }
 
+  function getAllPseudoForKategorieAndCharacter(kategorie) {
+    return $("option[id^='fertigkeitSelectorFertigkeitenOption-" + kategorie + "-alle-']");
+  }
 
 
   function updateFertigkeitSelector() {
@@ -392,6 +489,11 @@ function updateFertigkeitSelectorState() {
         }
 
         fertigkeiten.append(createPseudoForKategorie(kategorie));
+        $.each(
+          PhexCharacters, function(c, cc) {
+            fertigkeiten.append(createPseudoForKategorieAndCharacter(kategorie, cc));
+          }
+        );
 
         $.each(
           Ilaris[kategorie + "Fertigkeiten"],
@@ -403,6 +505,7 @@ function updateFertigkeitSelectorState() {
 
       if (diff.removed.kategorien.has(kategorie)) {
         getPseudoForKategorie(kategorie).remove();
+        getAllPseudoForKategorieAndCharacter(kategorie).remove();
         $.each(
           Ilaris[kategorie + "Fertigkeiten"],
           function(f, ff) {
@@ -413,13 +516,14 @@ function updateFertigkeitSelectorState() {
 
 
 
+/*
       $.each(Ilaris[kategorie + "Fertigkeiten"],
       function(f, ff) {
         if (diff.added.fertigkeiten.has(f)) {
           $.each(
             ff["talente"],
             function(t, tt) {
-              talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + tt.hashCode() + "\">" + tt + "</option>"));
+              talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + f.hashCode() + "-" + tt.hashCode() + "\">" + tt + "</option>"));
             }
           );
         }
@@ -428,19 +532,32 @@ function updateFertigkeitSelectorState() {
           $.each(
             ff["talente"],
             function(t, tt) {
-              $("#fertigkeitSelectorTalenteOption-" + tt.hashCode()).remove();
+              $("#fertigkeitSelectorTalenteOption-" + f.hashCode() + "-" + tt.hashCode()).remove();
             }
           );
         }
       }
     );
-
+*/
 
   }
 
 
 );
 
+for (var tt of diff.removed.talente.keys()) {
+  var tts = tt.split("-");
+  $("#fertigkeitSelectorTalenteOption-" + tts[0].hashCode() + "-" + tts[1].hashCode()).remove();
+}
+
+for (var tt of diff.added.talente.keys()) {
+  var tts = tt.split("-");
+  klammer = "";
+  if (Ilaris["UTalente"].hasOwnProperty(tts[1])) {
+     klammer = " ["+ tts[0]+  "]";
+  }
+  talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + tts[0].hashCode() + "-" + tts[1].hashCode() + "\">" + tts[1] + klammer + "</option>"));
+}
 
 
 
@@ -453,6 +570,13 @@ if ((fertigkeitSelectorState.kategorien.size > 0) && (fertigkeitSelectorState.fe
 }
 
 talentMustBeSelected = selectedPseudoForKategorie("K") || selectedPseudoForKategorie("P") || selectedPseudoForKategorie("U");
+$.each(["K", "P", "U"], function(k, kategorie) {
+
+$.each(PhexCharacters, function(c, cc) {
+  talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorieAndCharacter(kategorie, cc);
+});
+
+});
 
 updateTalentCheckbox(talentMustBeSelected,talentMustBeSelected);
 
