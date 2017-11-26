@@ -32,6 +32,10 @@
 
   }
 
+  #probenListe > li > span {
+    /*padding-left: 1rem;*/
+  }
+
   #fertigkeitSelectorForm > div.form-group {
     width: 100%;
   }
@@ -149,6 +153,7 @@
         }
         updateProbenListe();
       });
+      $("input[id^='fertigkeitSelectorModus'").on("change", updateProbenListe);
 
       PhexCharacters = getCharacterListFromLocalStorage();
 
@@ -462,15 +467,17 @@ function updateProbenListe() {
   var pl = $("#probenListe");
   if (!probenListeInitialized) {
     $.each(PhexCharacters, function(c, char) {
-      var forC = $("<li class=\"list-group-item d-flex w-100 justify-content-between flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
-      var forCName = $("<h5>" + char + "</h5>");
-      var forCPW = $("<span id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
+      var forC = $("<li class=\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
+      var forCName = $("<h4 class=\"w-100 d-flex justify-content-between align-items-center\">" + char + "</h4>");
+      var forCPW = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
+      forCName.append(forCPW);
       var forCReq = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
       var forCProb = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
+      var forCProbDyn = $("<span id=\"probenListeLiProbDyn_" + char.hashCode() + "\"></span>")
       forC.append(forCName);
-      forC.append(forCPW);
       forC.append(forCReq);
       forC.append(forCProb);
+      forC.append(forCProbDyn);
       probenListeEntries.set(char, forC);
       pl.append(forC);
     });
@@ -484,8 +491,10 @@ function updateProbenListe() {
 
 
   var dc = parseInt($("#fertigkeitSelectorModusText").val());
+  var sg = true;
   if ($("#fertigkeitSelectorModusVP").prop("checked")) {
-    dc = dc + 10.5;
+    dc = dc + 10;
+    sg = false;
   }
 
   $.each(PhexCharacters, function(c, charname) {
@@ -496,15 +505,52 @@ function updateProbenListe() {
       pw = getProbenWertT(char,f);
       pwPref = "PW(T)"
     }
-    var reqNr = Math.max(0, dc-pw);
+    var reqNr = Math.max(0, Math.ceil(dc-pw));
     var chance = 100;
-    for (var i = 0; i < reqNr; ++i) {
+    var chanceDyn = 100;
+/*    console.log("Statische Schwierigkeit: " + dc);
+    console.log("Probenwert: " + pw);
+    console.log("Benötige: " + reqNr);*/
+
+    for (var i = 0; i < reqNr-1; ++i) {
+//      console.log("Habe gewürfelt: " + (i+1));
       chance = chance - probabilities[i];
     }
+    if (!sg) {
+      var dcalt = dc -10;
+      var differenz = pw - dcalt;
+      var scwahrscheinlichkeit = 0;
+      //console.log("Differenz ist: " + differenz);
+      for (var sc = 0; sc < 20; ++sc) {
+        scw = sc+differenz;
+        nscwahrscheinlichkeit = 100;
+        //console.log("Spieler hat: " + (sc + 1));
+        if (scw >= 0) {
+          nscwahrscheinlichkeit = 0;
+          for (var nsc = scw+1; nsc < 20; ++nsc) {
+          //console.log("Nicht-Spieler gewinnt mit: " + (nsc + 1));
+          nscwahrscheinlichkeit = nscwahrscheinlichkeit + probabilities[nsc];
+          }
+        }
+        //console.log("Spieler gewinnt hier mit Wahrscheinlichkeit: " + (100-nscwahrscheinlichkeit));
+        scwahrscheinlichkeit = scwahrscheinlichkeit + probabilities[sc]/100 * (100-nscwahrscheinlichkeit);
+        //console.log("Korrigiert um die Wahrscheinlichkeit ist das: " + (probabilities[sc]/100 *(100-nscwahrscheinlichkeit)));
+      }
+      chanceDyn = scwahrscheinlichkeit;
+
+    }
+
     chance = chance.toFixed(2);
+    chanceDyn = chanceDyn.toFixed(2);
     $("#probenListeLiPW_" + charname.hashCode()).text(pwPref + ": " + pw);
-    $("#probenListeLiReq_" + charname.hashCode()).text("Benötigt: " + reqNr);
-    $("#probenListeLiProb_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit: " + chance + "%");
+    $("#probenListeLiReq_" + charname.hashCode()).text("Benötigt (statisch): " + reqNr);
+    $("#probenListeLiProb_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (statisch): " + chance + "%");
+    $("#probenListeLiProbDyn_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (dynamisch): " + chanceDyn + "%");
+    if (sg) {
+      $("#probenListeLiProbDyn_" + charname.hashCode()).addClass("d-none");
+    } else {
+      $("#probenListeLiProbDyn_" + charname.hashCode()).removeClass("d-none");
+    }
 
   });
 
