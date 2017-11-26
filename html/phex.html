@@ -28,6 +28,10 @@
     font-weight: bolder;
   }
 
+  .badInput {
+    color: magenta;
+  }
+
   #fertigkeitSelectorCol {
 
   }
@@ -106,7 +110,7 @@
                 <input id="fertigkeitSelectorModusVP" type="radio" name="fertigkeitSelectorModus">
                 <span id="fertigkeitSelectorModusVPSpan" style="margin-left: .5rem;" >NSC</span>
               </span>
-              <input class="form-control usethis" id="fertigkeitSelectorModusText" value="12">
+              <input class="form-control usethis" id="fertigkeitSelectorModusText" value="12" type="number">
             </div>
           </div>
         </form>
@@ -154,7 +158,14 @@
         updateProbenListe();
       });
       $("input[id^='fertigkeitSelectorModus']").on("change", updateProbenListe);
-      $("#fertigkeitSelectorModusText").on("input", updateProbenListe);
+      $("#fertigkeitSelectorModusText").on("input", function(e) {
+        if ($("#fertigkeitSelectorModusText")[0].checkValidity()) {
+          $("#fertigkeitSelectorModusText").removeClass("is-invalid");
+          updateProbenListe();
+        } else {
+          $("#fertigkeitSelectorModusText").addClass("is-invalid");
+        }
+      });
 
       PhexCharacters = getCharacterListFromLocalStorage();
 
@@ -492,6 +503,11 @@ function updateProbenListe() {
 
 
   var dc = parseInt($("#fertigkeitSelectorModusText").val());
+  if (isNaN(dc)) {
+    $("#fertigkeitSelectorModusText").addClass("is-invalid");
+  } else {
+    $("#fertigkeitSelectorModusText").removeClass("is-invalid");
+  }
   var sg = true;
   if ($("#fertigkeitSelectorModusVP").prop("checked")) {
     dc = dc + 10;
