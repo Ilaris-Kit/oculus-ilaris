@@ -153,7 +153,8 @@
         }
         updateProbenListe();
       });
-      $("input[id^='fertigkeitSelectorModus'").on("change", updateProbenListe);
+      $("input[id^='fertigkeitSelectorModus']").on("change", updateProbenListe);
+      $("#fertigkeitSelectorModusText").on("input", updateProbenListe);
 
       PhexCharacters = getCharacterListFromLocalStorage();
 
@@ -506,49 +507,66 @@ function updateProbenListe() {
       pwPref = "PW(T)"
     }
     var reqNr = Math.max(0, Math.ceil(dc-pw));
+    if (reqNr > 20) {
+      reqNr = -1;
+    }
     var chance = 100;
     var chanceDyn = 100;
-/*    console.log("Statische Schwierigkeit: " + dc);
+    console.log("Statische Schwierigkeit: " + dc);
     console.log("Probenwert: " + pw);
-    console.log("Benötige: " + reqNr);*/
+    console.log("Benötige: " + reqNr);
 
     for (var i = 0; i < reqNr-1; ++i) {
-//      console.log("Habe gewürfelt: " + (i+1));
+      console.log("Habe gewürfelt: " + (i+1));
       chance = chance - probabilities[i];
     }
     if (!sg) {
       var dcalt = dc -10;
       var differenz = pw - dcalt;
-      var scwahrscheinlichkeit = 0;
-      //console.log("Differenz ist: " + differenz);
-      for (var sc = 0; sc < 20; ++sc) {
-        scw = sc+differenz;
-        nscwahrscheinlichkeit = 100;
-        //console.log("Spieler hat: " + (sc + 1));
-        if (scw >= 0) {
-          nscwahrscheinlichkeit = 0;
-          for (var nsc = scw+1; nsc < 20; ++nsc) {
-          //console.log("Nicht-Spieler gewinnt mit: " + (nsc + 1));
-          nscwahrscheinlichkeit = nscwahrscheinlichkeit + probabilities[nsc];
+      var scwahrscheinlichkeit = -1;
+      // console.log("Differenz ist: " + differenz);
+      if (differenz <= 20) {
+        scwahrscheinlichkeit = 0;
+        for (var sc = 0; sc < 20; ++sc) {
+          scw = sc+differenz;
+          nscwahrscheinlichkeit = 100;
+          // console.log("Spieler hat: " + (sc + 1));
+          if (scw >= 0) {
+            nscwahrscheinlichkeit = 0;
+            for (var nsc = scw+1; nsc < 20; ++nsc) {
+              // console.log("Nicht-Spieler gewinnt mit: " + (nsc + 1));
+              nscwahrscheinlichkeit = nscwahrscheinlichkeit + probabilities[nsc];
+            }
           }
+          // console.log("Spieler gewinnt hier mit Wahrscheinlichkeit: " + (100-nscwahrscheinlichkeit));
+          scwahrscheinlichkeit = scwahrscheinlichkeit + probabilities[sc]/100 * (100-nscwahrscheinlichkeit);
+          // console.log("Korrigiert um die Wahrscheinlichkeit ist das: " + (probabilities[sc]/100 *(100-nscwahrscheinlichkeit)));
         }
-        //console.log("Spieler gewinnt hier mit Wahrscheinlichkeit: " + (100-nscwahrscheinlichkeit));
-        scwahrscheinlichkeit = scwahrscheinlichkeit + probabilities[sc]/100 * (100-nscwahrscheinlichkeit);
-        //console.log("Korrigiert um die Wahrscheinlichkeit ist das: " + (probabilities[sc]/100 *(100-nscwahrscheinlichkeit)));
-      }
-      chanceDyn = scwahrscheinlichkeit;
+        chanceDyn = scwahrscheinlichkeit;
 
+      }
     }
 
     chance = chance.toFixed(2);
-    chanceDyn = chanceDyn.toFixed(2);
     $("#probenListeLiPW_" + charname.hashCode()).text(pwPref + ": " + pw);
-    $("#probenListeLiReq_" + charname.hashCode()).text("Benötigt (statisch): " + reqNr);
-    $("#probenListeLiProb_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (statisch): " + chance + "%");
-    $("#probenListeLiProbDyn_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (dynamisch): " + chanceDyn + "%");
+    if (reqNr >= 0) {
+      $("#probenListeLiReq_" + charname.hashCode()).text("Benötigt (statisch): " + reqNr);
+      $("#probenListeLiProb_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (statisch): " + chance + "%");
+    } else {
+      $("#probenListeLiReq_" + charname.hashCode()).text("Erfolg (statisch) nicht möglich.");
+      $("#probenListeLiProb_" + charname.hashCode()).text("");
+    }
+
     if (sg) {
+      $("#probenListeLiProbDyn_" + charname.hashCode()).text("");
       $("#probenListeLiProbDyn_" + charname.hashCode()).addClass("d-none");
     } else {
+      if (chanceDyn > 0) {
+        chanceDyn = chanceDyn.toFixed(2);
+        $("#probenListeLiProbDyn_" + charname.hashCode()).text("Erfolgswahrscheinlichkeit (dynamisch): " + chanceDyn + "%");
+      } else {
+        $("#probenListeLiProbDyn_" + charname.hashCode()).text("Erfolg (dynamisch) nicht möglich.");
+      }
       $("#probenListeLiProbDyn_" + charname.hashCode()).removeClass("d-none");
     }
 
