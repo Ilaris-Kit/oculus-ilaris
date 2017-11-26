@@ -511,7 +511,7 @@ function updateProbenListe() {
       var inputGrp = $("<div class=\"input-group\"></div>");
 
 
-      var textAddon = $("<span class=\"input-group-addon\">Erschwernis</span>");
+      var textAddon = $("<span class=\"input-group-addon\">SG</span>");
       var inputField = $("<input class=\"form-control\" value=\"0\" type=\"number\">");
       var updown = $("<span class=\"input-group-btn\"></span>");
       var down = $("<button class=\"btn btn-secondary\" type=\"button\">▼</button>");
@@ -520,6 +520,13 @@ function updateProbenListe() {
       updown.append(up);
 
       inputField.attr("id", "probenListModifier_" + char.hashCode());
+      textAddon.text("SG +");
+      textAddon.css("padding-right", "4px");
+      inputField.css("padding-left", "4px");
+      up.css("padding-left", "1px");
+      up.css("padding-right", "1px");
+      down.css("padding-left", "1px");
+      down.css("padding-right", "1px");
 
       inputField.on("input", function() {
         var fine = (inputField[0].checkValidity());
@@ -527,7 +534,11 @@ function updateProbenListe() {
         down.prop("disabled", !fine);
         if (fine) inputField.removeClass("is-invalid");
         else inputField.addClass("is-invalid");
-        if (fine) updateProbenListe();
+        if (fine) {
+          updateProbenListe();
+  //        textAddon.text("SG " + $("#fertigkeitSelectorModusText").val() + "+");
+        }
+
       });
 
       inputField.change(function() {
