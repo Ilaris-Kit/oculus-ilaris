@@ -3,9 +3,7 @@ h1, h5 {
   font-weight: bolder;
 }
 
-li.nav-item {
-  font-weight: bolder;
-}
+
 
 .table {
   margin-left: auto !important;
@@ -15,6 +13,7 @@ li.nav-item {
 
 body {
   font-family: "Open Sans";
+  padding-top: 5rem;
 }
 
 .table td, .table th {
@@ -23,4 +22,33 @@ body {
 input, select, label.active, label, .btn:focus,.btn:active {
    outline: none !important;
    box-shadow: none !important;
+}
+
+nav {
+  font-family: "Open Sans Condensed";
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: normal;
+  flex-grow: 1;
+}
+
+.navbar-brand:before {
+  content: "OI";
+  font-weight: bolder;
+}
+
+@media only screen and (min-width : 577px) {
+
+  .navbar-brand:before {
+    content: "Oculus Ilaris";
+    visibility: visible;
+  }
+
+  .navbar-brand {
+    visibility: hidden;
+  }
 }

@@ -55,25 +55,31 @@
 
 </head>
 <body>
+
+  <div id="navWrapper">
+
+  </div>
+
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <p>
-          <h1>Oculus Ilaris</h1>
-        </p>
         <div>
-          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: flex-start; flex-wrap: wrap;">
+          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: space-between; flex-wrap: wrap;">
 
 
+            <div class="form-group" id="fertigkeitSelectorKategorienDiv">
 
-            <div class="input-group" id="characterManager">
+            <div class="input-group">
               <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
               <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
               <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
-              <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten">
-              </select>
-              <span class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
+              <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; text-align: right;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
 
+            </div>
+          </div>
+            <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
+            <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten" style="flex-grow: 100";>
+            </select>
             </div>
 
 
@@ -87,8 +93,6 @@
               </select>
 
             </div>-->
-            <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
-            </div>
             <div class="form-group" id="fertigkeitSelectorTalenteDiv">
               <select class="form-control custom-select" id="fertigkeitSelectorTalente">
             </div>
@@ -110,11 +114,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script>
+  $("#navWrapper").load("nav.html", function() {$("#phexLink").addClass("active"); $(".navbar-brand").text("Phex");});
   $(document).ready(function () {
+
+
     initializeIlaris(function() {
       updateFertigkeitSelector();
 
       var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+      var fertigkeitenWrapper = $("#fertigkeitSelectorFertigkeitenDiv");
       var talente = $("#fertigkeitSelectorTalente");
 
 
@@ -132,6 +140,27 @@
 
       }
     );
+
+    var wide = false;
+
+    $(window).resize(function(e) {
+      if ($(window).width() >= 768 && wide == false) {
+        wide = true;
+        var grp = $("#fertigkeitSelectorDisplayFertigkeitenGroupedSpan");
+        fertigkeiten.insertBefore(grp);
+        fertigkeitenWrapper.addClass("d-none");
+        return;
+      }
+      if ($(window).width() < 768 && wide == true) {
+        wide = false;
+        fertigkeitenWrapper.removeClass("d-none");
+        fertigkeitenWrapper.append(fertigkeiten);
+      }
+
+    });
+
+    $(window).trigger("resize");
+
 
 
     /*  $(document).on('click', 'a[href^="#fertigkeitSelector"]', function (event) {
@@ -351,6 +380,8 @@
         }
       }
       );
+
+
     }
     );
 
