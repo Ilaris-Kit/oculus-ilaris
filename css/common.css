@@ -16,3 +16,11 @@ li.nav-item {
 body {
   font-family: "Open Sans";
 }
+
+.table td, .table th {
+  vertical-align: middle;
+}
+input, select, label.active, label, .btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none !important;
+}

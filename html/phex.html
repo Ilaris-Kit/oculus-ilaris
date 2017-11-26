@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="../css/common.css">
 
   <style>
+
+
+
   #fertigkeitSelectorCol {
 
   }
@@ -58,33 +61,46 @@
         <p>
           <h1>Oculus Ilaris</h1>
         </p>
+        <div>
+          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: flex-start; flex-wrap: wrap;">
 
+
+
+            <div class="input-group" id="characterManager">
+              <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
+              <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px">P</span>
+              <span class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px">U</span>
+              <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten">
+              </select>
+              <span class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px">Gruppieren</span>
+
+            </div>
+
+
+
+        <!--  <div class="form-group" id="fertigkeitSelectorKategorienDiv">
+              <label for="fertigkeitSelectorKategorienLabel"><a id="fertigkeitSelectorKategorienAll" href="#fertigkeitSelectorKategorienAll">A</a>/<a id="fertigkeitSelectorKategorienNone" href="#fertigkeitSelectorKategorienNone">K</a></label>
+              <select multiple class="form-control" id="fertigkeitSelectorKategorien">
+                <option id="fertigkeitSelectorKategorienOptionK">K</option>
+                <option id="fertigkeitSelectorKategorienOptionP">P</option>
+                <option id="fertigkeitSelectorKategorienOptionU">U</option>
+              </select>
+
+            </div>-->
+            <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
+            </div>
+            <div class="form-group" id="fertigkeitSelectorTalenteDiv">
+              <select class="form-control custom-select" id="fertigkeitSelectorTalente">
+            </div>
+
+          </form>
+        </div>
       </div>
-    </div>
-    <div class="col-12" id="fertigkeitSelectorCol">
-      <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: flex-start; flex-wrap: wrap;">
-        <div class="form-group" id="fertigkeitSelectorKategorienDiv">
-          <label for="fertigkeitSelectorKategorienLabel"><a id="fertigkeitSelectorKategorienAll" href="#fertigkeitSelectorKategorienAll">A</a>/<a id="fertigkeitSelectorKategorienNone" href="#fertigkeitSelectorKategorienNone">K</a></label>
-          <select multiple class="form-control" id="fertigkeitSelectorKategorien">
-            <option id="fertigkeitSelectorKategorienOptionK">K</option>
-            <option id="fertigkeitSelectorKategorienOptionP">P</option>
-            <option id="fertigkeitSelectorKategorienOptionU">U</option>
-          </select>
         </div>
-        <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
-          <label for="fertigkeitSelectorFertigkeitenDiv"><a id="fertigkeitSelectorFertigkeitenAll" href="#fertigkeitSelectorFertigkeitenAll">A</a>/<a id="fertigkeitSelectorFertigkeitenNone" href="#fertigkeitSelectorFertigkeitenNone">K</a></label>
-          <select multiple class="form-control" id="fertigkeitSelectorFertigkeiten">
-          </select>
-        </div>
-        <div class="form-group" id="fertigkeitSelectorTalenteDiv">
-          <label for="fertigkeitSelectorTalenteDiv"><a id="fertigkeitSelectorTalenteAll" href="#fertigkeitSelectorTalenteAll">A</a>/<a id="fertigkeitSelectorTalenteNone" href="#fertigkeitSelectorTalenteNone">K</a></label>
-          <select multiple class="form-control" id="fertigkeitSelectorTalente">
-          </select>
-        </div>
+      </div>
 
-      </form>
-    </div>
-  </div>
+
+
 
 
   <!-- Bootstrap core JavaScript
@@ -96,17 +112,29 @@
   <script>
   $(document).ready(function () {
     initializeIlaris(function() {
+      updateFertigkeitSelector();
 
-      var kategorien = $("#fertigkeitSelectorKategorien");
       var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
       var talente = $("#fertigkeitSelectorTalente");
 
-      kategorien.on("change", updateFertigkeitSelector);
+
       fertigkeiten.on("change", updateFertigkeitSelector);
       talente.on("change", updateFertigkeitSelector);
+      $("#fertigkeitSelectorKategorienOptionK, #fertigkeitSelectorKategorienOptionP, #fertigkeitSelectorKategorienOptionU").on("change", updateFertigkeitSelector);
+      $("#fertigkeitSelectorDisplayFertigkeitenGrouped").on("change", rewriteEntries);
+      $(".clickable").on("click", function(e) {
+        if ($(e.target).is("input[type='checkbox']")) return;
+        $.each($(this).children("input[type='checkbox']"), function(i, cb) {
+          $(cb).prop("checked", !$(cb).prop("checked"));
+          $(cb).change();
+        });
+        e.preventDefault();
 
-      updateFertigkeitSelector();
-      $(document).on('click', 'a[href^="#fertigkeitSelector"]', function (event) {
+      }
+    );
+
+
+    /*  $(document).on('click', 'a[href^="#fertigkeitSelector"]', function (event) {
         var href = $(this).attr('href');
 
         if (href.startsWith("#fertigkeitSelector")) {
@@ -124,7 +152,7 @@
           }
         }
 
-      });
+      });*/
 /*
       var pickedUp = false;
       var pageY = 0;
@@ -153,8 +181,35 @@
     talente: new Set()
   }
 
+  function rewriteEntries() {
+    var group = $("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked");
+    var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
+    $.each(
+      fertigkeiten.children("option"),
+      function (o, option) {
+        var text = $(option).text();
+        var kategorie = $(option).attr("id").split("-")[1];
+
+        var splitted = text.split(kategorie + " ");
+
+        if ((splitted[0] === "")) {
+          splitted.splice(0,1);
+          text = splitted.join("");
+        }
+
+        var prefix = "";
+
+        if (group) {
+           prefix = kategorie + " ";
+        }
+
+        $(option).text(prefix + text);
+      }
+    );
+    sortSelect(fertigkeiten);
+  }
+
   function updateFertigkeitSelectorState() {
-    var kategorien = $("#fertigkeitSelectorKategorien");
     var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
     var talente = $("#fertigkeitSelectorTalente");
 
@@ -175,7 +230,7 @@
     $.each(
       ["K", "P", "U"],
       function(k, kategorie) {
-        var kategorieSelected = $("#fertigkeitSelectorKategorienOption" + kategorie).prop("selected");
+        var kategorieSelected = $("#fertigkeitSelectorKategorienOption" + kategorie).prop("checked");
 
         if (fertigkeitSelectorState.kategorien.has(kategorie)) {
           if (kategorieSelected) {
@@ -246,7 +301,6 @@
 
       var diff = updateFertigkeitSelectorState();
 
-      var kategorien = $("#fertigkeitSelectorKategorien");
       var fertigkeiten = $("#fertigkeitSelectorFertigkeiten");
       var talente = $("#fertigkeitSelectorTalente");
 
@@ -254,10 +308,14 @@
       function(k, kategorie) {
 
         if (diff.added.kategorien.has(kategorie)) {
+          var prefix = "";
+          if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
+            prefix = kategorie + " ";
+          }
           $.each(
             Ilaris[kategorie + "Fertigkeiten"],
             function(f, ff) {
-              fertigkeiten.append($("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode() + "\">" + kategorie + " " +  f +"</option>"));
+              fertigkeiten.append($("<option id=\"fertigkeitSelectorFertigkeitenOption-" + kategorie + "-" + f.hashCode() + "\">" + prefix + f +"</option>"));
             }
           );
         }
@@ -278,7 +336,7 @@
           $.each(
             ff["talente"],
             function(t, tt) {
-              talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + kategorie + "-"  + f.hashCode() + "-"+ tt.hashCode() + "\">" + tt +"</option>"));
+              talente.append($("<option id=\"fertigkeitSelectorTalenteOption-" + tt.hashCode() + "\">" + tt + "</option>"));
             }
           );
         }
@@ -287,7 +345,7 @@
           $.each(
             ff["talente"],
             function(t, tt) {
-              $("#fertigkeitSelectorTalenteOption-" + kategorie + "-" + f.hashCode() + "-" + tt.hashCode()).remove();
+              $("#fertigkeitSelectorTalenteOption-" + tt.hashCode()).remove();
             }
           );
         }
@@ -301,6 +359,11 @@
 
     sortSelect(fertigkeiten);
     sortSelect(talente);
+
+    if ((fertigkeitSelectorState.kategorien.size > 0) && (fertigkeitSelectorState.fertigkeiten.size === 0) && !(fertigkeiten.val === "")) {
+      updateFertigkeitSelector();
+    }
+
 
   }
 
