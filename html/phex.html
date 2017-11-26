@@ -499,9 +499,9 @@ function updateProbenListe() {
     $.each(PhexCharacters, function(c, char) {
       var forC = $("<li class=\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
       var forCName = $("<h4 class=\"w-100 d-flex justify-content-end align-items-center\"><span style=\"flex-grow: 1;\">" + char + "</span></h4>");
-      var forCSelected = $("<span class=\"badge badge-pill\" id=\"probenListeLiSelected_" + char.hashCode() + "\"></span>")
+    //  var forCSelected = $("<span class=\"badge badge-pill\" id=\"probenListeLiSelected_" + char.hashCode() + "\"></span>")
       var forCPW = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
-      forCName.append(forCSelected);
+    //  forCName.append(forCSelected);
       forCName.append(forCPW);
       var forCReq = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
       var forCProb = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
@@ -539,17 +539,17 @@ function updateProbenListe() {
   $.each(PhexCharacters, function(c, charname) {
     var char = PhexCharacterObjects(charname);
     var pw = getProbenWert(char, f);
-//    var pwPref = "PW";
-    var talentText = "";
-    var talentClass = "";
+    var pwPref = "PW ";
+//    var talentText = "";
+    var talentClass = "badge-primary";
     if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (char[kategorie+"Talente"][t].selected)) {
       pw = getProbenWertT(char,f);
-//      pwPref = "PW(T)"
-      talentText = "hat Talent";
+      pwPref = "PW(T) "
+//      talentText = "hat Talent";
       talentClass = "badge-success";
     }
     if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (!char[kategorie+"Talente"][t].selected)) {
-      talentText = "hat Talent nicht";
+//      talentText = "hat Talent nicht";
       talentClass = "badge-danger";
     }
 
@@ -596,11 +596,11 @@ function updateProbenListe() {
     }
 
     chance = chance.toFixed(2);
-    $("#probenListeLiPW_" + charname.hashCode()).text(pw);
-    $("#probenListeLiSelected_" + charname.hashCode()).text(talentText);
-    $("#probenListeLiSelected_" + charname.hashCode()).removeClass("badge-danger");
-    $("#probenListeLiSelected_" + charname.hashCode()).removeClass("badge-success");
-    $("#probenListeLiSelected_" + charname.hashCode()).addClass(talentClass);
+    $("#probenListeLiPW_" + charname.hashCode()).text(pwPref + pw);
+    $("#probenListeLiPW_" + charname.hashCode()).removeClass("badge-danger");
+    $("#probenListeLiPW_" + charname.hashCode()).removeClass("badge-success");
+    $("#probenListeLiPW_" + charname.hashCode()).removeClass("badge-primary");
+    $("#probenListeLiPW_" + charname.hashCode()).addClass(talentClass);
 
 
     if (reqNr >= 0) {
