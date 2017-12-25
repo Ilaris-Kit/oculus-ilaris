@@ -2,9 +2,9 @@
   <html lang ="en">
   <head>
     <meta charset ="utf-8">
-    <meta name ="viewport" content ="width =device-width, initial-scale =1, shrink-to-fit =no">
-    <meta name ="description" content ="">
-    <meta name ="author" content ="">
+    <meta name="viewport" content ="width =device-width, initial-scale =1, shrink-to-fit =no">
+    <meta name="description" content ="">
+    <meta name="author" content ="">
 
     <title>Oculus Ilaris</title>
 
@@ -64,6 +64,14 @@
 
     }
 
+    .erfolg {
+      color: darkgreen;
+    }
+
+    .fehlschlag {
+      color: darkred;
+    }
+
 
 
     </style>
@@ -71,61 +79,64 @@
   </head>
   <body>
 
-    <div id ="navWrapper">
+    <div id="navWrapper">
 
     </div>
 
-    <div class ="container">
-      <div class ="row">
-        <div class ="col-12">
-          <form id ="fertigkeitSelectorForm" class ="d-flex" style ="justify-content: space-between; flex-wrap: wrap; align-items: stretch;">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <form id="fertigkeitSelectorForm" class="d-flex" style="justify-content: space-between; flex-wrap: wrap; align-items: stretch;">
 
 
-            <div class ="form-group" id ="fertigkeitSelectorKategorienDiv">
+            <div class="form-group" id="fertigkeitSelectorKategorienDiv">
 
-              <div class ="input-group">
-                <span class ="input-group-addon clickable" style ="flex-grow: 1; justify-content: center;"><input id ="fertigkeitSelectorKategorienOptionK" type ="checkbox" style ="margin-right: .5rem;" checked>K</span>
-                <span style ="flex-grow: 1; justify-content: center" class ="input-group-addon clickable"><input id ="fertigkeitSelectorKategorienOptionP" type ="checkbox" style ="margin-right: 10px" checked>P</span>
-                <span style ="flex-grow: 1; justify-content: center" class ="input-group-addon clickable"><input id ="fertigkeitSelectorKategorienOptionU" type ="checkbox" style ="margin-right: 10px" checked>U</span>
-                <span id ="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style ="flex-grow: 1; justify-content: center;" class ="input-group-addon clickable"><input id ="fertigkeitSelectorDisplayFertigkeitenGrouped" type ="checkbox" style ="margin-right: 10px" checked>Gruppieren</span>
+              <div class="input-group">
+                <span class="input-group-addon clickable" style="flex-grow: 1; justify-content: center;"><input id="fertigkeitSelectorKategorienOptionK" type="checkbox" style="margin-right: .5rem;" checked>K</span>
+                <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionP" type="checkbox" style="margin-right: 10px" checked>P</span>
+                <span style="flex-grow: 1; justify-content: center" class="input-group-addon clickable"><input id="fertigkeitSelectorKategorienOptionU" type="checkbox" style="margin-right: 10px" checked>U</span>
+                <span id="fertigkeitSelectorDisplayFertigkeitenGroupedSpan" style="flex-grow: 1; justify-content: center;" class="input-group-addon clickable"><input id="fertigkeitSelectorDisplayFertigkeitenGrouped" type="checkbox" style="margin-right: 10px" checked>Gruppieren</span>
 
               </div>
             </div>
-            <div class ="form-group" id ="fertigkeitSelectorFertigkeitenDiv">
-              <select class ="form-control custom-select" id ="fertigkeitSelectorFertigkeiten" style ="flex-grow: 100;">
+            <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
+              <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten" style="flex-grow: 100;">
               </select>
             </div>
 
-            <div class ="form-group" id ="fertigkeitSelectorTalenteDiv">
-              <div class ="input-group">
-                <span class ="input-group-addon clickable" style ="justify-content: center;"><input id ="fertigkeitSelectorTalenteJa" type ="checkbox" checked><span id ="fertigkeitSelectorTalenteJaSpan" style ="margin-left: .5rem;" >Talent auswählen</span></span>
-                <select class ="form-control custom-select" id ="fertigkeitSelectorTalente">
+            <div class="form-group" id="fertigkeitSelectorTalenteDiv">
+              <div class="input-group">
+                <span class="input-group-addon clickable" style="justify-content: center;"><input id="fertigkeitSelectorTalenteJa" type="checkbox" checked><span id="fertigkeitSelectorTalenteJaSpan" style="margin-left: .5rem;" >Talent auswählen</span></span>
+                <select class="form-control custom-select" id="fertigkeitSelectorTalente">
                 </select>
               </div>
             </div>
-            <div class ="form-group" id ="fertigkeitSelectorModusDiv">
-              <div class ="input-group">
-                <span class ="input-group-addon clickable" style ="justify-content: center;">
-                  <input id ="fertigkeitSelectorModusSG" type ="radio" name ="fertigkeitSelectorModus" checked>
-                  <span id ="fertigkeitSelectorModusSGSpan" style ="margin-left: .5rem;" >SG</span>
+            <div class="form-group" id="fertigkeitSelectorModusDiv">
+              <div class="input-group">
+                <span class="input-group-addon clickable" style="justify-content: center;">
+                  <input id="fertigkeitSelectorModusSG" type="radio" name="fertigkeitSelectorModus" checked>
+                  <span id="fertigkeitSelectorModusSGSpan" style="margin-left: .5rem;" >SG</span>
                 </span>
-                <span class ="input-group-addon clickable" style ="justify-content: center;">
-                  <input id ="fertigkeitSelectorModusVP" type ="radio" name ="fertigkeitSelectorModus">
-                  <span id ="fertigkeitSelectorModusVPSpan" style ="margin-left: .5rem;" >NSC</span>
+                <span class="input-group-addon clickable" style="justify-content: center;">
+                  <input id="fertigkeitSelectorModusVP" type="radio" name="fertigkeitSelectorModus">
+                  <span id="fertigkeitSelectorModusVPSpan" style="margin-left: .5rem;" >NSC</span>
                 </span>
-                <input class ="form-control usethis" id ="fertigkeitSelectorModusText" value ="12" type ="number">
-                <span class ="input-group-btn">
-                  <button class ="btn btn-secondary" type ="button" id ="fertigkeitSelectorDec">▼</button>
-                  <button class ="btn btn-secondary" type ="button" id ="fertigkeitSelectorInc">▲</button>
+                <input class="form-control usethis" id="fertigkeitSelectorModusText" value ="12" type="number">
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button" id="fertigkeitSelectorDec">▼</button>
+                  <button class="btn btn-secondary" type="button" id="fertigkeitSelectorInc">▲</button>
+                </span>
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="button" id="fertigkeitSelectorWuerfeln">Würfeln</button>
                 </span>
               </div>
             </div>
           </form>
         </div>
       </div>
-      <div class ="row">
-        <div class ="col-12">
-          <ul class ="list-group" id ="probenListe">
+      <div class="row">
+        <div class="col-12">
+          <ul class="list-group" id="probenListe">
           </ul>
         </div>
 
@@ -170,7 +181,6 @@
             $("#fertigkeitSelectorModusText").removeClass("is-invalid");
             $("#fertigkeitSelectorInc").prop("disabled", false);
             $("#fertigkeitSelectorDec").prop("disabled", false);
-
             updateProbenListe();
           } else {
             $("#fertigkeitSelectorModusText").addClass("is-invalid");
@@ -203,10 +213,10 @@
 
 
         $(".clickable").on("click", function(e) {
-          if ($(e.target).is("input[type ='checkbox']") || $(e.target).is("input[type ='radio']")) return;
-          $.each($(this).children("input[type =checkbox], input[type ='radio']"), function(i, cb) {
+          if ($(e.target).is("input[type='checkbox']") || $(e.target).is("input[type='radio']")) return;
+          $.each($(this).children("input[type=checkbox], input[type='radio']"), function(i, cb) {
             if ($(cb).prop("disabled")) return;
-            $(cb).prop("checked", !$(cb).prop("checked") || $(cb).is("input[type ='radio']"));
+            $(cb).prop("checked", !$(cb).prop("checked") || $(cb).is("input[type='radio']"));
             $(cb).change();
           });
           e.preventDefault();
@@ -235,24 +245,20 @@
 
       });
 
+      $("#fertigkeitSelectorForm").on("submit", function(e) {
+        e.preventDefault();
+        $.each(PhexCharacters, function(c, charname) {
+          $("#probenListeWuerfeln_" + charname.hashCode()).trigger("click");
+        });
+      });
+
+
+      $("#fertigkeitSelectorWuerfeln").on("click", function (e) {
+        $("#fertigkeitSelectorForm").trigger("submit");
+      });
+
       $(window).trigger("resize");
-      SimpleIlarisProbe.prototype.toString = function() {
-        return JSON.stringify(this.result());
-      }
 
-      try {
-
-        var p1 = new SimpleIlarisProbe(2, 1);
-        var p2 = new SimpleIlarisProbe(2, 2);
-
-        console.log(p1.toString());
-        console.log(p1);
-        console.log(p1.reroll());
-
-      } catch (e) {
-        console.log(e);
-        console.log(JSON.stringify(e));
-      }
 
 
   });
@@ -449,27 +455,32 @@
     var pl = $("#probenListe");
     if (!probenListeInitialized) {
       $.each(PhexCharacters, function(c, char) {
-        var forC = $("<li class =\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id =\"probenListeLi_" + char.hashCode() + "\"></li>");
-        var forCName = $("<h4 class =\"w-100 d-flex justify-content-end align-items-center\"><span style =\"flex-grow: 1;\">" + char + "</span></h4>");
-      //  var forCSelected = $("<span class =\"badge badge-pill\" id =\"probenListeLiSelected_" + char.hashCode() + "\"></span>")
-        var forCPW = $("<span class =\"badge badge-primary badge-pill\" id =\"probenListeLiPW_" + char.hashCode() + "\"></span>")
+        var forC = $("<li class=\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
+        var forCName = $("<h4 class=\"w-100 d-flex justify-content-end align-items-center\"><span style=\"flex-grow: 1;\">" + char + "</span></h4>");
+      //  var forCSelected = $("<span class=\"badge badge-pill\" id=\"probenListeLiSelected_" + char.hashCode() + "\"></span>")
+        var forCPW = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
       //  forCName.append(forCSelected);
         forCName.append(forCPW);
-        var forCReq = $("<span id =\"probenListeLiReq_" + char.hashCode() + "\"></span>")
-        var forCProb = $("<span id =\"probenListeLiProb_" + char.hashCode() + "\"></span>")
-        var forCProbDyn = $("<span id =\"probenListeLiProbDyn_" + char.hashCode() + "\"></span>")
+        var forCReq = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
+        forCReq.css("margin-right", "1rem");
+        var forCProb = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
+        forCProb.css("margin-right", "1rem");
+        var forCProbDyn = $("<span id=\"probenListeLiProbDyn_" + char.hashCode() + "\"></span>")
 
-        var formGrp = $("<form class =\"w-100\"><div class =\"form-group w-100\"></div></form>");
-        var inputGrp = $("<div class =\"input-group\"></div>");
+        var formGrp = $("<form class=\"w-100\"></form>");
+        var formDiv = $("<div class=\"form-group w-100\"></div>");
+        var inputGrp = $("<div class=\"input-group\"></div>");
 
 
-        var textAddon = $("<span class =\"input-group-addon\">SG</span>");
-        var inputField = $("<input class =\"form-control\" value =\"0\" type =\"number\">");
-        var updown = $("<span class =\"input-group-btn\"></span>");
-        var down = $("<button class =\"btn btn-secondary\" type =\"button\">▼</button>");
-        var up = $("<button class =\"btn btn-secondary\" type =\"button\">▲</button>");
+        var textAddon = $("<span class=\"input-group-addon\" id=\"probenListAddon_" + char.hashCode() + "\">SG</span>");
+        var inputField = $("<input class=\"form-control\" value =\"0\" type=\"number\">");
+        var updown = $("<span class=\"input-group-btn\"></span>");
+        var down = $("<button class=\"btn btn-secondary\" type=\"button\">▼</button>");
+        var up = $("<button class=\"btn btn-secondary\" type=\"button\">▲</button>");
         updown.append(down);
         updown.append(up);
+
+
 
         inputField.attr("id", "probenListModifier_" + char.hashCode());
         textAddon.text("SG +");
@@ -479,6 +490,8 @@
         up.css("padding-right", "3px");
         down.css("padding-left", "3px");
         down.css("padding-right", "2px");
+
+
 
         inputField.on("input", function() {
           var fine = (inputField[0].checkValidity());
@@ -509,19 +522,65 @@
           inputField.change();
         });
 
-        var button = $("<span class =\"input-group-btn\"><button class =\"btn btn-primary\">Würfeln</button></span>");
+        var button = $("<span class=\"input-group-btn\"><button class=\"btn btn-primary\" id=\"probenListeWuerfeln_" + char.hashCode() + "\">Würfeln</button></span>");
+
+
         forC.append(forCName);
 
         inputGrp.append(textAddon);
         inputGrp.append(inputField);
         inputGrp.append(updown);
         inputGrp.append(button);
-        formGrp.append(inputGrp);
+        formDiv.append(inputGrp);
+        formGrp.append(formDiv);
         forC.append(formGrp);
 
         forC.append(forCReq);
         forC.append(forCProb);
         forC.append(forCProbDyn);
+
+        var resultDiv = $("<div class=\"w-100\" id=\"probenListeResult_" + char.hashCode() + "\"></div>")
+        resultDiv.css("margin-top", "1rem");
+        resultDiv.addClass("d-none");
+
+        forC.append(resultDiv);
+        button.on("click", function(e) {
+          e.preventDefault();
+          var pw = parseInt($("#probenListeLiPW_" + char.hashCode()).text().split(" ")[1]);
+          var probe = new SimpleIlarisProbe(pw, 0);
+
+          var sg = parseInt($("#fertigkeitSelectorModusText").val()) + parseInt(inputField.val());
+
+          if ($("#fertigkeitSelectorModusVP").prop("checked")) {
+            var gp = new SimpleIlarisProbe(sg, 0);
+            sg = gp.result().ew;
+          }
+
+          var result = probe.result();
+          var ew = result.ew;
+          var gewertet = ew - pw;
+          var resultString = "<strong>";
+          if (ew >= sg) {
+            resultString = resultString + "Erfolg!";
+            if (gewertet === 20) {
+              resultString = resultString + " (Triumph!)";
+            }
+            resultDiv.removeClass("fehlschlag");
+            resultDiv.addClass("erfolg");
+          } else {
+            resultString = resultString +  "Fehlschlag!";
+            if (gewertet === 1) {
+              resultString = resultString + " (Patzer!)";
+            }
+            resultDiv.removeClass("erfolg");
+            resultDiv.addClass("fehlschlag");
+          }
+          resultString = resultString + "</strong> EW " + ew + " vs " + sg + ".<br>Ergebnisse: " + result.rolls.toString() + ", gewertete "  + gewertet + ".";
+          resultDiv.html(resultString);
+          resultDiv.removeClass("d-none");
+
+        });
+
 
         probenListeEntries.set(char, forC);
         pl.append(forC);
@@ -537,6 +596,7 @@
     var t = toption.val().split(" [")[0];
 
     var dc = parseInt($("#fertigkeitSelectorModusText").val());
+
 
     if (isNaN(dc)) {
       $("#fertigkeitSelectorModusText").addClass("is-invalid");
@@ -558,6 +618,8 @@
       var char = PhexCharacterObjects(charname);
       var pw = getProbenWert(char, f);
       var pwPref = "PW ";
+
+      $("#probenListAddon_" + charname.hashCode()).text($("#fertigkeitSelectorModusText").val() + " +");
 
       var mod = parseInt($("#probenListModifier_" + charname.hashCode()).val());
       if (isNaN(mod)) {
@@ -681,7 +743,7 @@
       prefix = kategorie + " ";
     }
     var text = prefix + "(Alle) " + kategorie + "-Talente";
-    return $("<option id =\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\">" + text + "</option>");
+    return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\">" + text + "</option>");
   }
 
   function createPseudoForKategorieAndCharacter(kategorie, character) {
@@ -690,7 +752,7 @@
       prefix = kategorie + " ";
     }
     var text = prefix + "(Alle) " + kategorie + "-Talente von " + character;
-    return $("<option id =\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character + "\">" + text + "</option>");
+    return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character + "\">" + text + "</option>");
   }
 
 
@@ -737,7 +799,7 @@
         $.each(
           Ilaris[kategorie + "Fertigkeiten"],
           function(f, ff) {
-            fertigkeiten.append($("<option id =\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode() + "\">" + prefix + f +"</option>"));
+            fertigkeiten.append($("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode() + "\">" + prefix + f +"</option>"));
           }
         );
       }
@@ -772,7 +834,7 @@
     if (tts[0] === "U") {
       klammer = " ["+ tts[1]+  "]";
     }
-    talente.append($("<option id =\"fertigkeitSelectorTalenteOption_" + tts[1].hashCode() + "_" + tts[2].hashCode() + "\" data-kategorie =\"" + tts[0] + "\" data-fertigkeit =\"" + tts[1] + "\">" + tts[2] + klammer + "</option>"));
+    talente.append($("<option id=\"fertigkeitSelectorTalenteOption_" + tts[1].hashCode() + "_" + tts[2].hashCode() + "\" data-kategorie =\"" + tts[0] + "\" data-fertigkeit =\"" + tts[1] + "\">" + tts[2] + klammer + "</option>"));
   }
 
 
