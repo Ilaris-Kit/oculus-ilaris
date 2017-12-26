@@ -86,10 +86,10 @@ Phex = {
             else inputField.addClass("is-invalid");
             if (fine) {
               Phex.frontend.probenliste.byName[char].sg.mod.val = parseInt(inputField.val());
-              updateProbenListe();
+              Phex.frontend.probenliste.update();
             } else {
               Phex.frontend.probenliste.byName[char].sg.mod.val = NaN;
-              updateProbenListe();
+              Phex.frontend.probenliste.update();
             }
 
           });
@@ -277,7 +277,7 @@ Phex = {
             }
 
             if (sg) {
-              Phex.frontend.probenliste.byName[charname].probability.static.element.addClass("d-none");
+              Phex.frontend.probenliste.byName[charname].probability.dynamic.element.addClass("d-none");
             } else {
               if (chanceDyn > 0) {
                 chanceDyn = chanceDyn.toFixed(2);
