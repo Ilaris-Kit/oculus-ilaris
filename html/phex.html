@@ -50,7 +50,7 @@
   #fertigkeitSelectorForm > div.form-group > div.input-group >span.input-group-addon,
   #fertigkeitSelectorForm > div.form-group > div.input-group > input {
     font-family: "Open Sans Condensed";
-    font-size: 140%;
+    font-size: 120%;
     height: 3rem;
 
   }
@@ -91,6 +91,7 @@
             </div>
           </div>
           <div class="form-group" id="fertigkeitSelectorFertigkeitenDiv">
+
             <select class="form-control custom-select" id="fertigkeitSelectorFertigkeiten" style="flex-grow: 100;">
             </select>
           </div>
@@ -104,14 +105,23 @@
           </div>
           <div class="form-group" id="fertigkeitSelectorModusDiv">
             <div class="input-group">
-              <span class="input-group-addon clickable" style="justify-content: center;">
+              <span class="input-group-addon clickable" style="justify-content: center;  flex-grow: 1;">
                 <input id="fertigkeitSelectorModusSG" type="radio" name="fertigkeitSelectorModus" checked>
                 <span id="fertigkeitSelectorModusSGSpan" style="margin-left: .5rem;" >SG</span>
               </span>
-              <span class="input-group-addon clickable" style="justify-content: center;">
-                <input id="fertigkeitSelectorModusVP" type="radio" name="fertigkeitSelectorModus">
-                <span id="fertigkeitSelectorModusVPSpan" style="margin-left: .5rem;" >NSC</span>
+              <span class="input-group-addon clickable" style="justify-content: center;  flex-grow: 1;">
+                <input id="fertigkeitSelectorModusVPStatic" type="radio" name="fertigkeitSelectorModus">
+                <span id="fertigkeitSelectorModusVPStaticSpan" style="margin-left: .5rem;" >VP (10)</span>
               </span>
+              <span class="input-group-addon clickable" style="justify-content: center; flex-grow: 1;">
+                <input id="fertigkeitSelectorModusVPDynamic" type="radio" name="fertigkeitSelectorModus">
+                <span id="fertigkeitSelectorModusVPDynamicSpan" style="margin-left: .5rem;" >VP (würfeln)</span>
+              </span>
+            </div>
+          </div>
+          <div class="form-group" id="fertigkeitSelectorModusTextDiv">
+            <div class="input-group w-100">
+              <!--<span class="input-group-addon" id="fertigkeitSelectorModusLbl">SG</span>-->
               <input class="form-control usethis" id="fertigkeitSelectorModusText" value ="12" type="number">
               <span class="input-group-btn">
                 <button class="btn btn-secondary" type="button" id="fertigkeitSelectorDec">▼</button>
@@ -215,6 +225,18 @@
 
       }
     );
+/*
+    $("#fertigkeitSelectorModusVPStatic").on("change", function(e) {
+      $("#fertigkeitSelectorModusLbl").text("NSC-Wert");
+    });
+    $("#fertigkeitSelectorModusVPDynamic").on("change", function(e) {
+      $("#fertigkeitSelectorModusLbl").text("NSC-Wert");
+    });
+    $("#fertigkeitSelectorModusSG").on("change", function(e) {
+      $("#fertigkeitSelectorModusLbl").text("SG");
+    });
+    */
+
 
     var wide = !($(window).width() >= 500);
 

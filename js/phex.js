@@ -139,9 +139,17 @@ Phex = {
 
             var sg = parseInt($("#fertigkeitSelectorModusText").val()) + Phex.frontend.probenliste.byName[char].sg.mod.val;
 
-            if ($("#fertigkeitSelectorModusVP").prop("checked")) {
+            if ($("#fertigkeitSelectorModusVPStatic").prop("checked")) {
+              sg = sg+10;
+            }
+
+            var ergebnisseNSC = "";
+            var gewertetNSC = 0;
+            if ($("#fertigkeitSelectorModusVPDynamic").prop("checked")) {
               var gp = new SimpleIlarisProbe(sg, 0);
+              gewertetNSC = gp.result().ew - sg;
               sg = gp.result().ew;
+              ergebnisseNSC = gp.result().rolls.toString();
             }
 
             var result = probe.result();
@@ -164,6 +172,9 @@ Phex = {
               resultDiv.addClass("fehlschlag");
             }
             resultString = resultString + "</strong> EW " + ew + " vs " + sg + ".<br>Ergebnisse: " + result.rolls.toString() + ", gewertete "  + gewertet + ".";
+            if (gewertetNSC > 0) {
+              resultString = resultString + "<br>Ergebnisse NSC: " + ergebnisseNSC + ", gewertete " + gewertetNSC + ".";
+            }
             resultDiv.html(resultString);
             resultDiv.removeClass("d-none");
 
@@ -190,7 +201,7 @@ Phex = {
 
         var dc = parseInt($("#fertigkeitSelectorModusText").val());
         var sg = true;
-        if ($("#fertigkeitSelectorModusVP").prop("checked")) {
+        if ($("#fertigkeitSelectorModusVPStatic").prop("checked") || $("#fertigkeitSelectorModusVPDynamic").prop("checked")) {
           dc = dc + 10;
           sg = false;
         }
@@ -268,11 +279,17 @@ Phex = {
             Phex.frontend.probenliste.byName[charname].pw.val = pw;
             Phex.frontend.probenliste.byName[charname].pw.element.text(pwPref + pw).removeClass("badge-danger").removeClass("badge-success").removeClass("badge-primary").addClass(talentClass);
 
+            var statisch = "";
+            if (!sg) {
+              statisch = " (nur Spieler würfelt)"
+            }
+
+
             if (reqNr >= 0) {
-              Phex.frontend.probenliste.byName[charname].req.element.text("Benötigt (statisch): " + reqNr);
-              Phex.frontend.probenliste.byName[charname].probability.static.element.text("Erfolgswahrscheinlichkeit (statisch): " + chance + "%");
+              Phex.frontend.probenliste.byName[charname].req.element.text("Benötigt" + statisch + ": " + reqNr);
+              Phex.frontend.probenliste.byName[charname].probability.static.element.text("Erfolgswahrscheinlichkeit" + statisch + ": " + chance + "%");
             } else {
-              Phex.frontend.probenliste.byName[charname].req.element.text("Erfolg (statisch) nicht möglich.");
+              Phex.frontend.probenliste.byName[charname].req.element.text("Erfolg" + statisch + " nicht möglich.");
               Phex.frontend.probenliste.byName[charname].probability.static.element.text("");
             }
 
@@ -281,9 +298,9 @@ Phex = {
             } else {
               if (chanceDyn > 0) {
                 chanceDyn = chanceDyn.toFixed(2);
-                Phex.frontend.probenliste.byName[charname].probability.dynamic.element.text("Erfolgswahrscheinlichkeit (dynamisch): " + chanceDyn + "%");
+                Phex.frontend.probenliste.byName[charname].probability.dynamic.element.text("Erfolgswahrscheinlichkeit (NSC würfelt auch): " + chanceDyn + "%");
               } else {
-                Phex.frontend.probenliste.byName[charname].probability.dynamic.element.text("Erfolg (dynamisch) nicht möglich.");
+                Phex.frontend.probenliste.byName[charname].probability.dynamic.element.text("Erfolg (NSC würfelt auch) nicht möglich.");
               }
               Phex.frontend.probenliste.byName[charname].probability.dynamic.element.removeClass("d-none");
             }
