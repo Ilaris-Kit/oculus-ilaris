@@ -15,7 +15,7 @@ TsaUI = {
     TsaUI.isInitialized["icons"] = false;
 
     var currentlySelected = TsaUI.updateCharacterList();
-    console.log("List done");
+
     TsaUI.updateCharacterSheet(currentlySelected);
 
     var br = "";
@@ -317,7 +317,7 @@ TsaUI = {
     });
     var ul = $(listname);
     $.each(items, function(i, li){
-      ul.append(li); /* This removes li from the old spot and moves it */
+      ul.append(li);
     });
 
   },
@@ -348,7 +348,6 @@ TsaUI = {
       while (tdcounter < $(a).children("th, td").length) {
         keyA = $($(a).children("th, td")[tdcounter]).text();
         keyB = $($(b).children("th, td")[tdcounter]).text();
-        //console.log(keyA + " vs " + keyB);
         if (keyA < keyB) return -1;
         if (keyA > keyB) return 1;
         tdcounter = tdcounter+1;
@@ -585,8 +584,6 @@ TsaUI = {
         var sel = null;
         var tr = TsaUI.MVcreatePFertigkeitenRow(titem, true);
         $.each(clist, function( ci, citem ) {
-          //console.log("Lookup for character: " + ci);
-          //console.log(citem);
           pwt = -1;
           var theChar = TsaUI.Characters[citem];
           var sel = theChar[kategorie + "Talente"][titem]["selected"];

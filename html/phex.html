@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,700" rel="stylesheet" crossorigin="anonymous">
 
-    <script src='../js/download.js' defer="defer"></script>
+    <script src="../js/download.js" defer="defer"></script>
     <script src="../js/local.js" defer="defer"></script>
     <script src="../js/ilaris.js" defer="defer"></script>
     <script src="../js/character.js" defer="defer"></script>
@@ -32,16 +32,6 @@
 
     .badInput {
       color: magenta;
-    }
-
-    #fertigkeitSelectorCol {
-
-    }
-
-
-
-    #probenListe > li > span {
-      /*padding-left: 1rem;*/
     }
 
     #fertigkeitSelectorForm > div.form-group {
@@ -655,35 +645,26 @@
       }
       var chance = 100;
       var chanceDyn = 100;
-    //  console.log("Statische Schwierigkeit: " + dc);
-    //  console.log("Probenwert: " + pw);
-    //  console.log("Benötige: " + reqNr);
 
       for (var i = 0; i < reqNr-1; ++i) {
-  //      console.log("Habe gewürfelt: " + (i+1));
         chance = chance - probabilities[i];
       }
       if (!sg) {
         var dcalt = dc -10;
         var differenz = pw - dcalt;
         var scwahrscheinlichkeit = -1;
-        // console.log("Differenz ist: " + differenz);
         if (differenz <= 20) {
           scwahrscheinlichkeit = 0;
           for (var sc = 0; sc < 20; ++sc) {
             scw = sc+differenz;
             nscwahrscheinlichkeit = 100;
-            // console.log("Spieler hat: " + (sc + 1));
             if (scw >= 0) {
               nscwahrscheinlichkeit = 0;
               for (var nsc = scw+1; nsc < 20; ++nsc) {
-                // console.log("Nicht-Spieler gewinnt mit: " + (nsc + 1));
                 nscwahrscheinlichkeit = nscwahrscheinlichkeit + probabilities[nsc];
               }
             }
-            // console.log("Spieler gewinnt hier mit Wahrscheinlichkeit: " + (100-nscwahrscheinlichkeit));
             scwahrscheinlichkeit = scwahrscheinlichkeit + probabilities[sc]/100 * (100-nscwahrscheinlichkeit);
-            // console.log("Korrigiert um die Wahrscheinlichkeit ist das: " + (probabilities[sc]/100 *(100-nscwahrscheinlichkeit)));
           }
           chanceDyn = scwahrscheinlichkeit;
 
@@ -781,8 +762,6 @@
     $.each(["K", "P", "U"],
     function(k, kategorie) {
 
-      //      talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorie(kategorie);
-
       if (diff.added.kategorien.has(kategorie)) {
         var prefix = "";
         if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
@@ -843,7 +822,6 @@
   sortSelect(talente);
 
   if ((fertigkeitSelectorState.kategorien.size > 0) && (fertigkeitSelectorState.fertigkeiten.size === 0) && !(fertigkeiten.val === "")) {
-  //  console.log("Val ist: " + fertigkeiten.val());
     updateFertigkeitSelector();
   }
 
@@ -898,7 +876,7 @@
     for (i = 0; i < this.length; i++) {
       chr   = this.charCodeAt(i);
       hash  = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
+      hash |= 0;
     }
     return hash;
   };
@@ -965,7 +943,7 @@
     /**
     * Returns a random integer between min (inclusive) and max (inclusive)
     * Using Math.round() will give you a non-uniform distribution!
-    https =//stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
+    https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
     */
     var getRandomInt = function(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;

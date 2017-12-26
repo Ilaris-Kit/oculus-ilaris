@@ -105,13 +105,8 @@ function _addUser(character, usedRecipe, usedArgs, userRecipe, userArgs) {
 
 
 function TSAload(path, args) {
-//  console.log("Going to load: " + path);
-//  console.log("args: ");
-//  console.log(args);
   for (var i = 1; i < args.length; ++i) {
-  //  console.log("Replacing arg:" + args[i]);
     path = (path + "").split("$" + (i-1)).join(args[i]);
-  //  console.log("Result:" + path);
   }
   var character = args[0];
   if (!_loaded.has(character)) {
@@ -122,12 +117,10 @@ function TSAload(path, args) {
     return forC.get(path);
   }
   var obj = character;
-  //console.log("Going to traverse: " + path);
   $.each((path + "").split("."), function(s, step) {
     obj = obj[step];
   });
   forC.set(path, obj);
-  //console.log("loaded: " + obj);
   return obj;
 }
 
@@ -135,9 +128,6 @@ function TSAload(path, args) {
 function TSAreplace(s, ingredients) {
 
     var result = s;
-
-    //console.log("replacing in " + s + " : ");
-    //console.log(ingredients);
 
     $.each(ingredients, function(i, ii) {
       if (Array.isArray(ii)) {
@@ -148,8 +138,6 @@ function TSAreplace(s, ingredients) {
         result = (result + "").split("_" + i + "_").join(ii);
       }
     });
-
-    //console.log("replaced in " + s + " : " + result);
 
     return result;
 }
@@ -248,15 +236,9 @@ function TSAinterprete(recipeKey) {
       $.each(loaded, function(i, ii) {
           calculatedIngredients[ii] = ingredients[ii](calculatedIngredients, args);
       });
-      //console.log("loads done:");
-/*      $.each(calculatedIngredients, function(c, cc) {
-        console.log(c + ": ");
-        console.log(cc);
-      })*/
+
       $.each(used, function(i, ii) {
           var _args = [];
-          //console.log("Preparing args for ");
-          //console.log(ii);
           for (var j = 0; j < ii.args.length; ++j) {
             var s = TSAreplace(ii.args[j], calculatedIngredients);
             for (var k = 1; k < args.length; ++k) {
@@ -266,22 +248,13 @@ function TSAinterprete(recipeKey) {
           }
           var _argstring = _args.join(",");
           _args.unshift(args[0]);
-          //console.log("Prepared args: ");
-          //console.log(_args.join(","));
+
           calculatedIngredients[ii.key] = ingredients[ii.key](_args);
           _addUser( args[0],ii.recipe, _argstring, recipeKey,argstring);
       });
-      //console.log("uses done:")
-      /*$.each(calculatedIngredients, function(c, cc) {
-        console.log(cc);
-      })*/
+
       var result = undefined;
       $.each(steps, function(s, step) {
-        //console.log("Next step: " + s);
-        /*$.each(calculatedIngredients, function(c, cc) {
-          console.log(c + ": ");
-          console.log(cc);
-        });*/
         result = step(calculatedIngredients, args);
       });
 
@@ -308,15 +281,6 @@ c = {
   }
 }
 
-/*console.log(TSAinterprete("Attribut")(c, "KL"));
-console.log(TSAinterprete("bw")(c, "laufen"));
-console.log(TSAinterprete("bw")(c, "laufen"));
-console.log(TSAinterprete("bw")(c, "laufen"));
-console.log(TSAinterprete("bw")(c, "laufen"));*/
-console.log(TSAinterprete("bw")(c, "laufen"));
-console.log(TSAinterprete("pwt")(c, "laufen"));
-console.log(TSAinterprete("pwt")(c, "laufen"));
-_update(c, "Attribut", "KL");
 
 /*
 
