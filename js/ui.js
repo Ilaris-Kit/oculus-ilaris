@@ -248,6 +248,7 @@ TsaUI = {
     var schadensbonus = Math.floor(parseInt(currentCharacter["KK"])/4);
     var asp = parseInt(currentCharacter["AsP"]);
     var kap = parseInt(currentCharacter["KaP"]);
+    var be = 0;
 
     $.each(currentCharacter["Vorteile"], function (v, vv) {
 
@@ -284,10 +285,13 @@ TsaUI = {
         kap = kap+8;
       }
 
+      if ((vv === "Rüstungsgewöhnung I") || (vv === "Rüstungsgewöhung II")) {
+        be = be -1;
+      }
 
 
     });
-    var be = 0;
+
     var zonen = ["Beine", "/ L. Arm", "/ R. Arm", "/ Bauch", "/ Brust", "/ Kopf"];
     var rs = [0,0,0,0,0,0];
     var zr = true;
@@ -298,6 +302,8 @@ TsaUI = {
         rs[i] = rs[i] + parseInt(rr["rs"][i]);
       }
     });
+
+    if (be < 0) be = 0;
 
     var dhstern = currentCharacter["KO"] - 2*be;
     var wsstern = rs[0];
@@ -404,6 +410,23 @@ TsaUI = {
       }
     });
 
+
+    var ruestungString = "-";
+    if (currentCharacter["Rüstungen"].length > 0) {
+      ruestungString = "<ul id=\"currentCharacterItemsRuestung\"></ul>";
+      lists.push("ItemsRuestung");
+    }
+    var ruestungListe = $("<li>Rüstung: " + ruestungString + "</li>");
+    $("#currentCharacterItemsListe").append(ruestungListe);
+    $.each(currentCharacter["Rüstungen"], function(a, aa) {
+      var listring = aa["name"] + ", BE " + aa["be"] + ", RS ";
+      if (aa["rs"].length == 1) listring = listring + aa["rs"];
+      else for (var i = 0; i < aa["rs"].length; ++i) {
+        listring = listring + " " + zonen[i] + " " + aa["rs"][i];
+      }
+      $("#currentCharacterItemsRuestung").append("<li>" + listring + "</li>");
+    });
+
     var waffenString = "-";
     if (currentCharacter["Waffen"].length > 0) {
       waffenString = "<ul id=\"currentCharacterItemsWaffen\"></ul>";
@@ -413,7 +436,8 @@ TsaUI = {
     $("#currentCharacterItemsListe").append(waffenListe);
     var waffentyp = {"Nah": "Nahkampf", "Fern": "Fernkampf"};
     $.each(currentCharacter["Waffen"], function(a, aa) {
-      var listring = aa["name"] + ", " +  waffentyp[aa["typ"]]  + ", "+ aa["wuerfel"] + "w6";
+      var listring = aa["name"] + ", " +  waffentyp[aa["typ"]];
+      listring = listring +  ", "+ aa["wuerfel"] + "w6";
       if (aa["bonus"] > 0) listring = listring + "+" + aa["bonus"];
       if (schadensbonus > 0 && aa["typ"] === "Nah") {
         var sb = schadensbonus;
@@ -428,12 +452,13 @@ TsaUI = {
     });
 
 
+
     var ausruestungString = "-";
     if (currentCharacter["Ausrüstung"].length > 0) {
       ausruestungString = "<ul id=\"currentCharacterItemsAusruestung\"></ul>";
       lists.push("ItemsAusruestung");
     }
-    var ausruestungListe = $("<li>Ausrüstungsstücke: " + ausruestungString + "</li>");
+    var ausruestungListe = $("<li>Ausrüstung: " + ausruestungString + "</li>");
     $("#currentCharacterItemsListe").append(ausruestungListe);
     $.each(currentCharacter["Ausrüstung"], function(a, aa) {
       $("#currentCharacterItemsAusruestung").append("<li>" + aa + "</li>");
