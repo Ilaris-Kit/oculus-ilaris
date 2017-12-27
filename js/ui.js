@@ -96,6 +96,9 @@ TsaUI = {
       initializeIlaris(function() {alert("Rebuilt");}, true);
     } );
     $( "#deleteAllButton" ).click( function( event ) {
+      $.each(TsaUI.Characters, function(x, xx) {
+        delete(TsaUI.Characters[x]);
+      });
       TsaUI.updateCharacterSheet(TsaUI.updateCharacterList(deleteAllCharactersFromLocalStorage()));
 
     } );
