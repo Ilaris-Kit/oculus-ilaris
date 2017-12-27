@@ -105,16 +105,46 @@ function finalizeCallback(callback) {
           if (fertigkeit in Ilaris[kategorie + "Fertigkeiten"]) {
             if (!("vorteile" in Ilaris[kategorie + "Fertigkeiten"][fertigkeit])) {
               Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile"] = [];
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-mode"] = [];
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-object"] = [];
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-target"] = [];
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-if"] = [];
             }
             Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile"].push(i);
-          }
+            if ("inc" in jitem) {
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-mode"].push("inc");
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-object"].push(jitem["inc"]);
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-target"].push(jitem["by"]);
+            } else if ("set" in jitem) {
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-mode"].push("set");
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-object"].push(jitem["set"]);
+              Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-target"].push(jitem["to"]);
+            }
+            Ilaris[kategorie + "Fertigkeiten"][fertigkeit]["vorteile-if"].push(jitem["if"]);
+
+            }
         });
         $.each(["P", "U", "K"], function (k, kategorie) {
           if (fertigkeit in Ilaris[kategorie + "Talente"]) {
             if (!("vorteile" in Ilaris[kategorie + "Talente"][fertigkeit])) {
               Ilaris[kategorie + "Talente"][fertigkeit]["vorteile"] = [];
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-mode"] = [];
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-object"] = [];
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-target"] = [];
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-if"] = [];
+
             }
             Ilaris[kategorie + "Talente"][fertigkeit]["vorteile"].push(i);
+            if ("inc" in jitem) {
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-mode"].push("inc");
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-object"].push(jitem["inc"]);
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-target"].push(jitem["by"]);
+            } else if ("set" in jitem) {
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-mode"].push("set");
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-object"].push(jitem["set"]);
+              Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-target"].push(jitem["to"]);
+            }
+            Ilaris[kategorie + "Talente"][fertigkeit]["vorteile-if"].push(jitem["if"]);
           }
         });
 

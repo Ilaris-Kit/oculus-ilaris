@@ -36,6 +36,9 @@ Phex = {
             wuerfeln: {
               element: undefined
             },
+            vorteile: {
+              element: undefined
+            },
             result: {
               element: undefined
             }
@@ -127,10 +130,16 @@ Phex = {
           forC.append(forCProb);
           forC.append(forCProbDyn);
 
+          var vorteileDiv = Phex.frontend.probenliste.byName[char].vorteile.element = $("<div class=\"w-100\" id=\"probenListeVorteile_" + char.hashCode() + "\"></div>")
+          vorteileDiv.css("margin-top", "1rem");
+
           var resultDiv = Phex.frontend.probenliste.byName[char].result.element = $("<div class=\"w-100\" id=\"probenListeResult_" + char.hashCode() + "\"></div>")
           resultDiv.css("margin-top", "1rem");
           resultDiv.addClass("d-none");
 
+
+
+          forC.append(vorteileDiv);
           forC.append(resultDiv);
           button.on("click", function(e) {
             e.preventDefault();
@@ -192,12 +201,11 @@ Phex = {
         }
         var pl = Phex.frontend.probenliste.element;
 
-        var toption = $("#fertigkeitSelectorTalente").children("option:selected");
+        var foption = $("#fertigkeitSelectorFertigkeiten").children("option:selected");
 
-        if (toption.length === 0) return;
-        var kategorie = toption.attr("data-kategorie");
-        var f = toption.attr("data-fertigkeit");
-        var t = toption.val().split(" [")[0];
+        var kategorie = foption.attr("data-kategorie");
+
+        var f = foption.attr("data-fertigkeit");
 
         var dc = parseInt($("#fertigkeitSelectorModusText").val());
         var sg = true;
@@ -211,27 +219,91 @@ Phex = {
           dc = keepdc;
 
           var char = PhexCharacterObjects(charname);
-          var pw = getProbenWert(char, f);
-          var pwPref = "PW ";
 
           Phex.frontend.probenliste.byName[charname].sg.lbl.element.text($("#fertigkeitSelectorModusText").val() + " +");
-
           var mod = Phex.frontend.probenliste.byName[charname].sg.mod.val;
-
           dc = dc + mod;
 
+          var pw = NaN;
+          var pwPref = "PW ";
+          var talentClass = "badge-danger";
 
-          var talentClass = "badge-primary";
-          if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (char[kategorie+"Talente"][t].selected)) {
-            pw = getProbenWertT(char,f);
-            pwPref = "PW(T) "
-            talentClass = "badge-success";
+          if ($("#fertigkeitSelectorTalente").hasClass("usethis")) {
+
+            var toption = $("#fertigkeitSelectorTalente").children("option:selected");
+            var t = toption.attr("data-talent");
+            f = toption.attr("data-fertigkeit");
+
+            if (char[kategorie+"Talente"][t].selected) {
+              pw = getProbenWertT(char,f);
+              pwPref = "PW(T) ";
+              talentClass = "badge-success";
+            }
+
+          } else {
+            talentClass = "badge-primary";
           }
-          if ($("#fertigkeitSelectorTalente").hasClass("usethis") && (!char[kategorie+"Talente"][t].selected)) {
-            talentClass = "badge-danger";
+
+          if (isNaN(pw)) {
+            pw = getProbenWert(char, f);
+          }
+
+          var vorteile = [];
+          var vorteileMode = [];
+          var vorteileObject = [];
+          var vorteileTarget = [];
+          var vorteileIf = [];
+
+          $.each(
+            Ilaris[kategorie + "Fertigkeiten"][f]["vorteile"], function (v, vv) {
+              $.each(char["Vorteile"], function (w, ww) {
+                if (vv === ww) {
+                  vorteile.push(ww);
+                  vorteileMode.push(Ilaris[kategorie + "Fertigkeiten"][f]["vorteile-mode"][v]);
+                  vorteileObject.push(Ilaris[kategorie + "Fertigkeiten"][f]["vorteile-object"][v]);
+                  vorteileTarget.push(Ilaris[kategorie + "Fertigkeiten"][f]["vorteile-target"][v]);
+                  vorteileIf.push(Ilaris[kategorie + "Fertigkeiten"][f]["vorteile-if"][v]);
+                }
+              });
+            }
+          );
+
+          if ($("#fertigkeitSelectorTalente").hasClass("usethis")) {
+            $.each(
+              Ilaris[kategorie + "Talente"][t]["vorteile"], function (v, vv) {
+                $.each(char["Vorteile"], function (w, ww) {
+                  if (vv === ww) {
+                    vorteile.push(ww);
+                    vorteileMode.push(Ilaris[kategorie + "Talente"][t]["vorteile-mode"][v]);
+                    vorteileObject.push(Ilaris[kategorie + "Talente"][t]["vorteile-object"][v]);
+                    vorteileTarget.push(Ilaris[kategorie + "Talente"][t]["vorteile-target"][v]);
+                    vorteileIf.push(Ilaris[kategorie + "Talente"][t]["vorteile-if"][v]);
+                  }
+                });
+              }
+            );
+
+          }
+          var vorteilString = " -";
+          if (vorteile.length > 0) {
+            vorteilString = "<ul>";
+            for (var i = 0; i < vorteile.length; ++i) {
+              vorteilString = vorteilString + "<li><em>" + vorteile[i] + "</em>: ";
+              if (vorteileMode[i] === "inc") {
+                vorteilString = vorteilString + "Erhöhe " + vorteileObject[i].join(", ") + " um " + vorteileTarget[i];
+              } else if (vorteileMode[i] === "set") {
+                vorteilString = vorteilString + "Setze " + vorteileObject[i].join(", ") + " auf " + vorteileTarget[i];
+              }
+              if (!(vorteileIf[i] === undefined)) {
+                vorteilString = vorteilString + ", falls: " + vorteileIf[i];
+              }
+              vorteilString = vorteilString + "</li>";
+            }
+            vorteilString = vorteilString + "</ul>";
           }
 
 
+          Phex.frontend.probenliste.byName[charname].vorteile.element.html("<strong>Relevante Vorteile</strong> (werden nicht einberechnet):" + vorteilString);
 
           if (isNaN(dc)) {
             Phex.frontend.probenliste.byName[charname].req.element.addClass("d-none");

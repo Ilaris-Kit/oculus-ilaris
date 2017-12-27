@@ -432,11 +432,13 @@ function selectedPseudoForKategorie(kategorie) {
   if (finder.length === 0) return false;
   return finder.prop("selected");
 }
+/*
 function selectedPseudoForKategorieAndCharacter(kategorie, character) {
   var finder = getPseudoForKategorieAndCharacter(kategorie, character);
   if (finder.length === 0) return false;
   return finder.prop("selected");
 }
+*/
 
 function createPseudoForKategorie(kategorie) {
   var prefix = "";
@@ -444,9 +446,10 @@ function createPseudoForKategorie(kategorie) {
     prefix = kategorie + " ";
   }
   var text = prefix + "(Alle) " + kategorie + "-Talente";
-  return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\">" + text + "</option>");
+  return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\" data-kategorie=\"" + kategorie + "\">" + text + "</option>");
 }
 
+/*
 function createPseudoForKategorieAndCharacter(kategorie, character) {
   var prefix = "";
   if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
@@ -455,19 +458,23 @@ function createPseudoForKategorieAndCharacter(kategorie, character) {
   var text = prefix + "(Alle) " + kategorie + "-Talente von " + character;
   return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character + "\">" + text + "</option>");
 }
-
+*/
 
 function getPseudoForKategorie(kategorie) {
   return $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle");
 }
 
+/*
 function getPseudoForKategorieAndCharacter(kategorie, character) {
   return $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character);
 }
+*/
 
+/*
 function getAllPseudoForKategorieAndCharacter(kategorie) {
   return $("option[id^='fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_']");
 }
+*/
 
 
 function updateFertigkeitSelector(norepeat = false) {
@@ -521,7 +528,7 @@ function updateFertigkeitSelector(norepeat = false) {
       if (kategorie === "U") {
         klammer = " ["+ ff+  "]";
       }
-      talente.append($("<option id=\"fertigkeitSelectorTalenteOption_" + ff.hashCode() + "_" + tt.hashCode() + "\" data-kategorie =\"" + kategorie + "\" data-fertigkeit=\"" + ff + "\">" + tt + klammer + "</option>"));
+      talente.append($("<option id=\"fertigkeitSelectorTalenteOption_" + ff.hashCode() + "_" + tt.hashCode() + "\" data-kategorie =\"" + kategorie + "\" data-fertigkeit=\"" + ff + "\" data-talent=\"" + tt + "\">" + tt + klammer + "</option>"));
     });
   }
 
@@ -546,13 +553,6 @@ function updateFertigkeitSelector(norepeat = false) {
 
 
   talentMustBeSelected = selectedPseudoForKategorie("K") || selectedPseudoForKategorie("P") || selectedPseudoForKategorie("U");
-  $.each(["K", "P", "U"], function(k, kategorie) {
-
-    $.each(PhexCharacters, function(c, cc) {
-      talentMustBeSelected = talentMustBeSelected || selectedPseudoForKategorieAndCharacter(kategorie, cc);
-    });
-
-  });
 
   updateTalentCheckbox(talentMustBeSelected,talentMustBeSelected);
 
