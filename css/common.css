@@ -15,10 +15,12 @@ h1, h2, h3, h4, h5 {
 body {
   font-family: "Alegreya Sans";
   padding-top: 5rem;
+  color: #495057;
 }
 
 footer, .ui {
   font-family: "Roboto" !important;
+  color: #495057;
 }
 
 
@@ -43,12 +45,14 @@ nav {
   flex-grow: 1;
 }
 
+
 .navbar-brand:before {
   content: "OI";
   font-weight: bolder;
 }
 
-button, .badge, .btn, .form-control, .input-group-addon {
+
+button, .badge, .btn, .input-group-addon,.form-control {
   font-family: "Roboto";
   font-weight: 400;
 }
