@@ -103,6 +103,33 @@ function getCharacterFromXML(s) {
     });
   });
 
+  var Objekte = Charakter.find("Objekte");
+  var Ruestungen = Objekte.find("Rüstungen");
+  var Waffen = Objekte.find("Waffen");
+  var Ausruestung = Objekte.find("Ausrüstung");
+  var Ausruestungsstuecke = Ausruestung.find("Ausrüstungsstück");
+
+  result["Rüstungen"] = [];
+  $.each(Ruestungen.find("Rüstung"), function(i, item) {
+    var r = $(item);
+    result["Rüstungen"].push({name: r.attr("name"), be: r.attr("be"), rs: r.attr("rs").split("/")});
+  });
+
+  result["Waffen"] = [];
+  $.each(Waffen.find("Waffe"), function(i, item) {
+    var r = $(item);
+    result["Waffen"].push({name: r.attr("name"), wuerfel: r.attr("w6"), bonus: r.attr("plus"), eigenschaften: r.attr("eigenschaften").split(", "), haerte: r.attr("haerte"), rw: r.attr("rw"), kampfstil: r.attr("kampfstil"), typ: r.attr("kampfstil"), wm: r.attr("wm")});
+  });
+
+  result["Ausrüstung"] = [];
+  $.each(Ausruestungsstuecke, function(i, item) {
+    var as = $(item);
+    result["Ausrüstung"].push(as.text());
+  });
+
+
+
+
 
   $.each(fromText, function( i, item ) {
     result[i] = item.text();

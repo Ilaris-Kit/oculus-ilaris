@@ -287,10 +287,27 @@ TsaUI = {
 
 
     });
+    var be = 0;
+    var zonen = ["Beine", "/ L. Arm", "/ R. Arm", "/ Bauch", "/ Brust", "/ Kopf"];
+    var rs = [0,0,0,0,0,0];
+    var zr = true;
+    $.each(currentCharacter["Rüstungen"], function( r, rr) {
+      be = be + parseInt(rr["be"]);
+      if (zr && rr["rs"].length == 1) zr = false;
+      for (var i = 0; i < rr["rs"].length; ++i) {
+        rs[i] = rs[i] + parseInt(rr["rs"][i]);
+      }
+    });
 
-    var dhstern = currentCharacter["KO"] + " - 2xBE";
-    var wsstern = ws + " + RS";
-    var gsstern = gs + " - BE";
+    var dhstern = currentCharacter["KO"] - 2*be;
+    var wsstern = rs[0];
+    if (zr) {
+      wsstern = "";
+      for (var i = 0; i < zonen.length; ++i) {
+          wsstern = wsstern + zonen[i] + " " + rs[i] + " ";
+      }
+    }
+    var gsstern = gs - be;
 
 
     $("#currentCharacterSchipsTotal").text(schipsTotal);
@@ -303,6 +320,7 @@ TsaUI = {
     abgeleitet.append("<li>Wundschwelle* (WS*) " + wsstern + "</li>");
     abgeleitet.append("<li>Magieresistenz (MR) " + mr + "</li>");
     abgeleitet.append("<li>Geschwindigkeit (GS) " + gs + "</li>");
+    abgeleitet.append("<li>Behinderung durch Rüstung (BE) " + be + "</li>");
     abgeleitet.append("<li>Geschwindigkeit* (GS*) " + gsstern + "</li>");
     abgeleitet.append("<li>Durchhaltevermögen (DH*) " + dhstern + "</li>");
     abgeleitet.append("<li>Initiative (INI) " + ini + "</li>");
