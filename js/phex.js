@@ -53,7 +53,7 @@ Phex = {
           forCName.append(forCNameText);
           forCName.append(forCPW);
           var forCContent = $("<div class=\"w-100 d-flex justify-content-between align-items-center flex-wrap\"></div>");
-          forCContent.css("margin-top", ".75rem");
+          forCContent.css("margin-top", "1rem");
           forCName.css("margin-bottom", "0");
 
           hider.on("click", function(e) {
