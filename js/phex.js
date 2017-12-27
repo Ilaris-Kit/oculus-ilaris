@@ -50,7 +50,7 @@ Phex = {
           var hider = $("<button class=\"btn btn-sm btn-secondary\" style=\"margin-left: 1rem; line-height: 1rem; width: calc(1.5rem + 2px);\">–</button>");
           forCName.append(forCPW);
           forCName.append(hider);
-          var forCContent = $("<div></div>");
+          var forCContent = $("<div class=\"w-100 d-flex justify-content-between align-items-center flex-wrap\"></div>");
           forCContent.css("margin-top", ".75rem");
           forCName.css("margin-bottom", "0");
 
