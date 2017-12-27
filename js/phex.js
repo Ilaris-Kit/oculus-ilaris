@@ -45,11 +45,13 @@ Phex = {
           };
 
           var forC = Phex.frontend.probenliste.byName[char].element = $("<li class=\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
-          var forCName = $("<h4 class=\"w-100 d-flex justify-content-end align-items-center\"><span style=\"flex-grow: 1;\">" + char + "</span></h4>");
+          var forCName = $("<h4 class=\"w-100 d-flex justify-content-end align-items-center\"></h4>");
+          var forCNameText = $("<span style=\"flex-grow: 1;\">" + char + "</span>");
           var forCPW = Phex.frontend.probenliste.byName[char].pw.element = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>");
-          var hider = $("<button class=\"btn btn-sm btn-secondary\" style=\"margin-left: 1rem; line-height: 1rem; width: calc(1.5rem + 2px);\">–</button>");
-          forCName.append(forCPW);
+          var hider = $("<button class=\"btn btn-sm btn-secondary\" style=\"margin-right: 1rem; line-height: 1rem; width: calc(1.5rem + 2px);\">–</button>");
           forCName.append(hider);
+          forCName.append(forCNameText);
+          forCName.append(forCPW);
           var forCContent = $("<div class=\"w-100 d-flex justify-content-between align-items-center flex-wrap\"></div>");
           forCContent.css("margin-top", ".75rem");
           forCName.css("margin-bottom", "0");
