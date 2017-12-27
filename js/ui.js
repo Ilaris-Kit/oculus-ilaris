@@ -404,6 +404,40 @@ TsaUI = {
       }
     });
 
+    var waffenString = "-";
+    if (currentCharacter["Waffen"].length > 0) {
+      waffenString = "<ul id=\"currentCharacterItemsWaffen\"></ul>";
+      lists.push("ItemsWaffen");
+    }
+    var waffenListe = $("<li>Waffen (Kampfstile nicht berücksichtigt): " + waffenString + "</li>");
+    $("#currentCharacterItemsListe").append(waffenListe);
+    var waffentyp = {"Nah": "Nahkampf", "Fern": "Fernkampf"};
+    $.each(currentCharacter["Waffen"], function(a, aa) {
+      var listring = aa["name"] + ", " +  waffentyp[aa["typ"]]  + ", "+ aa["wuerfel"] + "w6";
+      if (aa["bonus"] > 0) listring = listring + "+" + aa["bonus"];
+      if (schadensbonus > 0 && aa["typ"] === "Nah") {
+        var sb = schadensbonus;
+        $.each(aa["eigenschaften"], function(x, xx) {
+          if (xx === "Kopflastig") sb = 2*schadensbonus;
+        });
+        listring = listring + "(+" + sb + ")";
+      }
+      listring = listring + ", WM " + aa["wm"] + ", RW " + aa["rw"] + ", Härte " + aa["haerte"];
+      if (aa["eigenschaften"].length > 0) listring = listring + ", <em>" + aa["eigenschaften"].join(", ") +  "</em>";
+      $("#currentCharacterItemsWaffen").append("<li>" + listring + "</li>");
+    });
+
+
+    var ausruestungString = "-";
+    if (currentCharacter["Ausrüstung"].length > 0) {
+      ausruestungString = "<ul id=\"currentCharacterItemsAusruestung\"></ul>";
+      lists.push("ItemsAusruestung");
+    }
+    var ausruestungListe = $("<li>Ausrüstungsstücke: " + ausruestungString + "</li>");
+    $("#currentCharacterItemsListe").append(ausruestungListe);
+    $.each(currentCharacter["Ausrüstung"], function(a, aa) {
+      $("#currentCharacterItemsAusruestung").append("<li>" + aa + "</li>");
+    });
 
     $.each(lists, function( i, item ) {
       TsaUI.sortList("#currentCharacter" + item);
@@ -490,7 +524,7 @@ TsaUI = {
     $.each(textfields, function( i, item ) {
       $("#currentCharacter" + item).text("");
     });
-    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","EigenschaftenGeistig","EigenschaftenKörperlich","Abgeleitet" ]
+    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","EigenschaftenGeistig","EigenschaftenKörperlich","Abgeleitet", "ItemsListe" ]
     $.each(lists, function( i, item ) {
       $("#currentCharacter" + item).empty();
     });

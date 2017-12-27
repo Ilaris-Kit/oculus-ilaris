@@ -118,7 +118,9 @@ function getCharacterFromXML(s) {
   result["Waffen"] = [];
   $.each(Waffen.find("Waffe"), function(i, item) {
     var r = $(item);
-    result["Waffen"].push({name: r.attr("name"), wuerfel: r.attr("w6"), bonus: r.attr("plus"), eigenschaften: r.attr("eigenschaften").split(", "), haerte: r.attr("haerte"), rw: r.attr("rw"), kampfstil: r.attr("kampfstil"), typ: r.attr("kampfstil"), wm: r.attr("wm")});
+    var eigenschaftenListe = [];
+    if (!(r.attr("eigenschaften").trim() === "")) eigenschaftenListe =  r.attr("eigenschaften").trim().split(", ");
+    result["Waffen"].push({name: r.attr("name"), wuerfel: r.attr("W6"), bonus: r.attr("plus"), eigenschaften: eigenschaftenListe, haerte: r.attr("haerte"), rw: r.attr("rw"), kampfstil: r.attr("kampfstil"), typ: r.attr("typ"), wm: r.attr("wm")});
   });
 
   result["Ausrüstung"] = [];
