@@ -158,7 +158,7 @@ Phex = {
               var gp = new SimpleIlarisProbe(sg, 0);
               gewertetNSC = gp.result().ew - sg;
               sg = gp.result().ew;
-              ergebnisseNSC = gp.result().rolls.toString();
+              ergebnisseNSC = gp.result().rolls.join(", ");
             }
 
             var result = probe.result();
@@ -180,7 +180,7 @@ Phex = {
               resultDiv.removeClass("erfolg");
               resultDiv.addClass("fehlschlag");
             }
-            resultString = resultString + "</strong> EW " + ew + " vs " + sg + ".<br>Ergebnisse: " + result.rolls.toString() + ", gewertete "  + gewertet + ".";
+            resultString = resultString + "</strong> EW " + ew + " vs " + sg + ".<br>Ergebnisse: " + result.rolls.join(", ") + ", gewertete "  + gewertet + ".";
             if (gewertetNSC > 0) {
               resultString = resultString + "<br>Ergebnisse NSC: " + ergebnisseNSC + ", gewertete " + gewertetNSC + ".";
             }
