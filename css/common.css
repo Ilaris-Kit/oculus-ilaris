@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
 
 h1, h2, h3, h4, h5 {
-  font-family: "Alegreya Sans";
-  font-weight: bolder;
+  font-weight: 700;
 }
 
 
@@ -18,10 +17,10 @@ body {
   padding-top: 5rem;
 }
 
-
-footer {
-  font-family: "Alegreya Sans";
+footer, .ui {
+  font-family: "Roboto" !important;
 }
+
 
 .table td, .table th {
   vertical-align: middle;
@@ -53,7 +52,6 @@ button, .badge, .btn, .form-control, .input-group-addon {
   font-family: "Roboto";
   font-weight: 400;
 }
-
 
 
 
