@@ -103,6 +103,13 @@ function getCharacterFromXML(s) {
     });
   });
 
+  var FreieFertigkeiten = Charakter.find("Fertigkeiten").find("Freie-Fertigkeit");
+  result["FFertigkeiten"] = {};
+  $.each(FreieFertigkeiten, function(i, item) {
+    var ff = $(item);
+    result["FFertigkeiten"][ff.attr("name")] = ff.attr("wert");
+  });
+
   var Objekte = Charakter.find("Objekte");
   var Ruestungen = Objekte.find("Rüstungen");
   var Waffen = Objekte.find("Waffen");

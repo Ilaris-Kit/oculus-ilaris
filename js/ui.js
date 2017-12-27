@@ -207,7 +207,7 @@ TsaUI = {
       $("#currentCharacterEigenheiten").append("<li>" + item + "</li>");
     });
 
-    var lists = ["Eigenheiten","PFertigkeiten","KFertigkeiten","UFertigkeiten", "PTalente" ]
+    var lists = ["Eigenheiten","PFertigkeiten","KFertigkeiten","UFertigkeiten", "FFertigkeiten" ]
 
     var vorteileLists = {};
 
@@ -413,6 +413,12 @@ TsaUI = {
       }
     });
 
+    var freieFertigkeiten = "";
+    $.each(currentCharacter["FFertigkeiten"], function(f, ff) {
+      $("#currentCharacterFFertigkeiten").append("<li>" + f + " " + ff + "</li>");
+    });
+
+
 
     var ruestungString = "-";
     if (currentCharacter["Rüstungen"].length > 0) {
@@ -552,7 +558,7 @@ TsaUI = {
     $.each(textfields, function( i, item ) {
       $("#currentCharacter" + item).text("");
     });
-    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","EigenschaftenGeistig","EigenschaftenKörperlich","Abgeleitet", "ItemsListe" ]
+    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","FFertigkeiten","EigenschaftenGeistig","EigenschaftenKörperlich","Abgeleitet", "ItemsListe" ]
     $.each(lists, function( i, item ) {
       $("#currentCharacter" + item).empty();
     });
