@@ -56,9 +56,13 @@ Phex = {
 
           hider.on("click", function(e) {
             e.preventDefault();
-            if (hider.html() === "–") hider.html("+");
-            else hider.html("–");
-            forCContent.toggle();
+            if (forCContent.hasClass("d-flex")) {
+              hider.html("+");
+              forCContent.addClass("d-none").removeClass("d-flex");
+            } else {
+              hider.html("–");
+              forCContent.addClass("d-flex").removeClass("d-none");
+            }
           });
 
           var forCReq = Phex.frontend.probenliste.byName[char].req.element = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
