@@ -26,6 +26,8 @@ function getCharacterFromXML(s) {
   });
 
   fromText["Schips"] = AllgemeineInfos.find("schips");
+  result["AsP"] = $(Charakter.find("Energien").find("AsP")).attr("wert");
+  result["KaP"] = $(Charakter.find("Energien").find("KaP")).attr("wert");
 
   var Erfahrung = Charakter.find("Erfahrung");
   fromText["EPtotal"] = Erfahrung.find("EPtotal");
@@ -100,6 +102,7 @@ function getCharacterFromXML(s) {
       result["UTalente"][IlarisCleanupTalent($(titem).attr("name"))]["selected"] = true;
     });
   });
+
 
   $.each(fromText, function( i, item ) {
     result[i] = item.text();

@@ -218,16 +218,74 @@ TsaUI = {
     /* Abgleitete Werte */
 
     var schipsTotal = 4;
+    var ws = (4 + Math.floor(parseInt(currentCharacter["KO"]/4)));
+    var mr = (4 + Math.floor(parseInt(currentCharacter["MU"]/4)));
+    var gs = (4 + Math.floor(parseInt(currentCharacter["GE"]/4)));
+    var ini = parseInt(currentCharacter["IN"]);
+    var schadensbonus = Math.floor(parseInt(currentCharacter["KK"])/4);
+    var asp = parseInt(currentCharacter["AsP"]);
+    var kap = parseInt(currentCharacter["KaP"]);
+
     $.each(currentCharacter["Vorteile"], function (v, vv) {
 
       if ((vv === "Glück I") || (vv === "Glück II")) {
         schipsTotal = schipsTotal+1;
       }
 
+      if ((vv === "Willensstark I") || (vv === "Willensstark II")) {
+        mr = mr+4;
+      }
+
+      if ((vv === "Flink I") || (vv === "Flink II")) {
+        gs = gs+1;
+      }
+
+
+      if (vv === "Unbeugsamkeit") {
+        mr = mr + Math.round(currentCharakter["MU"]/2);
+      }
+
+      if (vv === "Unverwüstlich") {
+        ws = ws+1;
+      }
+
+      if (vv === "Kampfreflexe") {
+        ini = ini+4;
+      }
+
+      if ((vv === "Zauberer I") || (vv === "Zauberer II") || (vv === "Zauberer III") || (vv === "Zauberer IV")) {
+        asp = asp+8;
+      }
+
+      if ((vv === "Geweiht I") || (vv === "Geweiht II") || (vv === "Geweiht III") || (vv === "Geweiht IV")) {
+        kap = kap+8;
+      }
+
+
+
     });
+
+    var dhstern = currentCharacter["KO"] + " - 2xBE";
+    var wsstern = ws + " + RS";
+    var gsstern = gs + " - BE";
+
 
     $("#currentCharacterSchipsTotal").text(schipsTotal);
 
+
+
+
+    var abgeleitet = $("#currentCharacterAbgeleitet");
+    abgeleitet.append("<li><strong>Wundschwelle</strong> (WS) " + ws + "</li>");
+    abgeleitet.append("<li><strong>Wundschwelle*</strong> (WS*) " + wsstern + "</li>");
+    abgeleitet.append("<li><strong>Magieresistenz</strong> (MR) " + mr + "</li>");
+    abgeleitet.append("<li><strong>Geschwindigkeit</strong> (GS) " + gs + "</li>");
+    abgeleitet.append("<li><strong>Geschwindigkeit*</strong> (GS*) " + gsstern + "</li>");
+    abgeleitet.append("<li><strong>Durchhaltevermögen</strong> (DH*) " + dhstern + "</li>");
+    abgeleitet.append("<li><strong>Initiative</strong> (INI) " + ini + "</li>");
+    abgeleitet.append("<li><strong>Schadensbonus</strong> " + schadensbonus + "</li>");
+    if (asp > 0) abgeleitet.append("<li><strong>Astralpunkte</strong> (AsP) total: " + asp + "</li>");
+    if (kap > 0) abgeleitet.append("<li><strong>Karmalpunkte</strong> (KaP) total: " + kap + "</li>");
 
 
     /*                  */
@@ -394,7 +452,7 @@ TsaUI = {
     $.each(textfields, function( i, item ) {
       $("#currentCharacter" + item).text("");
     });
-    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","EigenschaftenGeistig","EigenschaftenKörperlich" ]
+    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","EigenschaftenGeistig","EigenschaftenKörperlich","Abgeleitet" ]
     $.each(lists, function( i, item ) {
       $("#currentCharacter" + item).empty();
     });
@@ -675,6 +733,7 @@ TsaUI = {
       if (!(TsaUI.isInitialized["deleteCharacterButton"])) {
         $( "#deleteCharacterButton" ).click( function( event ) {
           TsaUI.deletionModal($("#characterList").val(), function () {
+            delete(TsaUI.Characters[$("#characterList").val()]);
             TsaUI.updateCharacterSheet(TsaUI.updateCharacterList(deleteCharacterFromLocalStorage($("#characterList").val())));
           })
         } );
