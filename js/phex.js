@@ -46,8 +46,21 @@ Phex = {
 
           var forC = Phex.frontend.probenliste.byName[char].element = $("<li class=\"list-group-item d-flex justify-content-between align-items-center flex-wrap\" id=\"probenListeLi_" + char.hashCode() + "\"></li>");
           var forCName = $("<h4 class=\"w-100 d-flex justify-content-end align-items-center\"><span style=\"flex-grow: 1;\">" + char + "</span></h4>");
-          var forCPW = Phex.frontend.probenliste.byName[char].pw.element = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>")
+          var forCPW = Phex.frontend.probenliste.byName[char].pw.element = $("<span class=\"badge badge-primary badge-pill\" id=\"probenListeLiPW_" + char.hashCode() + "\"></span>");
+          var hider = $("<button class=\"btn btn-sm btn-secondary\" style=\"margin-left: 1rem; line-height: 1rem; width: calc(1.5rem + 2px);\">–</button>");
           forCName.append(forCPW);
+          forCName.append(hider);
+          var forCContent = $("<div></div>");
+          forCContent.css("margin-top", ".75rem");
+          forCName.css("margin-bottom", "0");
+
+          hider.on("click", function(e) {
+            e.preventDefault();
+            if (hider.html() === "–") hider.html("+");
+            else hider.html("–");
+            forCContent.toggle();
+          });
+
           var forCReq = Phex.frontend.probenliste.byName[char].req.element = $("<span id=\"probenListeLiReq_" + char.hashCode() + "\"></span>")
           forCReq.css("margin-right", "1rem");
           var forCProb = Phex.frontend.probenliste.byName[char].probability.static.element = $("<span id=\"probenListeLiProb_" + char.hashCode() + "\"></span>")
@@ -124,11 +137,13 @@ Phex = {
           inputGrp.append(button);
           formDiv.append(inputGrp);
           formGrp.append(formDiv);
-          forC.append(formGrp);
 
-          forC.append(forCReq);
-          forC.append(forCProb);
-          forC.append(forCProbDyn);
+          forCContent.append(formGrp);
+          forCContent.append(forCReq);
+          forCContent.append(forCProb);
+          forCContent.append(forCProbDyn);
+
+          forC.append(forCContent);
 
           var vorteileDiv = Phex.frontend.probenliste.byName[char].vorteile.element = $("<div class=\"w-100\" id=\"probenListeVorteile_" + char.hashCode() + "\"></div>")
           vorteileDiv.css("margin-top", "1rem");
@@ -139,8 +154,8 @@ Phex = {
 
 
 
-          forC.append(vorteileDiv);
-          forC.append(resultDiv);
+          forCContent.append(vorteileDiv);
+          forCContent.append(resultDiv);
           button.on("click", function(e) {
             e.preventDefault();
             var pw = Phex.frontend.probenliste.byName[char].pw.val;
