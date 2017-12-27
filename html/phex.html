@@ -135,7 +135,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <ul class="list-group" id="probenListe">
+        <ul class="list-group ui" id="probenListe">
         </ul>
       </div>
 
@@ -430,13 +430,6 @@ function selectedPseudoForKategorie(kategorie) {
   if (finder.length === 0) return false;
   return finder.prop("selected");
 }
-/*
-function selectedPseudoForKategorieAndCharacter(kategorie, character) {
-  var finder = getPseudoForKategorieAndCharacter(kategorie, character);
-  if (finder.length === 0) return false;
-  return finder.prop("selected");
-}
-*/
 
 function createPseudoForKategorie(kategorie) {
   var prefix = "";
@@ -447,32 +440,11 @@ function createPseudoForKategorie(kategorie) {
   return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle\" data-kategorie=\"" + kategorie + "\">" + text + "</option>");
 }
 
-/*
-function createPseudoForKategorieAndCharacter(kategorie, character) {
-  var prefix = "";
-  if ($("#fertigkeitSelectorDisplayFertigkeitenGrouped").prop("checked")) {
-    prefix = kategorie + " ";
-  }
-  var text = prefix + "(Alle) " + kategorie + "-Talente von " + character;
-  return $("<option id=\"fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character + "\">" + text + "</option>");
-}
-*/
 
 function getPseudoForKategorie(kategorie) {
   return $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle");
 }
 
-/*
-function getPseudoForKategorieAndCharacter(kategorie, character) {
-  return $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_" + character);
-}
-*/
-
-/*
-function getAllPseudoForKategorieAndCharacter(kategorie) {
-  return $("option[id^='fertigkeitSelectorFertigkeitenOption_" + kategorie + "_alle_']");
-}
-*/
 
 
 function updateFertigkeitSelector(norepeat = false) {
@@ -501,7 +473,6 @@ function updateFertigkeitSelector(norepeat = false) {
 
     if (diff.removed.kategorien.has(kategorie)) {
       getPseudoForKategorie(kategorie).remove();
-      getAllPseudoForKategorieAndCharacter(kategorie).remove();
       $.each( Ilaris[kategorie + "Fertigkeiten"], function(f, ff) {
         $("#fertigkeitSelectorFertigkeitenOption_" + kategorie + "_" + f.hashCode()).remove();
       });

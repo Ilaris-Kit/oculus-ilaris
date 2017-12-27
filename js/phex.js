@@ -288,7 +288,7 @@ Phex = {
           if (vorteile.length > 0) {
             vorteilString = "<ul>";
             for (var i = 0; i < vorteile.length; ++i) {
-              vorteilString = vorteilString + "<li><em>" + vorteile[i] + "</em>: ";
+              vorteilString = vorteilString + "<li>" + vorteile[i] + ": ";
               if (vorteileMode[i] === "inc") {
                 vorteilString = vorteilString + "Erhöhe " + vorteileObject[i].join(", ") + " um " + vorteileTarget[i];
               } else if (vorteileMode[i] === "set") {
