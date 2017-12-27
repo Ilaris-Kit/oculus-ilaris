@@ -208,20 +208,22 @@ TsaUI = {
       $("#currentCharacterVorteileListe").append("<li>" + item + "</li>");
     });
 
+
     $.each(Ilaris["PFertigkeiten"], function( i, item ) {
       var tlist = item["talente"];
       var selectedTalents = [];
       var otherTalents = [];
       $.each(tlist, function( ti, titem ) {
         if (currentCharacter["PTalente"][titem]["selected"]) {
-          $("#currentCharacterPTalente").append("<li><span class=\"selectedTalent\">" + titem + "</span>: PW(T) " + getProbenWertT(currentCharacter,i) + "</li>");
+          //$("#currentCharacterPTalente").append("<li><span class=\"selectedTalent\">" + titem + "</span>: PW(T) " + getProbenWertT(currentCharacter,i) + "</li>");
           selectedTalents.push("<span class=\"selectedTalent\">" + titem + "</span>" );
         } else {
-          $("#currentCharacterPTalente").append("<li><span class=\"otherTalent\">" + titem + "</span>: PW " + getProbenWert(currentCharacter,i) + "</li>");
+          //$("#currentCharacterPTalente").append("<li><span class=\"otherTalent\">" + titem + "</span>: PW " + getProbenWert(currentCharacter,i) + "</li>");
           otherTalents.push(titem);
         }
 
       });
+
       var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: " + selectedTalents.join(", ");
       if (selectedTalents.length > 0 && otherTalents.length > 0) listring = listring +  ", ";
       listring = listring +  otherTalents.join(", ");
@@ -231,7 +233,7 @@ TsaUI = {
       listring = listring + "; PW(T): " + getProbenWertT(currentCharacter,i);
       listring = listring + "</li>";
       $("#currentCharacterPFertigkeiten").append(listring);
-      $("#currentCharacterPTalente").append("<li><span class=\"fertigkeit\">" + i + "</span>: PW " + getProbenWert(currentCharacter,i) + "</li>");
+      //$("#currentCharacterPTalente").append("<li><span class=\"fertigkeit\">" + i + "</span>: PW " + getProbenWert(currentCharacter,i) + "</li>");
     });
 
     $.each(Ilaris["KFertigkeiten"], function( i, item ) {
