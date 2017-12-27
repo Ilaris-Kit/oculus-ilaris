@@ -204,15 +204,38 @@ TsaUI = {
       $("#currentCharacterEigenheiten").append("<li>" + item + "</li>");
     });
 
-    $.each(currentCharacter["Vorteile"], function( i, item ) {
-      $("#currentCharacterVorteileListe").append("<li>" + item + "</li>");
+    var lists = ["Eigenheiten","PFertigkeiten","KFertigkeiten","UFertigkeiten", "PTalente" ]
+
+    var vorteileLists = {};
+
+    $.each(["A", "P", "K", "S", "M", "R", "G", "T"], function (k, kat) {
+      vorteileLists[kat] = [];
     });
 
+
+
+    $.each(currentCharacter["Vorteile"], function( i, item ) {
+      vorteileLists[Ilaris["Vorteile"][item]].push("<li>" + item + "</li>");
+//      $("#currentCharacterVorteileListe").append("<li>" + item + "</li>");
+    });
+
+    var bezeichner = {"A": "Allgemeine Vorteile", "P": "Profane Vorteile", "K": "Kampfvorteile", "S": "Kampfstile", "M": "Magische Vorteile", "R": "Repräsentationen", "G": "Karmale Vorteile", "T": "Traditionen"};
+
+    $.each(["A", "P", "K", "S", "M", "R", "G", "T"], function (k, kat) {
+      if (vorteileLists[kat].length > 0) {
+        lists.push("VorteileListe" + kat);
+        $("#currentCharacterVorteileListe").append("<li><strong>" + bezeichner[kat] + "</strong><ul id=\"currentCharacterVorteileListe" + kat +"\">" + vorteileLists[kat].join("") + "</ul></li>");
+      }
+    });
+
+
+    var attribute = {"CH": "Charisma", "IN": "Intution", "KL": "Klugheit", "MU": "Mut", "FF": "Fingerfertigkeit", "GE": "Gewandtheit", "KO": "Konstitution", "KK": "Körperkraft"};
+
     $.each(["CH","IN","KL","MU"], function(x,xx) {
-      $("#currentCharacterEigenschaftenGeistig").append("<li><strong>" + xx + " " + currentCharacter[xx] + "</strong> (PW " + (parseInt(currentCharacter[xx])*2) + ")</li>");
+      $("#currentCharacterEigenschaftenGeistig").append("<li>" + attribute[xx] + " (" + xx + ") " + currentCharacter[xx] + ", PW " + (parseInt(currentCharacter[xx])*2) + "</li>");
     });
     $.each(["FF","GE","KO","KK"], function(x,xx) {
-      $("#currentCharacterEigenschaftenKörperlich").append("<li><strong>" + xx + " " + currentCharacter[xx] + "</strong> (PW " + (parseInt(currentCharacter[xx])*2) + ")</li>");
+      $("#currentCharacterEigenschaftenKörperlich").append("<li>" + attribute[xx] + " (" + xx + ") " + currentCharacter[xx] + ", PW " + (parseInt(currentCharacter[xx])*2) + "</li>");
     });
 
     /* Abgleitete Werte */
@@ -276,16 +299,16 @@ TsaUI = {
 
 
     var abgeleitet = $("#currentCharacterAbgeleitet");
-    abgeleitet.append("<li><strong>Wundschwelle</strong> (WS) " + ws + "</li>");
-    abgeleitet.append("<li><strong>Wundschwelle*</strong> (WS*) " + wsstern + "</li>");
-    abgeleitet.append("<li><strong>Magieresistenz</strong> (MR) " + mr + "</li>");
-    abgeleitet.append("<li><strong>Geschwindigkeit</strong> (GS) " + gs + "</li>");
-    abgeleitet.append("<li><strong>Geschwindigkeit*</strong> (GS*) " + gsstern + "</li>");
-    abgeleitet.append("<li><strong>Durchhaltevermögen</strong> (DH*) " + dhstern + "</li>");
-    abgeleitet.append("<li><strong>Initiative</strong> (INI) " + ini + "</li>");
-    abgeleitet.append("<li><strong>Schadensbonus</strong> " + schadensbonus + "</li>");
-    if (asp > 0) abgeleitet.append("<li><strong>Astralpunkte</strong> (AsP) total: " + asp + "</li>");
-    if (kap > 0) abgeleitet.append("<li><strong>Karmalpunkte</strong> (KaP) total: " + kap + "</li>");
+    abgeleitet.append("<li>Wundschwelle (WS) " + ws + "</li>");
+    abgeleitet.append("<li>Wundschwelle* (WS*) " + wsstern + "</li>");
+    abgeleitet.append("<li>Magieresistenz (MR) " + mr + "</li>");
+    abgeleitet.append("<li>Geschwindigkeit (GS) " + gs + "</li>");
+    abgeleitet.append("<li>Geschwindigkeit* (GS*) " + gsstern + "</li>");
+    abgeleitet.append("<li>Durchhaltevermögen (DH*) " + dhstern + "</li>");
+    abgeleitet.append("<li>Initiative (INI) " + ini + "</li>");
+    abgeleitet.append("<li>Schadensbonus " + schadensbonus + "</li>");
+    if (asp > 0) abgeleitet.append("<li>Astralpunkte (AsP) total: " + asp + "</li>");
+    if (kap > 0) abgeleitet.append("<li>Karmalpunkte (KaP) total: " + kap + "</li>");
 
 
     /*                  */
@@ -298,26 +321,27 @@ TsaUI = {
       $.each(tlist, function( ti, titem ) {
         if (currentCharacter["PTalente"][titem]["selected"]) {
           //$("#currentCharacterPTalente").append("<li><span class=\"selectedTalent\">" + titem + "</span>: PW(T) " + getProbenWertT(currentCharacter,i) + "</li>");
-          selectedTalents.push("<span class=\"selectedTalent\">" + titem + "</span>" );
+          selectedTalents.push("<li class=\"selectedTalent\">" + titem + "</li>" );
         } else {
           //$("#currentCharacterPTalente").append("<li><span class=\"otherTalent\">" + titem + "</span>: PW " + getProbenWert(currentCharacter,i) + "</li>");
-          otherTalents.push(titem);
+          otherTalents.push("<li>" + titem + "</li>");
         }
 
       });
 
-      var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: " + selectedTalents.join(", ");
-      if (selectedTalents.length > 0 && otherTalents.length > 0) listring = listring +  ", ";
-      listring = listring +  otherTalents.join(", ");
-      listring = listring + "; BW: " + getBasisWert(currentCharacter,i);
-      listring = listring + "; FW: " + currentCharacter["PFertigkeiten"][i]["fw"];
-      listring = listring + "; PW: " + getProbenWert(currentCharacter,i);
-      listring = listring + "; PW(T): " + getProbenWertT(currentCharacter,i);
+      var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: ";
+      listring = listring + "BW " + getBasisWert(currentCharacter,i);
+      listring = listring + ", FW " + currentCharacter["PFertigkeiten"][i]["fw"];
+      listring = listring + ", PW " + getProbenWert(currentCharacter,i);
+      if (selectedTalents.length > 0) listring = listring +  "<br>Talente: PW(T) " + getProbenWertT(currentCharacter,i)+ "<ul>" + selectedTalents.join("") + "</ul>";
+
       listring = listring + "</li>";
       $("#currentCharacterPFertigkeiten").append(listring);
       //$("#currentCharacterPTalente").append("<li><span class=\"fertigkeit\">" + i + "</span>: PW " + getProbenWert(currentCharacter,i) + "</li>");
     });
 
+    $("#currentCharacterKFertigkeiten").append("<li>Ungeübter Nahkampf: BW = PW " + Math.round((parseInt(currentCharacter["GE"]) + parseInt(currentCharacter["KK"]) + parseInt(currentCharacter["MU"]))/3) + "</li>");
+    $("#currentCharacterKFertigkeiten").append("<li>Ungeübter Fernkampf: BW = PW " + Math.round((parseInt(currentCharacter["FF"]) + parseInt(currentCharacter["IN"]) + parseInt(currentCharacter["KK"]))/3) + "</li>");
     $.each(Ilaris["KFertigkeiten"], function( i, item ) {
       if (currentCharacter["KFertigkeiten"][i]["fw"] > 0) {
         var tlist = item["talente"];
@@ -325,17 +349,16 @@ TsaUI = {
         var otherTalents = [];
         $.each(tlist, function( ti, titem ) {
           if (currentCharacter["KTalente"][titem]["selected"]) {
-            selectedTalents.push("<span class=\"selectedTalent\">" + titem + "</span>" );
+            selectedTalents.push("<li class=\"selectedTalent\">" + titem + "</li>" );
           }
 
         });
-        var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: " + selectedTalents.join(", ");
-        if (selectedTalents.length > 0 && otherTalents.length > 0) listring = listring +  ", ";
-        listring = listring +  otherTalents.join(", ");
-        listring = listring + "; BW: " + getBasisWert(currentCharacter,i);
-        listring = listring + "; FW: " + currentCharacter["KFertigkeiten"][i]["fw"];
-        listring = listring + "; PW: " + (Math.round(parseInt(currentCharacter["KFertigkeiten"][i]["fw"])/2) + getBasisWert(currentCharacter,i));
-        listring = listring + "; PW(T): " + (Math.round(parseInt(currentCharacter["KFertigkeiten"][i]["fw"])) + getBasisWert(currentCharacter,i));
+        var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: ";
+        listring = listring + "BW " + getBasisWert(currentCharacter,i);
+        listring = listring + ", FW " + currentCharacter["KFertigkeiten"][i]["fw"];
+        listring = listring + ", PW " + getProbenWert(currentCharacter,i);
+        if (selectedTalents.length > 0) listring = listring +  "<br>Talente: PW(T) " + getProbenWertT(currentCharacter,i)+ "<ul>" + selectedTalents.join("") + "</ul>";
+
         listring = listring + "</li>";
 
         $("#currentCharacterKFertigkeiten").append(listring);
@@ -349,24 +372,21 @@ TsaUI = {
         var otherTalents = [];
         $.each(tlist, function( ti, titem ) {
           if (currentCharacter["UTalente"][titem]["selected"]) {
-            selectedTalents.push("<span class=\"selectedTalent\">" + titem + "</span>" );
+            selectedTalents.push("<li class=\"selectedTalent\">" + titem + "</li>" );
           }
 
         });
-        var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: " + selectedTalents.join(", ");
-        if (selectedTalents.length > 0 && otherTalents.length > 0) listring = listring +  ", ";
-        listring = listring +  otherTalents.join(", ");
-        listring = listring + "; BW: " + getBasisWert(currentCharacter,i);
-        listring = listring + "; FW: " + currentCharacter["UFertigkeiten"][i]["fw"];
-        listring = listring + "; PW: " + (Math.round(parseInt(currentCharacter["UFertigkeiten"][i]["fw"])/2) + getBasisWert(currentCharacter,i));
-        listring = listring + "; PW(T): " + (Math.round(parseInt(currentCharacter["UFertigkeiten"][i]["fw"])) + getBasisWert(currentCharacter,i));
-        listring = listring + "</li>";
+        var listring = "<li><span class=\"fertigkeit\">" + i + "</span>: ";
+        listring = listring + "BW " + getBasisWert(currentCharacter,i);
+        listring = listring + ", FW " + currentCharacter["UFertigkeiten"][i]["fw"];
+        if (selectedTalents.length > 0) listring = listring +  "<br>Spezialtalente: PW(T) " + getProbenWertT(currentCharacter,i)+ "<ul>" + selectedTalents.join("") + "</ul>";
 
+        listring = listring + "</li>";
         $("#currentCharacterUFertigkeiten").append(listring);
       }
     });
 
-    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten", "PTalente" ]
+
     $.each(lists, function( i, item ) {
       TsaUI.sortList("#currentCharacter" + item);
     });

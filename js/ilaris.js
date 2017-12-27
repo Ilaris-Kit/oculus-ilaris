@@ -3,6 +3,25 @@ function getIlarisFromRulesXML() {
 
   var rules = getRulesFromLocalStorage();
 
+  var vorteiltyp = [];
+  vorteiltyp[0] = "A"; // Allgemein
+  vorteiltyp[1] = "P"; // Profan
+  vorteiltyp[2] = "K"; // Kampf
+  vorteiltyp[3] = "S"; // Kampfstil
+  vorteiltyp[4] = "M"; // Magisch
+  vorteiltyp[5] = "R"; // Repräsentation
+  vorteiltyp[6] = "G"; // Geweiht
+  vorteiltyp[7] = "T"; // Tradition
+
+
+
+
+  var rulesVorteile = rules.find("Datenbank").find("Vorteil");
+  ilaris["Vorteile"] = {};
+  $.each(rulesVorteile, function (v, vv) {
+    ilaris["Vorteile"][$(vv).attr("name")] = vorteiltyp[$(vv).attr("typ")];
+  });
+
 
   ilaris["KFertigkeiten"] = {};
   ilaris["PFertigkeiten"] = {};
