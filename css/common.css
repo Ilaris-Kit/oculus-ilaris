@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
 h1, h2, h3, h4, h5 {
-  font-family: "Open Sans Condensed";
+  font-family: "Alegreya Sans";
   font-weight: bolder;
 }
 
@@ -12,8 +14,13 @@ h1, h2, h3, h4, h5 {
 
 
 body {
-  font-family: "Raleway";
+  font-family: "Alegreya Sans";
   padding-top: 5rem;
+}
+
+
+footer {
+  font-family: "Alegreya Sans";
 }
 
 .table td, .table th {
@@ -25,9 +32,10 @@ input, select, label.active, label, .btn:focus,.btn:active {
 }
 
 nav {
-  font-family: "Open Sans Condensed";
+  font-family: "Alegreya Sans";
   font-size: 2rem;
   line-height: 1;
+  min-height: 4rem;
 }
 
 .navbar-brand {
@@ -40,6 +48,14 @@ nav {
   content: "OI";
   font-weight: bolder;
 }
+
+button, .badge, .btn, .form-control, .input-group-addon {
+  font-family: "Roboto";
+  font-weight: 400;
+}
+
+
+
 
 @media only screen and (min-width : 577px) {
 
