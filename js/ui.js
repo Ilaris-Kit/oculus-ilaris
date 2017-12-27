@@ -195,7 +195,7 @@ TsaUI = {
       TsaUI.Characters[currentlySelected] = getCharacterFromLocalStorage($("#characterList").val());
     }
     var currentCharacter = TsaUI.Characters[currentlySelected];
-    var textfields = ["Name", "Rasse", "Status", "Kurzbeschreibung", "Finanzen", "Heimat", "EPtotal", "EPspent"];
+    var textfields = ["Name", "Rasse", "Status", "Kurzbeschreibung", "Finanzen", "Heimat", "EPtotal", "EPspent", "Schips"];
     $.each(textfields, function( i, item ) {
       TsaUI.updateTextField(item,currentlySelected);
     });
@@ -207,6 +207,30 @@ TsaUI = {
     $.each(currentCharacter["Vorteile"], function( i, item ) {
       $("#currentCharacterVorteileListe").append("<li>" + item + "</li>");
     });
+
+    $.each(["CH","IN","KL","MU"], function(x,xx) {
+      $("#currentCharacterEigenschaftenGeistig").append("<li><strong>" + xx + " " + currentCharacter[xx] + "</strong> (PW " + (parseInt(currentCharacter[xx])*2) + ")</li>");
+    });
+    $.each(["FF","GE","KO","KK"], function(x,xx) {
+      $("#currentCharacterEigenschaftenKörperlich").append("<li><strong>" + xx + " " + currentCharacter[xx] + "</strong> (PW " + (parseInt(currentCharacter[xx])*2) + ")</li>");
+    });
+
+    /* Abgleitete Werte */
+
+    var schipsTotal = 4;
+    $.each(currentCharacter["Vorteile"], function (v, vv) {
+
+      if ((vv === "Glück I") || (vv === "Glück II")) {
+        schipsTotal = schipsTotal+1;
+      }
+
+    });
+
+    $("#currentCharacterSchipsTotal").text(schipsTotal);
+
+
+
+    /*                  */
 
 
     $.each(Ilaris["PFertigkeiten"], function( i, item ) {
@@ -366,11 +390,11 @@ TsaUI = {
 
 
   clearFields: function() {
-    var textfields = ["Name", "Rasse", "Status", "Kurzbeschreibung", "Finanzen", "Heimat", "EPtotal", "EPspent"];
+    var textfields = ["Name", "Rasse", "Status", "Kurzbeschreibung", "Finanzen", "Heimat", "EPtotal", "EPspent", "Schips", "SchipsTotal"];
     $.each(textfields, function( i, item ) {
       $("#currentCharacter" + item).text("");
     });
-    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente" ]
+    var lists = ["Eigenheiten","VorteileListe","PFertigkeiten","KFertigkeiten","UFertigkeiten","PTalente","EigenschaftenGeistig","EigenschaftenKörperlich" ]
     $.each(lists, function( i, item ) {
       $("#currentCharacter" + item).empty();
     });

@@ -25,6 +25,8 @@ function getCharacterFromXML(s) {
     }
   });
 
+  fromText["Schips"] = AllgemeineInfos.find("schips");
+
   var Erfahrung = Charakter.find("Erfahrung");
   fromText["EPtotal"] = Erfahrung.find("EPtotal");
   fromText["EPspent"] = Erfahrung.find("EPspent");
