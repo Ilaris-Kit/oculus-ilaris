@@ -309,11 +309,11 @@ TsaUI = {
     if (be < 0) be = 0;
 
     var dhstern = currentCharacter["KO"] - 2*be;
-    var wsstern = rs[0];
+    var wsstern = ws + rs[0];
     if (zr) {
       wsstern = "";
       for (var i = 0; i < zonen.length; ++i) {
-          wsstern = wsstern + zonen[i] + " " + rs[i] + " ";
+          wsstern = wsstern + zonen[i] + " " + (ws + rs[i]) + " ";
       }
     }
     var gsstern = gs - be;
