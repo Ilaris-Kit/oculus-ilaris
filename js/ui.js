@@ -288,12 +288,18 @@ TsaUI = {
         kap = kap+8;
       }
 
-      if ((vv === "Rüstungsgewöhnung I") || (vv === "Rüstungsgewöhnung II")) {
+      if (vv === "Rüstungsgewöhnung I") {
         be = be -1;
+      }
+
+      if (vv === "Rüstungsgewöhnung II") {
+        be = be -2;
       }
 
 
     });
+    
+    if (be < 0) be = 0;
 
     var zonen = ["Beine", "/ L. Arm", "/ R. Arm", "/ Bauch", "/ Brust", "/ Kopf"];
     var rs = [0,0,0,0,0,0];
