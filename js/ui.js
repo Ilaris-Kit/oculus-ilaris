@@ -288,7 +288,7 @@ TsaUI = {
         kap = kap+8;
       }
 
-      if ((vv === "Rüstungsgewöhnung I") || (vv === "Rüstungsgewöhung II")) {
+      if ((vv === "Rüstungsgewöhnung I") || (vv === "Rüstungsgewöhnung II")) {
         be = be -1;
       }
 
